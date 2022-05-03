@@ -4,29 +4,38 @@ A digital commendation system being developed for use at Bayfield High School
 
 ## Install Instructions
 
-This project uses Python version 3.9.9 which is a prerequisate to install.
+This project uses Python version 3.9.9 which is a prerequisite to install.
 
-1. Cloning the repo
-Clone the repositiory using git
-```
-$ git clone https://github.com/mmoomocow/digital-commendations.git
-```
+### Cloning the repo
 
-2. Installing the virtual enviroment
-Create a virtual enviroment using VENV. 
-```
-$ python -m venv venv
+Clone the repository using git
+
+```cmd
+git clone https://github.com/mmoomocow/digital-commendations.git
 ```
 
-3. Activate the virtual enviroment
+or download from the [GitHub releases](https://github.com/mmoomocow/digital-commendations/releases)
+
+### Installing the virtual environment
+
+Create a virtual environment using VENV.
+
+```cmd
+python -m venv venv
+```
+
+### Activate the virtual environment
+
 with windows:
-```
-$ <venv path>\Scripts\activate.bat
+
+```cmd
+<venv path>\Scripts\activate.bat
 ```
 
-4. Install the dependencies
-```
-$ pip install -r requirements.txt
+### Install the dependencies
+
+```cmd
+pip install -r requirements.txt
 ```
 
 For more information about venv, [see the documentation](https://docs.python.org/3/library/venv.html)
