@@ -57,6 +57,7 @@ class User(defaultUser):
 	teacher = models.OneToOneField('teachers.Teacher', on_delete=models.CASCADE, null=True, blank=True)
 	student = models.OneToOneField('students.Student', on_delete=models.CASCADE, null=True, blank=True)
 	caregiver = models.OneToOneField('students.Caregiver', on_delete=models.CASCADE, null=True, blank=True)
+
 	class Meta:
 		ordering = ('id',)
 		verbose_name = 'User'
