@@ -15,14 +15,38 @@ class Student(models.Model):
 	"""
 
 	# The KAMAR assigned student ID is a unique identifier for the student
-	id = models.IntegerField(unique=True, blank=False, null=False, verbose_name='Student ID')
+	id = models.IntegerField(unique=True, primary_key=True, blank=False, null=False, verbose_name='Student ID')
 
 	# The student's tutor room
-	tutor_room = models.CharField(max_length=3, blank=False, null=False, verbose_name='Tutor Room')
+	tutor_room = models.CharField(max_length=3, blank=True, null=True, verbose_name='Tutor Room')
 	# The student's house group
-	house_group = models.Choices((('Anderson', 'Anderson'), ('Begg', 'Begg'), ('Ross', 'Ross'), ('Herron', 'Herron'), ('Somerville', 'Somerville')))
+	ANDERSON = 'Anderson'
+	BEGG = 'Begg'
+	ROSS = 'Ross'
+	HERRON = 'Herron'
+	SOMERVILLE = 'Somerville'
+	HOUSE_GROUP_CHOICES = (
+		(ANDERSON, 'Anderson'),
+		(BEGG, 'Begg'),
+		(ROSS, 'Ross'),
+		(HERRON, 'Herron'),
+		(SOMERVILLE, 'Somerville'),
+	)
+	house_group = models.CharField(max_length=20, choices=HOUSE_GROUP_CHOICES, blank=True, null=True, verbose_name='House Group')
 	# The student's year level
-	year_level = models.IntegerChoices((9, 'Year 9'), (10, 'Year 10'), (11, 'Year 11'), (12, 'Year 12'), (13, 'Year 13'))
+	YEAR9 = 9
+	YEAR10 = 10
+	YEAR11 = 11
+	YEAR12 = 12
+	YEAR13 = 13
+	YEAR_LEVEL_CHOICES = (
+		(YEAR9, 'Year 9'),
+		(YEAR10, 'Year 10'),
+		(YEAR11, 'Year 11'),
+		(YEAR12, 'Year 12'),
+		(YEAR13, 'Year 13'),
+	)
+	year_level = models.IntegerField(choices=YEAR_LEVEL_CHOICES, blank=True, null=True, verbose_name='Year Level')
 
 	# Parent/caregiver
-	caregiver = models.foreignKey(Caregiver, on_delete=models.CASCADE, verbose_name='Parent/Caregiver')
+	caregiver = models.ForeignKey(Caregiver, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Caregiver')
