@@ -21,10 +21,23 @@ class Teacher(models.Model):
 
 	# Staff code
 	# Uniquely identifies the teacher but can be repeated once a teacher has left the school.
-	staff_code = models.CharField(max_length=2, unique=True, blank=False, null=False, verbose_name='Staff Code')
+	staff_code = models.CharField(max_length=2, unique=True, blank=True, null=True, verbose_name='Staff Code')
 
 	# House group
-	house_group = models.Choices((('Anderson', 'Anderson'), ('Begg', 'Begg'), ('Ross', 'Ross'), ('Herron', 'Herron'), ('Somerville', 'Somerville')))
+	# The student's house group
+	ANDERSON = 'Anderson'
+	BEGG = 'Begg'
+	ROSS = 'Ross'
+	HERRON = 'Herron'
+	SOMERVILLE = 'Somerville'
+	HOUSE_GROUP_CHOICES = (
+		(ANDERSON, 'Anderson'),
+		(BEGG, 'Begg'),
+		(ROSS, 'Ross'),
+		(HERRON, 'Herron'),
+		(SOMERVILLE, 'Somerville'),
+	)
+	house_group = models.CharField(max_length=20, choices=HOUSE_GROUP_CHOICES, blank=True, null=True, verbose_name='House Group')
 
 	class Meta:
 		ordering = ('staff_code',)
