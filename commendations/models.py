@@ -38,4 +38,4 @@ class commendation(models.Model):
 	teacher = models.ForeignKey('teachers.teacher', on_delete=models.CASCADE, blank=False, null=False, verbose_name='Teacher')
 
 	# The student(s) who received the commendation
-	students = models.ManyToManyField('students.student', blank=False, null=False, verbose_name='Students')
+	students = models.ManyToManyField('students.student', blank=False, verbose_name='Students')
