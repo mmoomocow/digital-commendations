@@ -50,3 +50,14 @@ class Student(models.Model):
 
 	# Parent/caregiver
 	caregiver = models.ForeignKey(Caregiver, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Caregiver')
+
+	class Meta():
+		verbose_name = 'Student'
+		verbose_name_plural = 'Students'
+	
+	def __str__(self):
+		return str(self.id)
+
+	def delete(self, *args, **kwargs):
+		# Delete the student
+		super().delete(*args, **kwargs)
