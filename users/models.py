@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
+from teachers.models import Teacher
+from students.models import Student, Caregiver
 
 # Create your models here.
 
@@ -88,4 +90,10 @@ class User(defaultUser):
 		self.is_student = is_student
 		self.is_caregiver = is_caregiver
 		self.save()
-		# TODO - Create teacher, student or caregiver when user is created
+
+		if is_teacher:
+			self.teacher = Teacher.objects.create_teacher(user=self, *args, **kwargs)
+		elif is_student:
+			self.student = Student.objects.create_student(user=self, *args, **kwargs)
+		elif is_caregiver:
+			self.caregiver = Caregiver.objects.create_caregiver(user=self, *args, **kwargs)
