@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
+from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
 
 # Create your models here.
 
-class User(defaultUser):
+class User(defaultUser, defaultPermissionsMixin):
 	"""
 		The default, generic user object that exists as a base for all users
 		in the system.
