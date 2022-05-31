@@ -10,3 +10,17 @@ class UserAdmin(admin.ModelAdmin):
 	search_fields = ('username', 'email', 'first_name', 'last_name')
 	ordering = ('first_name', 'last_name')
 	readonly_fields = ('last_login', 'id')
+	fieldsets = (
+		(None, {
+			'fields': ('username', 'password', 'last_login', 'id')
+		}),
+		('Personal info', {
+			'fields': ('first_name', 'last_name', 'email', 'title')
+		}),
+		('Permissions', {
+			'fields': ('is_active', 'is_staff', 'is_superuser')
+		}),
+		('User Links', {
+			'fields': ('is_teacher', 'is_student', 'is_caregiver', 'teacher', 'student', 'caregiver')
+		}),
+	)
