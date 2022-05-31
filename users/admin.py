@@ -24,3 +24,10 @@ class UserAdmin(admin.ModelAdmin):
 			'fields': ('is_teacher', 'is_student', 'is_caregiver', 'teacher', 'student', 'caregiver')
 		}),
 	)
+
+	def delete_model(self, request, obj):
+		for user in obj.all():
+			if user.is_superuser:
+				return False
+			else:
+				super().delete_model(request, obj)
