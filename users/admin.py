@@ -18,7 +18,7 @@ class UserAdmin(admin.ModelAdmin):
 			'fields': ('first_name', 'last_name', 'email', 'title')
 		}),
 		('Permissions', {
-			'fields': ('is_active', 'is_staff', 'is_superuser')
+			'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
 		}),
 		('User Links', {
 			'fields': ('is_teacher', 'is_student', 'is_caregiver', 'teacher', 'student', 'caregiver')
