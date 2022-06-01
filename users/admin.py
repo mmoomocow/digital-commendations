@@ -10,6 +10,7 @@ class UserAdmin(admin.ModelAdmin):
 	search_fields = ('username', 'email', 'first_name', 'last_name')
 	ordering = ('first_name', 'last_name')
 	readonly_fields = ('last_login', 'id')
+	filter_horizontal = ('groups', 'user_permissions')
 	fieldsets = (
 		(None, {
 			'fields': ('username', 'password', 'last_login', 'id')
