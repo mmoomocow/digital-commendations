@@ -5,4 +5,6 @@ from .models import *
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
+@admin.register(Caregiver)
+class CaregiverAdmin(admin.ModelAdmin):
 	pass
