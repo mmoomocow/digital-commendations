@@ -1,9 +1,32 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
+from django.contrib.auth.models import BaseUserManager as defaultUserManager
+from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
+
 
 # Create your models here.
 
-class User(defaultUser):
+class UserManager(defaultUserManager):
+	def create_user(self, username, email, first_name, last_name, password=None):
+		if not username:
+			raise ValueError('Users must have a username')
+		if not email:
+			raise ValueError('Users must have an email address')
+
+		user = self.model(email=self.normalize_email(email), username=username, first_name=first_name, last_name=last_name)
+
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
+
+	def create_superuser(self, username, email, first_name, last_name, password):
+		user = self.create_user(username, email, first_name, last_name, password=password)
+		user.is_superuser = True
+		user.is_staff = True
+		user.save(using=self._db)
+		return user
+
+class User(defaultUser, defaultPermissionsMixin):
 	"""
 		The default, generic user object that exists as a base for all users
 		in the system.
@@ -11,6 +34,11 @@ class User(defaultUser):
 		authentication for students, teachers, and caregivers would require far
 		more code maintenance than just adding a new user object.
 	"""
+
+	# Custom user manager
+	objects = UserManager()
+	# Required fields for user
+	REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
 
 	# User ID
@@ -57,6 +85,8 @@ class User(defaultUser):
 	teacher = models.OneToOneField('teachers.Teacher', on_delete=models.CASCADE, null=True, blank=True)
 	student = models.OneToOneField('students.Student', on_delete=models.CASCADE, null=True, blank=True)
 	caregiver = models.OneToOneField('students.Caregiver', on_delete=models.CASCADE, null=True, blank=True)
+
+	USERNAME_FIELD = 'username'
 
 	class Meta:
 		ordering = ('id',)
