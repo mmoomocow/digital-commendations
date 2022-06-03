@@ -39,3 +39,10 @@ class commendation(models.Model):
 
 	# The student(s) who received the commendation
 	students = models.ManyToManyField('students.student', blank=False, verbose_name='Students')
+
+	class Meta:
+		verbose_name = 'Commendation'
+		verbose_name_plural = 'Commendations'
+
+	def __str__(self):
+		return 'Commendation ID: {}'.format(self.id)
