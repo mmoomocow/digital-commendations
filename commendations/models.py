@@ -32,7 +32,7 @@ class commendation(models.Model):
 	reason = models.TextField(max_length=500, blank=False, null=False, verbose_name='Reason')
 
 	# The date and time the commendation was given
-	date_time = models.DateTimeField(blank=False, null=False, verbose_name='Date and Time given')
+	date_time = models.DateTimeField(blank=False, null=False, verbose_name='Date and Time given', auto_now_add=True)
 
 	# The teacher who gave the commendation
 	teacher = models.ForeignKey('teachers.teacher', on_delete=models.CASCADE, blank=False, null=False, verbose_name='Teacher')
