@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
+from django.contrib.auth.hashers import make_password
+from teachers.models import Teacher
+from students.models import Student, Caregiver
 
 # Create your models here.
 
@@ -80,7 +83,7 @@ class User(defaultUser):
 	# Create user and corresponding teacher, student or caregiver
 	def create_user(self, email='', password='', title='', first_name='', last_name='', is_teacher=False, is_student=False, is_caregiver=False, *args, **kwargs):
 		self.email = email
-		self.password = password
+		self.password = make_password(password)
 		self.title = title
 		self.first_name = first_name
 		self.last_name = last_name
@@ -88,4 +91,10 @@ class User(defaultUser):
 		self.is_student = is_student
 		self.is_caregiver = is_caregiver
 		self.save()
-		# TODO - Create teacher, student or caregiver when user is created
+
+		if is_teacher:
+			self.teacher = Teacher.objects.create_teacher(user=self, *args, **kwargs)
+		elif is_student:
+			self.student = Student.objects.create_student(user=self, *args, **kwargs)
+		elif is_caregiver:
+			self.caregiver = Caregiver.objects.create_caregiver(user=self, *args, **kwargs)
