@@ -1,10 +1,11 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import *
 
 # Register your models here.
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseUserAdmin):
 	list_display = ('username', 'first_name', 'last_name', 'email', 'is_teacher', 'is_student', 'is_caregiver')
 	list_filter = ('is_teacher', 'is_student', 'is_caregiver', 'is_staff', 'is_superuser', 'is_active')
 	search_fields = ('username', 'email', 'first_name', 'last_name')

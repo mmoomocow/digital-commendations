@@ -29,13 +29,20 @@ class commendation(models.Model):
 	commendation_type = models.CharField(max_length=1, choices=COMMENDATION_TYPE_CHOICES, blank=False, null=False, verbose_name='Commendation Type')
 
 	# The reason for giving the commendation
-	reason = models.CharField(max_length=200, blank=False, null=False, verbose_name='Reason')
+	reason = models.TextField(max_length=500, blank=False, null=False, verbose_name='Reason')
 
 	# The date and time the commendation was given
-	date_time = models.DateTimeField(blank=False, null=False, verbose_name='Date and Time given')
+	date_time = models.DateTimeField(blank=False, null=False, verbose_name='Date and Time given', auto_now_add=True)
 
 	# The teacher who gave the commendation
 	teacher = models.ForeignKey('teachers.teacher', on_delete=models.CASCADE, blank=False, null=False, verbose_name='Teacher')
 
 	# The student(s) who received the commendation
 	students = models.ManyToManyField('students.student', blank=False, verbose_name='Students')
+
+	class Meta:
+		verbose_name = 'Commendation'
+		verbose_name_plural = 'Commendations'
+
+	def __str__(self):
+		return 'Commendation ID: {}'.format(self.id)
