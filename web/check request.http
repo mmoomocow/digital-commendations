@@ -1,0 +1,21 @@
+POST http://127.0.0.1:8000/api/check/ HTTP/1.1
+content-type: application/json
+Authorization: Basic {{KAMAR_AUTH_USERNAME}}/{{KAMAR_AUTH_PASSWORD}}
+
+{
+	"SMSDirectoryData": {
+		"datetime": 20200930131754,
+		"sync": "check",
+		"sms": "KAMAR",
+		"version": 1453,
+		"infourl": "https://help.mydomain.nz/",
+		"privacystatement": "data privacy statement",
+		"schools":[{
+			"index": 1,
+			"moeCode": "0123",
+			"name": "My Sample School",
+			"type": 32,
+			"authoritative": true
+		}]
+	}
+}

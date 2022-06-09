@@ -35,10 +35,11 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 # Application definition
 
 INSTALLED_APPS = [
-	'commendations.apps.CommendationsConfig',
-	'users.apps.UsersConfig',
-	'students.apps.StudentsConfig',
-	'teachers.apps.TeachersConfig',
+    'api.apps.ApiConfig',
+    'commendations.apps.CommendationsConfig',
+    'users.apps.UsersConfig',
+    'students.apps.StudentsConfig',
+    'teachers.apps.TeachersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
