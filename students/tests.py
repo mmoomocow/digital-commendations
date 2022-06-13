@@ -10,7 +10,7 @@ class StudentCaregiverTestCase(TestCase):
 		# Create a student
 		self.student = Student.objects.create(
 			id='12345',
-			tutor_room='abc',
+			tutor_room='ABc',
 			house_group=Student.ANDERSON,
 			year_level=Student.YEAR9,
 		)
