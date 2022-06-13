@@ -29,14 +29,9 @@ def TeacherTestCase(TestCase):
 		self.assertEqual(str(self.teacher), 'Te', 'Teacher string representation is not correct')
 
 	def test_user_link(self):
-		self.assertEqual(self.teacher.user.username, 'teacher', 'Username is not correct')
-		self.assertEqual(self.teacher.user.email, 'teacher@example.com', 'Email is not correct')
-		self.assertTrue(self.teacher.user.check_password('teacherpassword'), 'Password is not correct')
-		self.assertFalse(self.teacher.user.check_password('teacherpassword2'), 'Incorrect password was successful')
-		self.assertEqual(self.teacher.user.first_name, 'Teacher', 'First name is not correct')
-		self.assertEqual(self.teacher.user.last_name, 'User', 'Last name is not correct')
-		self.assertEqual(str(self.teacher.user), 'Teacher User', 'User string representation is not correct')
-		self.assertTrue(self.teacher.user.is_teacher, 'User is not a teacher')
-		self.assertEqual(self.teacher.user.teacher, self.teacher, 'User is not linked to the teacher')
-		self.assertFalse(self.teacher.user.is_student, 'Teacher Should not be a student')
-		self.assertFalse(self.teacher.user.is_caregiver, 'Teacher Should not be a caregiver')
+		# We don't need to test the full user because it is already tested in the UserTestCase
+		self.assertEqual(self.user.teacher, self.teacher, 'User is not linked to the teacher')
+		self.assertTrue(self.teacher.user.is_teacher, 'Teacher is not a teacher')
+		self.assertFalse(self.teacher.user.is_student, 'Teacher should not be  a student')
+		self.assertFalse(self.teacher.user.is_caregiver, 'Teacher should not be a caregiver')
+		self.assertEquals(str(self.teacher.user), 'Teacher User', 'User string representation is not correct')
