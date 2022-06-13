@@ -4,7 +4,7 @@ from users import models as user_models
 
 # Create your tests here.
 
-def TeacherTestCase(TestCase):
+class TeacherTestCase(TestCase):
 	def setUp(self):
 		# Create a teacher
 		self.teacher = Teacher.objects.create(

@@ -4,7 +4,7 @@ from users import models as user_models
 
 # Create your tests here.
 
-def StudentCaregiverTestCase(TestCase):
+class StudentCaregiverTestCase(TestCase):
 	def setUp(self):
 		# TODO - Create a caregiver and link to the student
 		# Create a student
