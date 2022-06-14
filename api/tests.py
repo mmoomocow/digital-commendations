@@ -16,7 +16,7 @@ class ApiTestCase(TestCase):
 			self.bad_req = self.client.post('/api/check/', json_data, content_type='application/json', **{'HTTP_AUTHORIZATION': 'Basic invalid'})
 
 	def test_good_request(self):
-		self.assertEqual(self.good_req.status_code, 200)
+		self.assertEqual(self.good_req.status_code, 200, 'Valid credentials were not accepted with 200')
 	
 	def test_bad_request(self):
-		self.assertEqual(self.bad_req.status_code, 403)
+		self.assertEqual(self.bad_req.status_code, 403, 'Invalid credentials were not rejected with 403')
