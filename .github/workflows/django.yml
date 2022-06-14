@@ -25,5 +25,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ALLOWED_HOSTS: '*'
+        DEBUG: True
+        KAMAR_AUTH_PASSWORD: 'kamar'
+        KAMAR_AUTH_USERNAME: 'Password1234'
       run: |
         python manage.py test
