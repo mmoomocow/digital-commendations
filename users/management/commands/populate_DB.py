@@ -27,7 +27,7 @@ def generate_teacher(number):
 		)
 		user.is_teacher = True
 		user.teacher = teacher_models.Teacher.objects.create(
-			staff_code=profile['name'].split(' ')[0:2],
+			staff_code=fake.unique.lexify(text='??'),
 			house_group=choice(teacher_houses),
 		)
 		user.save()
