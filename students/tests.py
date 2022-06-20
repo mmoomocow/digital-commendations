@@ -32,7 +32,7 @@ class StudentCaregiverTestCase(TestCase):
 		self.assertEqual(self.student.tutor_room, 'ABc', 'Tutor room is not correct')
 		self.assertEqual(self.student.house_group, Student.ANDERSON, 'House group is not correct')
 		self.assertEqual(self.student.year_level, Student.YEAR9, 'Year level is not correct')
-		self.assertEqual(str(self.student), '12345', 'Student string representation is not correct')
+		self.assertEqual(str(self.student), 'Student User (12345)', 'Student string representation is not correct')
 
 	def test_user_link(self):
 		# We don't need to test the full user because it is already tested in the UserTestCase
