@@ -20,11 +20,11 @@ class Student(models.Model):
 	# The student's tutor room
 	tutor_room = models.CharField(max_length=3, blank=True, null=True, verbose_name='Tutor Room')
 	# The student's house group
-	ANDERSON = 'Anderson'
-	BEGG = 'Begg'
-	ROSS = 'Ross'
-	HERRON = 'Herron'
-	SOMERVILLE = 'Somerville'
+	ANDERSON = 'A'
+	BEGG = 'B'
+	ROSS = 'R'
+	HERRON = 'H'
+	SOMERVILLE = 'S'
 	HOUSE_GROUP_CHOICES = (
 		(ANDERSON, 'Anderson'),
 		(BEGG, 'Begg'),
