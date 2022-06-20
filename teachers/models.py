@@ -43,7 +43,7 @@ class Teacher(models.Model):
 		ordering = ('staff_code',)
 
 	def __str__(self):
-		return self.staff_code
+		return str(f'{self.staff_code} ({self.user.first_name} {self.user.last_name})')
 
 	def delete(self, *args, **kwargs):
 		# Delete the teacher
