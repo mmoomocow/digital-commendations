@@ -5,7 +5,8 @@ from .models import *
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-	pass
+	list_display = ('id', 'user', 'tutor_room', 'house_group', 'year_level',)
+	list_filter = ('house_group', 'year_level',)
 
 @admin.register(Caregiver)
 class CaregiverAdmin(admin.ModelAdmin):
