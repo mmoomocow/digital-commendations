@@ -75,5 +75,6 @@ class CommendationTestCase(TestCase):
 	def test_commendation_links(self):
 		self.assertEqual(self.commendation.teacher, self.teacher.teacher, 'Commendation teacher is not correct')
 		self.assertEqual(self.commendation.students.count(), 2, 'Commendation students are not correct')
-		self.assertEqual(str(self.commendation.students.first()), str(self.student1.student), 'Commendation student #1 is not correct')
-		self.assertEqual(str(self.commendation.students.last()), str(self.student2.student), 'Commendation student #2 is not correct')
+		# The order of students is not important or guaranteed, so we only check if both students are in the list
+		self.assertTrue(self.commendation.students.contains(self.student1.student), 'Commendation student #1 is not correct')
+		self.assertTrue(self.commendation.students.contains(self.student2.student), 'Commendation student #2 is not correct')
