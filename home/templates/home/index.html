@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 
+{% comment %} HTML title {% endcomment %}
+{% block title %}Hello World{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
 {% block headerText %}Hello World{% endblock headerText %}
 
+{% comment %} Main content {% endcomment %}
 {% block content %}
 <p>First front end content of the site!!</p>
 {% endblock content %}
