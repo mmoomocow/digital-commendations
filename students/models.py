@@ -56,7 +56,7 @@ class Student(models.Model):
 		verbose_name_plural = 'Students'
 	
 	def __str__(self):
-		return str(self.id)
+		return str(f'{self.user.first_name} {self.user.last_name} ({self.id})')
 
 	def delete(self, *args, **kwargs):
 		# Delete the student
