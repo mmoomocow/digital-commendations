@@ -22,5 +22,8 @@ def loginView(request):
 		return HttpResponse('<h1>Login</h1>') # Basic HTTP response for now without a form, but we'll add one later
 
 def logoutView(request):
-	logout(request)
-	return HttpResponse('<h1>Logged Out</h1>') # Basic HTTP more work on front end will be done later
+	if request.user.is_authenticated:
+		logout(request)
+		return HttpResponse('<h1>Logout successful</h1>') # Basic HTTP more work on front end will be done later
+	else: 
+		return HttpResponse('<h1>You are not logged in</h1>')
