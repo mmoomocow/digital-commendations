@@ -41,12 +41,12 @@ html, body {
 /* Navigation Bar styles */
 nav {
 	background-color: var(--color-green);
-	height: 5.5vh;
+	font-size: 1.3em;
 }
 
 nav a {
 	display: inline-block;
-	padding: 0.5rem 1rem;
+	padding: 0.25rem 0.5rem;
 	text-decoration: none;
 	background-color: var(--color-green);
 	color: var(--color-gold);
