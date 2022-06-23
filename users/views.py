@@ -13,7 +13,7 @@ def loginView(request):
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			# Restrict access to active teachers for now
-			if user.is_active:
+			if user.is_active and user.is_teacher:
 				login(request, user)
 				return HttpResponse('<h1>Login successful</h1>')
 
