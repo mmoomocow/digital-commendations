@@ -25,11 +25,11 @@ class Teacher(models.Model):
 
 	# House group
 	# The student's house group
-	ANDERSON = 'Anderson'
-	BEGG = 'Begg'
-	ROSS = 'Ross'
-	HERRON = 'Herron'
-	SOMERVILLE = 'Somerville'
+	ANDERSON = 'A'
+	BEGG = 'B'
+	ROSS = 'R'
+	HERRON = 'H'
+	SOMERVILLE = 'S'
 	HOUSE_GROUP_CHOICES = (
 		(ANDERSON, 'Anderson'),
 		(BEGG, 'Begg'),
