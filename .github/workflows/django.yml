@@ -32,4 +32,4 @@ jobs:
         KAMAR_AUTH_PASSWORD: 'kamar'
         KAMAR_AUTH_USERNAME: 'Password1234'
       run: |
-        python manage.py test
+        python manage.py test --failfast --noinput --verbosity=3 --parallel
