@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import *
+from django.contrib.auth import logout
 
 # Create your tests here.
 
@@ -61,7 +62,10 @@ class UserTestCase(TestCase):
 	def test_user_login(self):
 		response1 = self.client.post('/users/login/', data={'username': 'testWebLogin', 'password': 'testpassword'})
 		self.assertEqual(response1.status_code, 202, 'Correct username and password was not accepted')
+		logout(self.client)
 		response2 = self.client.post('/users/login/', data={'username': 'testWebLogin', 'password': 'testpassword2'})
 		self.assertEqual(response2.status_code, 403, 'Incorrect username and password was accepted')
+		logout(self.client)
 		response3 = self.client.post('/users/login/', data={'username': 'testuser', 'password': 'testpassword'})
 		self.assertEqual(response3.status_code, 403, 'Non teacher user was logged in')
+		logout(self.client)
