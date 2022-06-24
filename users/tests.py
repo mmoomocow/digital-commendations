@@ -60,6 +60,14 @@ class UserTestCase(TestCase):
 		self.assertTrue(self.superuser.is_active, 'Superuser is not active')
 
 	def test_user_login(self):
+		response = self.client.get('/login/')
+		self.assertEqual(response.status_code, 301, '/login/ should redirect to /users/login/')
+		self.assertEqual(response.url, '/users/login/', '/login/ should redirect to /users/login/')
+		response = self.client.get('/users/login/')
+		self.assertEqual(response.status_code, 200, '/users/login/ should return a 200')
+		self.assertTemplateUsed(response, 'users/login.html', 'Login template was not used in login page')
+		self.assertTemplateUsed(response, 'base.html', 'Base template was not used in login page')
+
 		response1 = self.client.post('/users/login/', data={'username': 'testWebLogin', 'password': 'testpassword'})
 		self.assertEqual(response1.status_code, 202, 'Correct username and password was not accepted')
 		logout(self.client)
