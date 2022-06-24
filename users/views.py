@@ -16,13 +16,13 @@ def loginView(request):
 			if user.is_active:
 				if user.is_teacher:
 					login(request, user)
-					return render(request, 'users/login.html', {'success': True, 'error': f'<p style="color:green;">Login successful, welcome {user.first_name}</p>'})
+					return render(request, 'users/login.html', {'success': True, 'error': f'<p style="color:green;">Login successful, welcome {user.first_name}</p>'}, status=202)
 				else:
-					return render(request, 'users/login.html', {'error': 'Sorry, only teachers can log in!', 'username': username})
+					return render(request, 'users/login.html', {'error': 'Sorry, only teachers can log in!', 'username': username}, status=403)
 			else:
-				return render(request, 'users/login.html', {'error': 'You have been marked inactive, so cannot log in.', 'username': username})
+				return render(request, 'users/login.html', {'error': 'You have been marked inactive, so cannot log in.', 'username': username}, status=403)
 		else:
-			return render(request, 'users/login.html', {'error': 'Invalid username or password, <a href="/users/forgot/">forgot your password?</a>', 'username': username})
+			return render(request, 'users/login.html', {'error': 'Invalid username or password, <a href="/users/forgot/">forgot your password?</a>', 'username': username}, status=403)
 
 	else:
 		# Triggered if the client has not filled out the form, so send them the login page
