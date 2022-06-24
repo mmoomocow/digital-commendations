@@ -26,7 +26,7 @@ class TeacherTestCase(TestCase):
 	def test_teacher_creation(self):
 		self.assertEqual(self.teacher.staff_code, 'Te', 'Staff code is not correct')
 		self.assertEqual(self.teacher.house_group, Teacher.ANDERSON, 'House group is not correct')
-		self.assertEqual(str(self.teacher), 'Te', 'Teacher string representation is not correct')
+		self.assertEqual(str(self.teacher), 'Te (Teacher User)', 'Teacher string representation is not correct')
 
 	def test_user_link(self):
 		# We don't need to test the full user because it is already tested in the UserTestCase

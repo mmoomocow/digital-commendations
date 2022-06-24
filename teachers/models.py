@@ -25,11 +25,11 @@ class Teacher(models.Model):
 
 	# House group
 	# The student's house group
-	ANDERSON = 'Anderson'
-	BEGG = 'Begg'
-	ROSS = 'Ross'
-	HERRON = 'Herron'
-	SOMERVILLE = 'Somerville'
+	ANDERSON = 'A'
+	BEGG = 'B'
+	ROSS = 'R'
+	HERRON = 'H'
+	SOMERVILLE = 'S'
 	HOUSE_GROUP_CHOICES = (
 		(ANDERSON, 'Anderson'),
 		(BEGG, 'Begg'),
@@ -43,7 +43,7 @@ class Teacher(models.Model):
 		ordering = ('staff_code',)
 
 	def __str__(self):
-		return self.staff_code
+		return str(f'{self.staff_code} ({self.user.first_name} {self.user.last_name})')
 
 	def delete(self, *args, **kwargs):
 		# Delete the teacher

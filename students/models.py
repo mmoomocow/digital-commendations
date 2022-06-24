@@ -20,11 +20,11 @@ class Student(models.Model):
 	# The student's tutor room
 	tutor_room = models.CharField(max_length=3, blank=True, null=True, verbose_name='Tutor Room')
 	# The student's house group
-	ANDERSON = 'Anderson'
-	BEGG = 'Begg'
-	ROSS = 'Ross'
-	HERRON = 'Herron'
-	SOMERVILLE = 'Somerville'
+	ANDERSON = 'A'
+	BEGG = 'B'
+	ROSS = 'R'
+	HERRON = 'H'
+	SOMERVILLE = 'S'
 	HOUSE_GROUP_CHOICES = (
 		(ANDERSON, 'Anderson'),
 		(BEGG, 'Begg'),
@@ -56,7 +56,7 @@ class Student(models.Model):
 		verbose_name_plural = 'Students'
 	
 	def __str__(self):
-		return str(self.id)
+		return str(f'{self.user.first_name} {self.user.last_name} ({self.id})')
 
 	def delete(self, *args, **kwargs):
 		# Delete the student
