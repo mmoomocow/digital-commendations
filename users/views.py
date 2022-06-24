@@ -5,6 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 def loginView(request):
+	if request.user.is_authenticated:
+		# Don't allow logged in users to login again
+		return render(request, 'users/login.html', {'success': True, 'error': f'<p style="color:green;">Already logged in. Welcome {request.user.first_name}</p>'}, status=202)
+
 	if request.method == 'POST':
 		# Triggered if the client has submitted the form
 		username = request.POST['username']
@@ -16,7 +20,7 @@ def loginView(request):
 			if user.is_active:
 				if user.is_teacher:
 					login(request, user)
-					return render(request, 'users/login.html', {'success': True, 'error': f'<p style="color:green;">Login successful, welcome {user.first_name}</p>'}, status=202)
+					return render(request, 'users/login.html', {'success': True, 'error': f'<p style="color:green;">Login successful. Welcome {user.first_name}</p>'}, status=202)
 				else:
 					return render(request, 'users/login.html', {'error': 'Sorry, only teachers can log in!', 'username': username}, status=403)
 			else:
