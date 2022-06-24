@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 
@@ -6,20 +6,27 @@ from django.contrib.auth import authenticate, login, logout
 
 def loginView(request):
 	if request.method == 'POST':
-		# Triggered if the client has filled out and submitted the form
+		# Triggered if the client has submitted the form
 		username = request.POST['username']
 		password = request.POST['password']
 		# Checks if the user is valid
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			# Restrict access to active teachers for now
-			if user.is_active and user.is_teacher:
-				login(request, user)
-				return HttpResponse('<h1>Login successful</h1>')
+			if user.is_active:
+				if user.is_teacher:
+					login(request, user)
+					return render(request, 'users/login.html', {'success': True, 'error': f'<p style="color:green;">Login successful, welcome {user.first_name}</p>'})
+				else:
+					return render(request, 'users/login.html', {'error': 'Sorry, only teachers can log in!', 'username': username})
+			else:
+				return render(request, 'users/login.html', {'error': 'You have been marked inactive, so cannot log in.', 'username': username})
+		else:
+			return render(request, 'users/login.html', {'error': 'Invalid username or password, <a href="/users/forgot/">forgot your password?</a>', 'username': username})
 
 	else:
 		# Triggered if the client has not filled out the form, so send them the login page
-		return HttpResponse('<h1>Login</h1>') # Basic HTTP response for now without a form, but we'll add one later
+		return render(request, 'users/login.html')
 
 def logoutView(request):
 	if request.user.is_authenticated:

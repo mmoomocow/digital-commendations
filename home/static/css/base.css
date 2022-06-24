@@ -74,3 +74,9 @@ footer {
 	bottom: 0;
 	width: 100%;
 }
+
+/* Style for required field abbreviations */
+.requiredField {
+	color: red;
+	text-decoration: none;
+}
