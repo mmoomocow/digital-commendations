@@ -38,16 +38,15 @@ def loginView(request):
                         },
                         status=202,
                     )
-                else:
-                    return render(
-                        request,
-                        "users/login.html",
-                        {
-                            "error": "Sorry, only teachers can log in!",
-                            "username": username,
-                        },
-                        status=403,
-                    )
+                return render(
+                    request,
+                    "users/login.html",
+                    {
+                        "error": "Sorry, only teachers can log in!",
+                        "username": username,
+                    },
+                    status=403,
+                )
             else:
                 return render(
                     request,
@@ -80,5 +79,4 @@ def logoutView(request):
         return HttpResponse(
             "<h1>Logout successful</h1>"
         )  # Basic HTTP more work on front end will be done later
-    else:
-        return HttpResponse("<h1>You are not logged in</h1>")
+    return HttpResponse("<h1>You are not logged in</h1>")
