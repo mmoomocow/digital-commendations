@@ -56,20 +56,17 @@ def loginView(request):
                 },
                 status=403,
             )
-        else:
-            return render(
-                request,
-                "users/login.html",
-                {
-                    "error": 'Invalid username or password, <a href="/users/forgot/">forgot your password?</a>',
-                    "username": username,
-                },
-                status=403,
-            )
+        return render(
+            request,
+            "users/login.html",
+            {
+                "error": 'Invalid username or password, <a href="/users/forgot/">forgot your password?</a>',
+                "username": username,
+            },
+            status=403,
+        )
 
-    else:
-        # Triggered if the client has not filled out the form, so send them the login page
-        return render(request, "users/login.html")
+    return render(request, "users/login.html")
 
 
 def logoutView(request):
