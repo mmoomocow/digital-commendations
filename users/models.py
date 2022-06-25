@@ -52,7 +52,6 @@ class User(defaultUser, defaultPermissionsMixin):
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     # User ID
-    # This will not really be used, as all uses will refer to the respective student/teacher/caregiver
     # This field is just here to internally identify and link to the user
     id = models.AutoField(
         primary_key=True,

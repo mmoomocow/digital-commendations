@@ -28,7 +28,7 @@ class Teacher(models.Model):
     )
 
     # Staff code
-    # Uniquely identifies the teacher but can be repeated once a teacher has left the school.
+    # Uniquely identifies the teacher (can be repeated once a teacher has left)
     staff_code = models.CharField(
         max_length=2, unique=True, blank=True, null=True, verbose_name="Staff Code"
     )
