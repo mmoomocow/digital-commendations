@@ -9,36 +9,95 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('students', '0001_initial'),
-        ('teachers', '0001_initial'),
+        ("students", "0001_initial"),
+        ("teachers", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.AutoField(editable=False, primary_key=True, serialize=False, unique=True, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254, unique=True, verbose_name='Email Address')),
-                ('username', models.CharField(max_length=30, unique=True, verbose_name='Username')),
-                ('password', models.CharField(max_length=128, verbose_name='Password')),
-                ('title', models.CharField(blank=True, max_length=128, null=True, verbose_name='Title')),
-                ('first_name', models.CharField(max_length=128, verbose_name='First Name')),
-                ('last_name', models.CharField(max_length=128, verbose_name='Last Name')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='Last Login')),
-                ('is_staff', models.BooleanField(default=False)),
-                ('is_superuser', models.BooleanField(default=False)),
-                ('is_active', models.BooleanField(default=True)),
-                ('is_teacher', models.BooleanField(default=False)),
-                ('is_student', models.BooleanField(default=False)),
-                ('is_caregiver', models.BooleanField(default=False)),
-                ('caregiver', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='students.caregiver')),
-                ('student', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='students.student')),
-                ('teacher', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='teachers.teacher')),
+                (
+                    "id",
+                    models.AutoField(
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        max_length=254, unique=True, verbose_name="Email Address"
+                    ),
+                ),
+                (
+                    "username",
+                    models.CharField(
+                        max_length=30, unique=True, verbose_name="Username"
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="Password")),
+                (
+                    "title",
+                    models.CharField(
+                        blank=True, max_length=128, null=True, verbose_name="Title"
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(max_length=128, verbose_name="First Name"),
+                ),
+                (
+                    "last_name",
+                    models.CharField(max_length=128, verbose_name="Last Name"),
+                ),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="Last Login"
+                    ),
+                ),
+                ("is_staff", models.BooleanField(default=False)),
+                ("is_superuser", models.BooleanField(default=False)),
+                ("is_active", models.BooleanField(default=True)),
+                ("is_teacher", models.BooleanField(default=False)),
+                ("is_student", models.BooleanField(default=False)),
+                ("is_caregiver", models.BooleanField(default=False)),
+                (
+                    "caregiver",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="students.caregiver",
+                    ),
+                ),
+                (
+                    "student",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="students.student",
+                    ),
+                ),
+                (
+                    "teacher",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="teachers.teacher",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'User',
-                'verbose_name_plural': 'Users',
-                'ordering': ('id',),
+                "verbose_name": "User",
+                "verbose_name_plural": "Users",
+                "ordering": ("id",),
             },
         ),
     ]

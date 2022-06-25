@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commendations', '0002_alter_commendation_reason'),
+        ("commendations", "0002_alter_commendation_reason"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='commendation',
-            name='date_time',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='Date and Time given'),
+            model_name="commendation",
+            name="date_time",
+            field=models.DateTimeField(
+                auto_now_add=True, verbose_name="Date and Time given"
+            ),
         ),
     ]
