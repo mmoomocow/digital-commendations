@@ -1,0 +1,13 @@
+{
+    "python.linting.enabled": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "python.formatting.provider": "black",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "gitlens.advanced.blame.customArguments": [
+        "--ignore-rev",
+        "89e9e80a35182c5018f51f3e19b306d66afa436f"
+    ],
+}
