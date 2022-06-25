@@ -24,7 +24,7 @@ def KAMAR_check(request):
             },
             status=403,
         )
-    elif (
+    if (
         request.META.get("HTTP_AUTHORIZATION")
         == f'Basic {os.environ.get("KAMAR_AUTH_USERNAME")}/{os.environ.get("KAMAR_AUTH_PASSWORD")}'
     ):
@@ -43,15 +43,14 @@ def KAMAR_check(request):
             },
             status=200,
         )
-    else:
-        return JsonResponse(
-            {
-                "SMSDirectoryData": {
-                    "error": 403,
-                    "result": "Invalid authentication",
-                    "service": "Digital Commendation System",
-                    "version": "1.0",
-                }
-            },
-            status=403,
-        )
+    return JsonResponse(
+        {
+            "SMSDirectoryData": {
+                "error": 403,
+                "result": "Invalid authentication",
+                "service": "Digital Commendation System",
+                "version": "1.0",
+            }
+        },
+        status=403,
+    )
