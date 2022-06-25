@@ -47,16 +47,15 @@ def loginView(request):
                     },
                     status=403,
                 )
-            else:
-                return render(
-                    request,
-                    "users/login.html",
-                    {
-                        "error": "You have been marked inactive, so cannot log in.",
-                        "username": username,
-                    },
-                    status=403,
-                )
+            return render(
+                request,
+                "users/login.html",
+                {
+                    "error": "You have been marked inactive, so cannot log in.",
+                    "username": username,
+                },
+                status=403,
+            )
         else:
             return render(
                 request,
