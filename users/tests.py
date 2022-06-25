@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import *
+from django.contrib.auth import logout
 
 # Create your tests here.
 
@@ -20,6 +21,15 @@ class UserTestCase(TestCase):
             first_name="Test",
             last_name="SuperUser",
         )
+        self.webLogin = User.objects.create_user(
+            username="testWebLogin",
+            email="testWebLogin@example.com",
+            password="testpassword",
+            first_name="Test",
+            last_name="WebLogin",
+        )
+        self.webLogin.is_teacher = True
+        self.webLogin.save()
 
     def test_user_creation(self):
         self.assertEqual(self.user.username, "testuser", "Username is not correct")
@@ -63,7 +73,7 @@ class UserTestCase(TestCase):
             "User string representation is not correct",
         )
 
-    def test_user_permsissions(self):
+    def test_user_permissions(self):
         self.assertFalse(self.user.is_staff, "User is staff")
         self.assertFalse(self.user.is_superuser, "User is superuser")
         self.assertTrue(self.user.is_active, "User is not active")
@@ -72,3 +82,42 @@ class UserTestCase(TestCase):
         self.assertTrue(self.superuser.is_staff, "Superuser is not staff")
         self.assertTrue(self.superuser.is_superuser, "Superuser is not superuser")
         self.assertTrue(self.superuser.is_active, "Superuser is not active")
+
+    def test_user_login(self):
+        response = self.client.get("/login/")
+        self.assertEqual(
+            response.status_code, 301, "/login/ should redirect to /users/login/"
+        )
+        self.assertEqual(
+            response.url, "/users/login/", "/login/ should redirect to /users/login/"
+        )
+        response = self.client.get("/users/login/")
+        self.assertEqual(response.status_code, 200, "/users/login/ should return a 200")
+        self.assertTemplateUsed(
+            response, "users/login.html", "Login template was not used in login page"
+        )
+        self.assertTemplateUsed(
+            response, "base.html", "Base template was not used in login page"
+        )
+
+        response1 = self.client.post(
+            "/users/login/",
+            data={"username": "testWebLogin", "password": "testpassword"},
+        )
+        self.assertEqual(
+            response1.status_code, 202, "Correct username and password was not accepted"
+        )
+        logout(self.client)
+        response2 = self.client.post(
+            "/users/login/",
+            data={"username": "testWebLogin", "password": "testpassword2"},
+        )
+        self.assertEqual(
+            response2.status_code, 403, "Incorrect username and password was accepted"
+        )
+        logout(self.client)
+        response3 = self.client.post(
+            "/users/login/", data={"username": "testuser", "password": "testpassword"}
+        )
+        self.assertEqual(response3.status_code, 403, "Non teacher user was logged in")
+        logout(self.client)
