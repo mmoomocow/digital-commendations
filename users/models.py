@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
 from django.contrib.auth.models import BaseUserManager as defaultUserManager
 from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
-from django.contrib.auth.hashers import make_password
-from teachers.models import Teacher
-from students.models import Student, Caregiver
 
 # Create your models here.
 
@@ -52,7 +49,6 @@ class User(defaultUser, defaultPermissionsMixin):
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     # User ID
-    # This will not really be used, as all uses will refer to the respective student/teacher/caregiver
     # This field is just here to internally identify and link to the user
     id = models.AutoField(
         primary_key=True,
@@ -138,36 +134,3 @@ class User(defaultUser, defaultPermissionsMixin):
         elif self.is_caregiver:
             self.caregiver.delete()
         super().delete(*args, **kwargs)
-
-    # Create user and corresponding teacher, student or caregiver
-    def create_user(
-        self,
-        email="",
-        password="",
-        title="",
-        first_name="",
-        last_name="",
-        is_teacher=False,
-        is_student=False,
-        is_caregiver=False,
-        *args,
-        **kwargs,
-    ):
-        self.email = email
-        self.password = make_password(password)
-        self.title = title
-        self.first_name = first_name
-        self.last_name = last_name
-        self.is_teacher = is_teacher
-        self.is_student = is_student
-        self.is_caregiver = is_caregiver
-        self.save()
-
-        if is_teacher:
-            self.teacher = Teacher.objects.create_teacher(user=self, *args, **kwargs)
-        elif is_student:
-            self.student = Student.objects.create_student(user=self, *args, **kwargs)
-        elif is_caregiver:
-            self.caregiver = Caregiver.objects.create_caregiver(
-                user=self, *args, **kwargs
-            )

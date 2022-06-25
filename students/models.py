@@ -81,7 +81,3 @@ class Student(models.Model):
 
     def __str__(self):
         return str(f"{self.user.first_name} {self.user.last_name} ({self.id})")
-
-    def delete(self, *args, **kwargs):
-        # Delete the student
-        super().delete(*args, **kwargs)
