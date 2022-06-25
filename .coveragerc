@@ -1,0 +1,20 @@
+[run]
+omit =
+    venv/*
+    **/migrations/*
+    */asgi.py
+    */wsgi.py
+    */manage.py
+    **/__init__.py
+    **/tests.py
+branch = True
+dynamic_context = test_function
+
+[report]
+fail_under = 85
+precision = 2
+skip_empty = True
+
+[html]
+directory = coverage/
+show_contexts = True
