@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import *
+from .models import User
 
 # Register your models here.
 
@@ -62,5 +62,5 @@ class UserAdmin(BaseUserAdmin):
         for user in obj.all():
             if user.is_superuser:
                 return False
-            else:
-                super().delete_model(request, obj)
+            super().delete_model(request, obj)
+            return True
