@@ -11,7 +11,7 @@ class CommendationTestCase(TestCase):
     def setUp(self):
         # Commendation needs teachers and students
         # First create a teacher
-        self.teacher = user = user_models.User.objects.create_user(
+        self.teacher = user_models.User.objects.create_user(
             username="CommendationTeacher",
             email="testTeacher@example.com",
             password="teacherpassword",
