@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
 from django.contrib.auth.models import BaseUserManager as defaultUserManager
 from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
-from django.contrib.auth.hashers import make_password
-from teachers.models import Teacher
-from students.models import Student, Caregiver
 
 # Create your models here.
 
