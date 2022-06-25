@@ -9,6 +9,7 @@ omit =
     **/tests.py
 branch = True
 dynamic_context = test_function
+parallel = True
 
 [report]
 fail_under = 85
