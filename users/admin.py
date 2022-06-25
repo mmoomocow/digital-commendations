@@ -64,3 +64,4 @@ class UserAdmin(BaseUserAdmin):
                 return False
             else:
                 super().delete_model(request, obj)
+                return True
