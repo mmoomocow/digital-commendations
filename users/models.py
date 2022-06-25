@@ -137,36 +137,3 @@ class User(defaultUser, defaultPermissionsMixin):
         elif self.is_caregiver:
             self.caregiver.delete()
         super().delete(*args, **kwargs)
-
-    # Create user and corresponding teacher, student or caregiver
-    def create_user(
-        self,
-        email="",
-        password="",
-        title="",
-        first_name="",
-        last_name="",
-        is_teacher=False,
-        is_student=False,
-        is_caregiver=False,
-        *args,
-        **kwargs,
-    ):
-        self.email = email
-        self.password = make_password(password)
-        self.title = title
-        self.first_name = first_name
-        self.last_name = last_name
-        self.is_teacher = is_teacher
-        self.is_student = is_student
-        self.is_caregiver = is_caregiver
-        self.save()
-
-        if is_teacher:
-            self.teacher = Teacher.objects.create_teacher(user=self, *args, **kwargs)
-        elif is_student:
-            self.student = Student.objects.create_student(user=self, *args, **kwargs)
-        elif is_caregiver:
-            self.caregiver = Caregiver.objects.create_caregiver(
-                user=self, *args, **kwargs
-            )
