@@ -5,6 +5,7 @@ from faker.providers import misc as fake_misc
 from users import models as user_models
 from students import models as student_models
 from teachers import models as teacher_models
+from django.core.management.base import BaseCommand
 
 fake = Faker()
 fake.add_provider(fake_profile)
