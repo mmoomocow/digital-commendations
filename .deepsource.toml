@@ -5,6 +5,10 @@ test_patterns = ["**/tests.py"]
 exclude_patterns = ["**/migrations/**"]
 
 [[analyzers]]
+name = "test-coverage"
+enabled = true
+
+[[analyzers]]
 name = "python"
 enabled = true
 
