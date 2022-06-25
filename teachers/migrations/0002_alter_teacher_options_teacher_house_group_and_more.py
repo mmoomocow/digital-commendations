@@ -6,27 +6,51 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teachers', '0001_initial'),
+        ("teachers", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='teacher',
-            options={'ordering': ('staff_code',)},
+            name="teacher",
+            options={"ordering": ("staff_code",)},
         ),
         migrations.AddField(
-            model_name='teacher',
-            name='house_group',
-            field=models.CharField(blank=True, choices=[('Anderson', 'Anderson'), ('Begg', 'Begg'), ('Ross', 'Ross'), ('Herron', 'Herron'), ('Somerville', 'Somerville')], max_length=20, null=True, verbose_name='House Group'),
+            model_name="teacher",
+            name="house_group",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Anderson", "Anderson"),
+                    ("Begg", "Begg"),
+                    ("Ross", "Ross"),
+                    ("Herron", "Herron"),
+                    ("Somerville", "Somerville"),
+                ],
+                max_length=20,
+                null=True,
+                verbose_name="House Group",
+            ),
         ),
         migrations.AddField(
-            model_name='teacher',
-            name='staff_code',
-            field=models.CharField(blank=True, max_length=2, null=True, unique=True, verbose_name='Staff Code'),
+            model_name="teacher",
+            name="staff_code",
+            field=models.CharField(
+                blank=True,
+                max_length=2,
+                null=True,
+                unique=True,
+                verbose_name="Staff Code",
+            ),
         ),
         migrations.AlterField(
-            model_name='teacher',
-            name='id',
-            field=models.AutoField(editable=False, primary_key=True, serialize=False, unique=True, verbose_name='ID'),
+            model_name="teacher",
+            name="id",
+            field=models.AutoField(
+                editable=False,
+                primary_key=True,
+                serialize=False,
+                unique=True,
+                verbose_name="ID",
+            ),
         ),
     ]

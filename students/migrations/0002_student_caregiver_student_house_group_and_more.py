@@ -7,33 +7,69 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('students', '0001_initial'),
+        ("students", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student',
-            name='caregiver',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='students.caregiver', verbose_name='Caregiver'),
+            model_name="student",
+            name="caregiver",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="students.caregiver",
+                verbose_name="Caregiver",
+            ),
         ),
         migrations.AddField(
-            model_name='student',
-            name='house_group',
-            field=models.CharField(blank=True, choices=[('Anderson', 'Anderson'), ('Begg', 'Begg'), ('Ross', 'Ross'), ('Herron', 'Herron'), ('Somerville', 'Somerville')], max_length=20, null=True, verbose_name='House Group'),
+            model_name="student",
+            name="house_group",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("Anderson", "Anderson"),
+                    ("Begg", "Begg"),
+                    ("Ross", "Ross"),
+                    ("Herron", "Herron"),
+                    ("Somerville", "Somerville"),
+                ],
+                max_length=20,
+                null=True,
+                verbose_name="House Group",
+            ),
         ),
         migrations.AddField(
-            model_name='student',
-            name='tutor_room',
-            field=models.CharField(blank=True, max_length=3, null=True, verbose_name='Tutor Room'),
+            model_name="student",
+            name="tutor_room",
+            field=models.CharField(
+                blank=True, max_length=3, null=True, verbose_name="Tutor Room"
+            ),
         ),
         migrations.AddField(
-            model_name='student',
-            name='year_level',
-            field=models.IntegerField(blank=True, choices=[(9, 'Year 9'), (10, 'Year 10'), (11, 'Year 11'), (12, 'Year 12'), (13, 'Year 13')], null=True, verbose_name='Year Level'),
+            model_name="student",
+            name="year_level",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    (9, "Year 9"),
+                    (10, "Year 10"),
+                    (11, "Year 11"),
+                    (12, "Year 12"),
+                    (13, "Year 13"),
+                ],
+                null=True,
+                verbose_name="Year Level",
+            ),
         ),
         migrations.AlterField(
-            model_name='student',
-            name='id',
-            field=models.IntegerField(primary_key=True, serialize=False, unique=True, verbose_name='Student ID'),
+            model_name="student",
+            name="id",
+            field=models.IntegerField(
+                primary_key=True,
+                serialize=False,
+                unique=True,
+                verbose_name="Student ID",
+            ),
         ),
     ]
