@@ -17,6 +17,19 @@
 		{% endblock head %}
 	</head>
 	<body>
+        {% if messages %}
+        {% comment %} Display messages using django's build in messages framework {% endcomment %}
+        <ul class="messages">
+            {% for message in messages %}
+            <span>
+                <li class="{% if message.tags %}{{ message.tags }} {% endif %}">
+                    {{ message.message }}
+                </li>
+                
+            </span>
+            {% endfor %}
+        </ul>
+        {% endif %}
 		<header>
 			<nav>
 				<a href="/">Home</a>

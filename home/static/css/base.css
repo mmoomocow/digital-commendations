@@ -80,3 +80,44 @@ footer {
 	color: red;
 	text-decoration: none;
 }
+
+/* Messages styles */
+.messages {
+	margin: 0px;
+	display: block;
+	padding: 0px;
+}
+
+.messages li {
+	list-style: none;
+	margin: 0px;
+	padding: 2px 0px 2px 10px;
+	display: block;
+}
+
+.messages span.closeBTN {
+	padding-right: 5px;
+	float: right;
+	cursor: pointer;
+}
+
+.messages .info {
+	background-color: #2ae2e8;
+	font-weight: bold;
+}
+
+.messages .success {
+	background-color: #36dd36;
+	font-weight: bold;
+}
+
+.messages .warning {
+	background-color: #ff9d14;
+	font-weight: bold;
+}
+
+.messages .error {
+	color: white;
+	background-color: #e90000;
+	font-weight: bold;
+}
