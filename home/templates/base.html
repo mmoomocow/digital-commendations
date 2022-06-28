@@ -23,9 +23,9 @@
         <ul class="messages">
             {% for message in messages %}
             <span>
-                <li class="{% if message.tags %}{{ message.tags }} {% endif %}">
+                <li class="message {% if message.tags %}{{ message.tags }} {% endif %}">
                     {{ message.message }}
-                    <span class="material-symbols-outlined closeBTN">close</span>
+                    <span class="material-symbols-outlined closeBTN"  onclick="hideSelf(this.parentNode)">close</span>
                 </li>
                 
             </span>

@@ -5,3 +5,11 @@ function hideSelf(element) {
         element.style.display = "none";
     }, 300);
 }
+
+// hide all messages after 15 seconds
+setTimeout(() => {
+    let messages = document.getElementsByClassName("message");
+    for (let i = 0; i < messages.length; i++) {
+        hideSelf(messages[i]);
+    }
+}, 15000);
