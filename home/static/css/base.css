@@ -93,6 +93,7 @@ footer {
 	margin: 0px;
 	padding: 2px 0px 2px 10px;
 	display: block;
+	transition: opacity 0.3s ease-in-out;
 }
 
 .messages span.closeBTN {
