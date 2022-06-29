@@ -105,7 +105,7 @@ class UserTestCase(TestCase):
             data={"username": "testWebLogin", "password": "testpassword"},
         )
         self.assertEqual(
-            response1.status_code, 202, "Correct username and password was not accepted"
+            response1.status_code, 302, "Correct username and password was not accepted"
         )
         logout(self.client)
         response2 = self.client.post(
