@@ -22,7 +22,11 @@ def loginView(request):
             if user.is_active:
                 if user.is_teacher:
                     login(request, user)
-                    messages.add_message(request, messages.SUCCESS, "Login successful! Welcome back %s" % user.first_name)
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        "Login successful! Welcome back %s" % user.first_name,
+                    )
                     return redirect("/")
                 return render(
                     request,
@@ -58,7 +62,11 @@ def loginView(request):
 def logoutView(request):
     if request.user.is_authenticated:
         logout(request)
-        messages.add_message(request, messages.SUCCESS, "You have been logged out, see you next time!")
+        messages.add_message(
+            request, messages.SUCCESS, "You have been logged out, see you next time!"
+        )
         return redirect("/")
-    messages.add_message(request, messages.INFO, "You are not logged in, so you cannot log out!")
+    messages.add_message(
+        request, messages.INFO, "You are not logged in, so you cannot log out!"
+    )
     return redirect("/")
