@@ -1,22 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 # Create your views here.
 
 
 def loginView(request):
     if request.user.is_authenticated:
-        # Don't allow logged in users to login again
-        return render(
-            request,
-            "users/login.html",
-            {
-                "success": True,
-                "error": f'<p style="color:green;">Already logged in. Welcome {request.user.first_name}</p>',
-            },
-            status=202,
-        )
+        messages.add_message(request, messages.INFO, "You are already logged in!")
+        return redirect("/")
 
     if request.method == "POST":
         # Triggered if the client has submitted the form
@@ -29,15 +21,12 @@ def loginView(request):
             if user.is_active:
                 if user.is_teacher:
                     login(request, user)
-                    return render(
+                    messages.add_message(
                         request,
-                        "users/login.html",
-                        {
-                            "success": True,
-                            "error": f'<p style="color:green;">Login successful. Welcome {user.first_name}</p>',
-                        },
-                        status=202,
+                        messages.SUCCESS,
+                        "Login successful! Welcome back %s" % user.first_name,
                     )
+                    return redirect("/")
                 return render(
                     request,
                     "users/login.html",
@@ -72,7 +61,11 @@ def loginView(request):
 def logoutView(request):
     if request.user.is_authenticated:
         logout(request)
-        return HttpResponse(
-            "<h1>Logout successful</h1>"
-        )  # Basic HTTP more work on front end will be done later
-    return HttpResponse("<h1>You are not logged in</h1>")
+        messages.add_message(
+            request, messages.SUCCESS, "You have been logged out, see you next time!"
+        )
+        return redirect("/")
+    messages.add_message(
+        request, messages.INFO, "You are not logged in, so you cannot log out!"
+    )
+    return redirect("/")
