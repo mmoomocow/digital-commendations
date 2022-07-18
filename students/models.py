@@ -80,4 +80,6 @@ class Student(models.Model):
         verbose_name_plural = "Students"
 
     def __str__(self):
+        if not self.user.first_name:
+            return str(self.id)
         return str(f"{self.user.first_name} {self.user.last_name} ({self.id})")

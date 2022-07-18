@@ -59,4 +59,6 @@ class Teacher(models.Model):
         ordering = ("staff_code",)
 
     def __str__(self):
+        if not self.user.first_name:
+            return self.staff_code
         return str(f"{self.staff_code} ({self.user.first_name} {self.user.last_name})")
