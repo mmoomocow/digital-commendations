@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}Award Commendation{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'teachers/giveCommendation.min.css' %}">
+<script src="{% static 'teachers/search.js' %}"></script>
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}Award Commendation{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+<form>
+    <div class="formField">
+        <label for="commendationType">Commendation Type <abbr class="requiredField" title="This field is required">*</abbr></label>
+        <br>
+        {% for type in commendationTypes %}
+            <input type="radio" name="commendationType" id="{{ type.value }}" value="{{ type.value }}" required>
+            <label for="{{ type.value }}">{{ type.name }}</label>
+            <br>
+        {% endfor %}
+    </div>
+
+    <div class="formField">
+        <label for="reason">Reason</label>
+        <br>
+        <textarea name="reason" id="reason"></textarea>
+    </div>
+
+    <div class="formField">
+        <label for="students">Student(s) <abbr class="requiredField" title="This field is required">*</abbr></label>
+        {% comment %} Hold crtl to select multiple hint {% endcomment %}
+        <p class="hint">Hold Ctrl to select multiple students</p>
+        <input type="text" name="students" id="students" placeholder="Search students" onkeydown="filterStudents(this.value)">
+        <select name="students" id="students" multiple required>
+            {% for student in students %}
+                <option class="studentChoice" value="{{ student.id }}">{{ student }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="formField">
+        <label for="teacher">Teacher <abbr class="requiredField" title="This field is required">*</abbr></label>
+        <br>
+        <select name="teacher" id="teacher" required>
+            {% for teacher in teachers %}
+                <option value="{{ teacher.id }}">{{ teacher }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="formField">
+        <input type="submit" value="Submit" id="submit">
+    </div>
+</form>
+{% endblock content %}
