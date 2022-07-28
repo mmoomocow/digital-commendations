@@ -51,3 +51,13 @@ class TeacherTestCase(TestCase):
             "Teacher User",
             "User string representation is not correct",
         )
+
+    def test_teacher_home(self):
+        response = self.client.get("/teachers/")
+        self.assertEqual(response.status_code, 200, "Home page should be accessible")
+        self.assertTemplateUsed(
+            response, "teachers/home.html", "Teacher home page should use the correct template"
+        )
+
+    def test_teacher_give_commendation(self):
+        
