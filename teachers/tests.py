@@ -64,7 +64,7 @@ class TeacherTestCase(TestCase):
 
     def test_teacher_home(self):
         # Request will fail as not logged in
-        response = self.client.get("/commendations/award/")
+        response = self.client.get("/teachers/")
         self.assertEqual(
             response.status_code,
             403,
@@ -73,7 +73,7 @@ class TeacherTestCase(TestCase):
 
         # Login as user
         self.client.login(username="notTeacher", password="notTeacherPassword")
-        response = self.client.get("/commendations/award/")
+        response = self.client.get("/teachers/")
         self.assertEqual(
             response.status_code,
             403,
