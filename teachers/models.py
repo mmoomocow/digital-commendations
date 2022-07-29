@@ -7,13 +7,24 @@ class Teacher(models.Model):
     """
     The model for teachers and staff.
 
-    This model will link to commendations, and contain data that is
-    specific to staff members only, and therefore not suitable for the
-    generic user model.
+    This model contains data that is specific to teachers and staff, and therefore not suitable for the
+    generic user model. To access generic data, use the user reverse relation.
 
-    The generic user model contains all of the basic information that
-    is required for a user to log in, and contains email address, name
-    password etc, so this information should not be stored in the teacher model
+    Related Models:
+        :model:`commendation.Commendation` - Commendations are linked to teachers when
+
+        :model:`users.User` - The user model that is linked to the teacher
+
+    Fields:
+        id (AutoField): The primary key of the teacher
+
+        staff_code (str): The staff code of the teacher
+
+        user (ForeignKey): The user model that is linked to the teacher
+
+        house_group (str): The house group the teacher is a member of
+
+        user (ForeignKey): Reverse relation to the user model
     """
 
     # Teacher ID

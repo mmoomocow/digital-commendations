@@ -77,9 +77,53 @@ class User(defaultUser, defaultPermissionsMixin):
     """
     The default, generic user object that exists as a base for all users
     in the system.
-    This is also the user object that is used to authenticate users, as doing
-    authentication for students, teachers, and caregivers would require far
-    more code maintenance than just adding a new user object.
+
+    It extends Django's defaultUser object and defaultPermissionsMixin object.
+
+    Related Models:
+        :model:`teachers.Teacher` - The teacher model that is linked to the user
+
+        :model:`students.Student` - The student model that is linked to the user
+
+        :model:`students.Caregiver` - The caregiver model that is linked to the user
+
+    Methods:
+        delete(): Delete the user and any linked models of teachers, students and caregivers
+
+    Fields:
+        id (AutoField): The primary key of the user
+
+        username (str): The username that the user will use to login
+
+        password (str): The password of the user that will be salted and hashes. Defaults to None.
+
+        email (str): The email address of the user
+
+        first_name (str): The user's first name
+
+        last_name (str): The user's last name
+
+        is_active (bool): Whether the user is active or not
+
+        is_staff (bool): Whether the user is a staff member or not
+
+        is_superuser (bool): Whether the user is a superuser or not
+
+        date_joined (DateTimeField): The date and time the user joined the system
+
+        last_login (DateTimeField): The date and time the user last logged in
+
+        is_teacher (bool): Whether the user is a teacher or not
+
+        is_student (bool): Whether the user is a student or not
+
+        is_caregiver (bool): Whether the user is a caregiver or not
+
+        teacher (ForeignKey): The teacher model that is linked to the user
+
+        student (ForeignKey): The student model that is linked to the user
+
+        caregiver (ForeignKey): The caregiver model that is linked to the user
     """
 
     # Custom user manager

@@ -14,9 +14,22 @@ class Student(models.Model):
     """
     The model for students.
 
-    This model will link to commendations, and contain data that is
-    specific to students only, and therefore not suitable for the
-    generic user model.
+    This model contains data that is specific to students, and therefore not suitable for the
+    generic user model. To access generic data, use the user reverse relation.
+
+    Related Models:
+        :model:`commendation.Commendation` - Commendations are linked to students when awarded
+
+        :model:`users.User` - The user model that is linked to the student
+
+    Fields:
+        id (int): The primary key of the student (taken from KAMAR)
+
+        tutor_room (str): The student's tutor room
+
+        house_group (str): The student's house group
+
+        user (ForeignKey): Reverse relation to the user model
     """
 
     # The KAMAR assigned student ID is a unique identifier for the student
