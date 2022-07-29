@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import *
 from users import models as user_models
+from commendations.models import commendation as Commendation
 
 # Create your tests here.
 
@@ -56,8 +57,12 @@ class TeacherTestCase(TestCase):
         response = self.client.get("/teachers/")
         self.assertEqual(response.status_code, 200, "Home page should be accessible")
         self.assertTemplateUsed(
-            response, "teachers/home.html", "Teacher home page should use the correct template"
+            response,
+            "teachers/index.html",
+            "Teacher home page should use the correct template",
         )
-
-    def test_teacher_give_commendation(self):
-        
+        self.assertTemplateUsed(
+            response,
+            "base.html",
+            "Teacher home page should extend the base.html template",
+        )
