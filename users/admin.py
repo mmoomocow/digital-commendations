@@ -59,8 +59,7 @@ class UserAdmin(BaseUserAdmin):
     )
 
     def delete_model(self, request, obj):
-        for user in obj.all():
-            if user.is_superuser:
-                return False
-            super().delete_model(request, obj)
-            return True
+        if obj.is_superuser:
+            return False
+        super().delete_model(request, obj)
+        return True
