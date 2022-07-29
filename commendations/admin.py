@@ -6,6 +6,8 @@ from .models import commendation
 
 @admin.register(commendation)
 class CommendationAdmin(admin.ModelAdmin):
+    """Admin settings for the commendation model."""
+
     list_display = ("id", "commendation_type", "date_time", "teacher")
     list_filter = ("commendation_type", "date_time", "teacher")
     search_fields = (
