@@ -22,6 +22,7 @@ class TeacherTestCase(TestCase):
         # Link the user to the teacher
         self.user.is_teacher = True
         self.user.teacher = self.teacher
+        self.user.save()
 
         # Create a user to test permissions
         self.user2 = user_models.User.objects.create_user(
@@ -86,7 +87,7 @@ class TeacherTestCase(TestCase):
         self.assertEqual(
             response.status_code,
             200,
-            "GET request to award commendation by teachers should be successful",
+            "GET request to teacher home by teachers should be successful",
         )
         self.assertTemplateUsed(
             response,
