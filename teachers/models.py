@@ -60,7 +60,7 @@ class Teacher(models.Model):
 
         ordering = ("staff_code",)
 
-    def __str__(self):
+    def __str__(self) -> str:
         if not hasattr(self, "user"):
             return f"{self.staff_code}"
         return f"{self.staff_code} ({self.user.first_name} {self.user.last_name})"

@@ -7,7 +7,7 @@ import os
 
 
 @csrf_exempt
-def KAMAR_check(request):
+def KAMAR_check(request) -> JsonResponse:
     """
     Authenticate and respond to KAMAR check requests
     https://directoryservices.kamar.nz/?listening-service/check

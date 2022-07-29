@@ -72,5 +72,5 @@ class commendation(models.Model):
         verbose_name = "Commendation"
         verbose_name_plural = "Commendations"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Commendation ID: {self.id}"

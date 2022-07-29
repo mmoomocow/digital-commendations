@@ -4,12 +4,39 @@ from django.contrib.auth.models import BaseUserManager as defaultUserManager
 from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
 
 # Create your models here.
+class User:
+    pass
 
 
 class UserManager(defaultUserManager):
     """Manager for the User model."""
 
-    def create_user(self, username, email, first_name, last_name, password=None):
+    def create_user(
+        self,
+        username: str,
+        email: str,
+        first_name: str,
+        last_name: str,
+        password: str = None,
+    ):
+        """
+        Create a new user
+
+        Args:
+            username (str): The username that the user will use to login
+            email (str): The email address of the user
+            first_name (str): The user's first name
+            last_name (str): The user's last name
+            password (str): The password of the user that will be salted and hashes. Defaults to None.
+
+        Raises:
+            ValueError: Users must have a username
+            ValueError: Users must have an email
+
+        Returns:
+            User: Returns the newly created user
+        """
+
         if not username:
             raise ValueError("Users must have a username")
         if not email:
@@ -27,6 +54,19 @@ class UserManager(defaultUserManager):
         return user
 
     def create_superuser(self, username, email, first_name, last_name, password):
+        """
+        Create a new user with superuser privileges
+
+        Args:
+            username (str): The username that the user will use to login
+            email (str): The email address of the user
+            first_name (str): The user's first name
+            last_name (str): The user's last name
+            password (str): The password of the user that will be salted and hashes. Defaults to None.
+
+        Returns:
+            User: Returns the newly created user
+        """
         user = self.create_user(
             username, email, first_name, last_name, password=password
         )
@@ -131,6 +171,7 @@ class User(defaultUser, defaultPermissionsMixin):
 
     # When the user is deleted, delete the user's teacher, student or caregiver
     def delete(self, *args, **kwargs):
+        """Delete the user and any linked models of teachers, students and caregivers"""
         if self.is_teacher:
             self.teacher.delete()
         elif self.is_student:

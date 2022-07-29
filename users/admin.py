@@ -60,7 +60,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
 
-    def delete_model(self, request, obj):
+    def delete_model(self, request, obj) -> bool:
         if obj.is_superuser:
             return False
         super().delete_model(request, obj)
