@@ -80,7 +80,6 @@ class Student(models.Model):
         verbose_name_plural = "Students"
 
     def __str__(self):
-        try:
-            return str(f"{self.user.first_name} {self.user.last_name} ({self.id})")
-        except:
-            return str(f"{self.id}")
+        if not hasattr(self, "user"):
+            return f"{self.id}"
+        return str(f"{self.user.first_name} {self.user.last_name} ({self.id})")
