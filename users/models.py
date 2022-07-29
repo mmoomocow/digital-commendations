@@ -34,7 +34,6 @@ class UserManager(defaultUserManager):
         Returns:
             User: Returns the newly created user
         """
-
         if not username:
             raise ValueError("Users must have a username")
         if not email:
