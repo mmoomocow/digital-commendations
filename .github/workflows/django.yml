@@ -78,8 +78,11 @@ jobs:
         coverage report -m --fail-under=85
         coverage xml
 
-    - name: Report coverage to DeepSource
-      uses: deepsourcelabs/test-coverage-action@v1.0.0
-      with:
-        key: python
-        dsn: ${{ secrets.DEEPSOURCE_DSN }}
+    - name: Report results to DeepSource
+      run: |
+        coverage xml
+        curl https://deepsource.io/cli | sh
+        ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
+
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
