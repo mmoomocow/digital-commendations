@@ -66,6 +66,15 @@ class CommendationTestCase(TestCase):
         )
         self.commendation.students.add(self.student1.student, self.student2.student)
 
+        # Create a user that's not a teacher to test permissions
+        self.user = user_models.User.objects.create_user(
+            username="CommendationUser",
+            email="commendationUser@example.com",
+            password="userpassword",
+            first_name="Commendation",
+            last_name="User",
+        )
+
     def test_commendation_creation(self):
         self.assertEqual(
             self.commendation.commendation_type,
@@ -98,3 +107,78 @@ class CommendationTestCase(TestCase):
             self.commendation.students.contains(self.student2.student),
             "Commendation student #2 is not correct",
         )
+
+    def test_commendation_str(self):
+        self.assertEqual(
+            str(self.commendation),
+            "Commendation ID: 1",
+            "Commendation string is not correct",
+        )
+
+    def test_award_commendation_get(self):
+        # Request will fail as not logged in
+        response = self.client.get("/commendations/award/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to award commendation by unauthenticated users should be forbidden",
+        )
+
+        # Login as user
+        self.client.login(username="CommendationUser", password="userpassword")
+        response = self.client.get("/commendations/award/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to award commendation by non-teachers should be forbidden",
+        )
+        self.client.logout()
+
+        # Login as a teacher
+        self.client.login(username="CommendationTeacher", password="teacherpassword")
+        response = self.client.get("/commendations/award/")
+        self.assertEqual(
+            response.status_code,
+            200,
+            "GET request to award commendation by teachers should be successful",
+        )
+        self.assertTemplateUsed(
+            response, "commendations/award.html", "Award commendation template not used"
+        )
+        self.assertTemplateUsed(
+            response, "base.html", "Award commendation did not extend base.html"
+        )
+        # reset client
+        self.client.logout()
+
+    def test_award_commendation_post(self):
+        # Request will fail as not logged in
+        response = self.client.post("/commendations/award/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "POST request to award commendation by unauthenticated users should be forbidden",
+        )
+        # Login as a teacher
+        self.client.login(username="CommendationTeacher", password="teacherpassword")
+        response = self.client.post(
+            "/commendations/award/",
+            {
+                "commendationType": commendation.RESPECT,
+                "reason": "Post request test",
+                "teacher": self.teacher.teacher.id,
+                "students": [self.student1.student.id, self.student2.student.id],
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        newCommendation = commendation.objects.get(
+            commendation_type=commendation.RESPECT,
+            reason="Post request test",
+        )
+        self.assertEqual(newCommendation.teacher, self.teacher.teacher)
+        self.assertEqual(newCommendation.students.count(), 2)
+        self.assertTrue(newCommendation.students.contains(self.student1.student))
+        self.assertTrue(newCommendation.students.contains(self.student2.student))
+
+        # reset client
+        self.client.logout()
