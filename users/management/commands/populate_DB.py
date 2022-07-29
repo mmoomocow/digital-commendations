@@ -69,6 +69,10 @@ def generate_student(number):
 
 
 class Command(BaseCommand):
+    """
+    Populate the database with dummy data
+    """
+
     help = "Populates the database with dummy data."
 
     def add_arguments(self, parser):

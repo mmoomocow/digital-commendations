@@ -7,6 +7,10 @@ from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMix
 
 
 class UserManager(defaultUserManager):
+    """
+    Manager for the User model.
+    """
+
     def create_user(self, username, email, first_name, last_name, password=None):
         if not username:
             raise ValueError("Users must have a username")

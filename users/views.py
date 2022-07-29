@@ -6,6 +6,11 @@ from django.contrib import messages
 
 
 def loginView(request):
+    """
+    View for the login page.
+    GET requests will render the login page.
+    POST requests will authenticate the user and redirect them to the home page.
+    """
     if request.user.is_authenticated:
         messages.add_message(request, messages.INFO, "You are already logged in!")
         return redirect("/")
@@ -59,6 +64,10 @@ def loginView(request):
 
 
 def logoutView(request):
+    """
+    View for the logout page.
+    Requests will log the user out and redirect them to the home page.
+    """
     if request.user.is_authenticated:
         logout(request)
         messages.add_message(

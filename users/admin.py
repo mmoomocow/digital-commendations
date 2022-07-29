@@ -7,6 +7,8 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
+    """Admin config for the custom user model."""
+
     list_display = (
         "username",
         "first_name",
