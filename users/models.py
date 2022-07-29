@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
 from django.contrib.auth.models import BaseUserManager as defaultUserManager
@@ -16,7 +17,7 @@ class UserManager(defaultUserManager):
         first_name: str,
         last_name: str,
         password: str = None,
-    ):
+    ) -> User:
         """
         Create a new user
 
@@ -50,7 +51,14 @@ class UserManager(defaultUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, first_name, last_name, password):
+    def create_superuser(
+        self,
+        username: str,
+        email: str,
+        first_name: str,
+        last_name: str,
+        password: str = None,
+    ) -> User:
         """
         Create a new user with superuser privileges
 
