@@ -71,4 +71,4 @@ class commendation(models.Model):
         verbose_name_plural = "Commendations"
 
     def __str__(self):
-        return "Commendation ID: {}".format(self.id)
+        return f"Commendation ID: {self.id}"
