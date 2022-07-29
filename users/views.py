@@ -24,7 +24,7 @@ def loginView(request):
                     messages.add_message(
                         request,
                         messages.SUCCESS,
-                        "Login successful! Welcome back %s" % user.first_name,
+                        f"Login successful! Welcome back {user.first_name}",
                     )
                     return redirect("/")
                 return render(

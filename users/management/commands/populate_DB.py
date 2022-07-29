@@ -79,20 +79,19 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE("Populating the database..."))
 
         self.stdout.write(
-            self.style.NOTICE("Creating %s teachers..." % options["teachers"][0])
+            self.style.NOTICE(f"Creating {options['teachers'][0]} teachers...")
         )
         generate_teacher(options["teachers"][0])
         self.stdout.write(self.style.SUCCESS("Done!\n\n"))
 
         self.stdout.write(
-            self.style.NOTICE("Creating %s students..." % options["students"][0])
+            self.style.NOTICE(f"Creating {options['students'][0]} students...")
         )
         generate_student(options["students"][0])
         self.stdout.write(self.style.SUCCESS("Done!\n\n"))
 
         self.stdout.write(
             self.style.SUCCESS(
-                "Successfully generated %s users"
-                % (options["teachers"][0] + options["students"][0])
+                f"Successfully generated {options['teachers'][0] + options['students'][0]} users"
             )
         )
