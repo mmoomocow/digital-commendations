@@ -4,8 +4,6 @@ from django.contrib.auth.models import BaseUserManager as defaultUserManager
 from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
 
 # Create your models here.
-class User:
-    pass
 
 
 class UserManager(defaultUserManager):
