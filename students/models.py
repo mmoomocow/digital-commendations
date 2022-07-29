@@ -23,13 +23,12 @@ class Student(models.Model):
         :model:`users.User` - The user model that is linked to the student
 
     Fields:
-        id (int): The primary key of the student (taken from KAMAR)
+        * id (int): The primary key of the student (taken from KAMAR)
+        * tutor_room (str): The student's tutor room
+        * house_group (str): The student's house group
+        * user (ForeignKey): Reverse relation to the user model
 
-        tutor_room (str): The student's tutor room
-
-        house_group (str): The student's house group
-
-        user (ForeignKey): Reverse relation to the user model
+    Docs updated on: 30/7/2022
     """
 
     # The KAMAR assigned student ID is a unique identifier for the student

@@ -16,15 +16,13 @@ class Teacher(models.Model):
         :model:`users.User` - The user model that is linked to the teacher
 
     Fields:
-        id (AutoField): The primary key of the teacher
+        * id (AutoField): The primary key of the teacher
+        * staff_code (str): The staff code of the teacher
+        * user (ForeignKey): The user model that is linked to the teacher
+        * house_group (str): The house group the teacher is a member of
+        * user (ForeignKey): Reverse relation to the user model
 
-        staff_code (str): The staff code of the teacher
-
-        user (ForeignKey): The user model that is linked to the teacher
-
-        house_group (str): The house group the teacher is a member of
-
-        user (ForeignKey): Reverse relation to the user model
+        Docs updated on: 30/7/2022
     """
 
     # Teacher ID
