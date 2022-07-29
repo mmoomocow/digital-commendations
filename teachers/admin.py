@@ -6,6 +6,8 @@ from .models import Teacher
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
+    """Admin settings for the teacher model."""
+
     list_display = (
         "staff_code",
         "user",
