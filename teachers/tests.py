@@ -15,7 +15,7 @@ class TeacherTestCase(TestCase):
         self.user = user_models.User.objects.create_user(
             username="teacher",
             email="teacher@example.com",
-            password="teacherpassword",
+            password="teacherPassword",
             first_name="Teacher",
             last_name="User",
         )
@@ -27,7 +27,7 @@ class TeacherTestCase(TestCase):
         self.user2 = user_models.User.objects.create_user(
             username="notTeacher",
             email="notTeacher@example.com",
-            password="notTeacherpassword",
+            password="notTeacherPassword",
             first_name="Not",
             last_name="Teacher",
         )
@@ -80,6 +80,8 @@ class TeacherTestCase(TestCase):
         )
         self.client.logout()
 
+        # Login as teacher
+        self.client.login(username="teacher", password="teacherPassword")
         response = self.client.get("/teachers/")
         self.assertEqual(
             response.status_code,
@@ -96,3 +98,4 @@ class TeacherTestCase(TestCase):
             "base.html",
             "Teacher home page should extend the base.html template",
         )
+        self.client.logout()
