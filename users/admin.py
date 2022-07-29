@@ -7,6 +7,8 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
+    """Admin config for the custom user model."""
+
     list_display = (
         "username",
         "first_name",
@@ -58,7 +60,8 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
 
-    def delete_model(self, request, obj):
+    def delete_model(self, request, obj) -> bool:
+        """Override the delete method to prevent deletion of the superuser."""
         if obj.is_superuser:
             return False
         super().delete_model(request, obj)

@@ -5,10 +5,24 @@ from django.db import models
 
 class commendation(models.Model):
     """
-    The commendations that will be given to students as a reward
+    The model for commendations.
 
-    This model contains will contain data about the commendation, who gave it
-    who it was given to, the commendation type and the reason for giving it
+    This model stores data for the commendations that have been awarded to students by teachers.
+
+    Related Models:
+        * :model:`users.User` - The user model that is linked to the Student/Teacher
+        * :model:`teachers.Teacher` - The teacher model that is linked to the Teacher that awarded the commendation
+        * :model:`students.Student` - The student model that is linked to the Student that was awarded the commendation
+
+    Fields:
+        * id (AutoField): The primary key of the commendation
+        * commendation_type (str): The type of commendation that was awarded
+        * reason (str): The reason for the commendation
+        * date_time (DateTimeField): The date and time the commendation was awarded
+        * teacher (ForeignKey): The teacher model that is linked to the Teacher that awarded the commendation
+        * student (ManyToManyField): The student model that is linked to the Student that was awarded the commendation
+
+    Docs updated on: 30/7/2022
     """
 
     # Unique id for commendations
@@ -67,8 +81,10 @@ class commendation(models.Model):
     )
 
     class Meta:
+        """Meta settings for model"""
+
         verbose_name = "Commendation"
         verbose_name_plural = "Commendations"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Commendation ID: {self.id}"

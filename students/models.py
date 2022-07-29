@@ -4,16 +4,31 @@ from django.db import models
 
 
 class Caregiver(models.Model):
-    pass
+    """
+    Model for caregivers
+    This model has currently not been implemented and will be used in the future.
+    """
 
 
 class Student(models.Model):
     """
     The model for students.
 
-    This model will link to commendations, and contain data that is
-    specific to students only, and therefore not suitable for the
-    generic user model.
+    This model contains data that is specific to students, and therefore not suitable for the
+    generic user model. To access generic data, use the user reverse relation.
+
+    Related Models:
+        :model:`commendation.Commendation` - Commendations are linked to students when awarded
+
+        :model:`users.User` - The user model that is linked to the student
+
+    Fields:
+        * id (int): The primary key of the student (taken from KAMAR)
+        * tutor_room (str): The student's tutor room
+        * house_group (str): The student's house group
+        * user (ForeignKey): Reverse relation to the user model
+
+    Docs updated on: 30/7/2022
     """
 
     # The KAMAR assigned student ID is a unique identifier for the student
@@ -76,10 +91,12 @@ class Student(models.Model):
     )
 
     class Meta:
+        """Meta settings for model"""
+
         verbose_name = "Student"
         verbose_name_plural = "Students"
 
-    def __str__(self):
+    def __str__(self) -> str:
         if not hasattr(self, "user"):
             return f"{self.id}"
         return str(f"{self.user.first_name} {self.user.last_name} ({self.id})")

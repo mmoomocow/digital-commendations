@@ -12,7 +12,13 @@ fake.add_provider(fake_profile)
 fake.add_provider(fake_misc)
 
 
-def generate_teacher(number):
+def generate_teacher(number: int):
+    """
+    Generate a number of dummy teachers
+
+    Args:
+        number (int):The number of teachers to generate
+    """
     teacher_houses = [
         teacher_models.Teacher.ANDERSON,
         teacher_models.Teacher.BEGG,
@@ -39,7 +45,13 @@ def generate_teacher(number):
         user.save()
 
 
-def generate_student(number):
+def generate_student(number: int):
+    """
+    Generate a number of dummy students
+
+    Args:
+        number (int):The number of students to generate
+    """
     student_houses = [
         student_models.Student.ANDERSON,
         student_models.Student.BEGG,
@@ -69,13 +81,17 @@ def generate_student(number):
 
 
 class Command(BaseCommand):
+    """Populate the database with dummy data."""
+
     help = "Populates the database with dummy data."
 
     def add_arguments(self, parser):
+        """Add arguments to the command."""
         parser.add_argument("teachers", nargs="+", type=int)
         parser.add_argument("students", nargs="+", type=int)
 
     def handle(self, *args, **options):
+        """Handle the command."""
         self.stdout.write(self.style.NOTICE("Populating the database..."))
 
         self.stdout.write(

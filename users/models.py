@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
 from django.contrib.auth.models import BaseUserManager as defaultUserManager
@@ -7,7 +8,33 @@ from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMix
 
 
 class UserManager(defaultUserManager):
-    def create_user(self, username, email, first_name, last_name, password=None):
+    """Manager for the User model."""
+
+    def create_user(
+        self,
+        username: str,
+        email: str,
+        first_name: str,
+        last_name: str,
+        password: str = None,
+    ) -> User:
+        """
+        Create a new user
+
+        Args:
+            username (str): The username that the user will use to login
+            email (str): The email address of the user
+            first_name (str): The user's first name
+            last_name (str): The user's last name
+            password (str): The password of the user that will be salted and hashes. Defaults to None.
+
+        Raises:
+            ValueError: Users must have a username
+            ValueError: Users must have an email
+
+        Returns:
+            User: Returns the newly created user
+        """
         if not username:
             raise ValueError("Users must have a username")
         if not email:
@@ -24,7 +51,27 @@ class UserManager(defaultUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, first_name, last_name, password):
+    def create_superuser(
+        self,
+        username: str,
+        email: str,
+        first_name: str,
+        last_name: str,
+        password: str = None,
+    ) -> User:
+        """
+        Create a new user with superuser privileges
+
+        Args:
+            username (str): The username that the user will use to login
+            email (str): The email address of the user
+            first_name (str): The user's first name
+            last_name (str): The user's last name
+            password (str): The password of the user that will be salted and hashes. Defaults to None.
+
+        Returns:
+            User: Returns the newly created user
+        """
         user = self.create_user(
             username, email, first_name, last_name, password=password
         )
@@ -38,9 +85,37 @@ class User(defaultUser, defaultPermissionsMixin):
     """
     The default, generic user object that exists as a base for all users
     in the system.
-    This is also the user object that is used to authenticate users, as doing
-    authentication for students, teachers, and caregivers would require far
-    more code maintenance than just adding a new user object.
+
+    It extends Django's defaultUser object and defaultPermissionsMixin object.
+
+    Related Models:
+        * :model:`teachers.Teacher` - The teacher model that is linked to the user
+        * :model:`students.Student` - The student model that is linked to the user
+        * :model:`students.Caregiver` - The caregiver model that is linked to the user
+
+    Fields:
+        * id (AutoField): The primary key of the user
+        * username (str): The username that the user will use to login
+        * password (str): The password of the user that will be salted and hashes. Defaults to None.
+        * email (str): The email address of the user
+        * first_name (str): The user's first name
+        * last_name (str): The user's last name
+        * is_active (bool): Whether the user is active or not
+        * is_staff (bool): Whether the user is a staff member or not
+        * is_superuser (bool): Whether the user is a superuser or not
+        * date_joined (DateTimeField): The date and time the user joined the system
+        * last_login (DateTimeField): The date and time the user last logged in
+        * is_teacher (bool): Whether the user is a teacher or not
+        * is_student (bool): Whether the user is a student or not
+        * is_caregiver (bool): Whether the user is a caregiver or not
+        * teacher (ForeignKey): The teacher model that is linked to the user
+        * student (ForeignKey): The student model that is linked to the user
+        * caregiver (ForeignKey): The caregiver model that is linked to the user
+
+    Methods:
+        * delete(): Delete the user and any linked models of teachers, students and caregivers
+
+    Docs updated on: 30/7/2022
     """
 
     # Custom user manager
@@ -117,6 +192,8 @@ class User(defaultUser, defaultPermissionsMixin):
     USERNAME_FIELD = "username"
 
     class Meta:
+        """Meta settings for model"""
+
         ordering = ("id",)
         verbose_name = "User"
         verbose_name_plural = "Users"
@@ -127,6 +204,7 @@ class User(defaultUser, defaultPermissionsMixin):
 
     # When the user is deleted, delete the user's teacher, student or caregiver
     def delete(self, *args, **kwargs):
+        """Delete the user and any linked models of teachers, students and caregivers"""
         if self.is_teacher:
             self.teacher.delete()
         elif self.is_student:
