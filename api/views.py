@@ -8,8 +8,10 @@ import os
 
 @csrf_exempt
 def KAMAR_check(request):
-    # Respond to KAMAR check requests
-    # https://directoryservices.kamar.nz/?listening-service/check
+    """
+    Authenticate and respond to KAMAR check requests
+    https://directoryservices.kamar.nz/?listening-service/check
+    """
 
     # First check basic auth
     if request.META.get("HTTP_AUTHORIZATION") is None:
