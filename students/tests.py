@@ -7,7 +7,6 @@ from users import models as user_models
 
 class StudentCaregiverTestCase(TestCase):
     def setUp(self):
-        # TODO - Create a caregiver and link to the student
         # Create a student
         self.student = Student.objects.create(
             id="12345",
