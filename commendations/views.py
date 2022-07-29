@@ -9,6 +9,7 @@ from students.models import Student
 
 
 def giveCommendation(request):
+    """Award commendations to students. Requires you to be a logged in teacher."""
     # Check if user is logged in
     if not request.user.is_authenticated:
         messages.error(request, "You must be logged in to give a commendation.")

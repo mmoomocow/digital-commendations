@@ -6,6 +6,7 @@ from django.contrib import messages
 
 
 def index(request):
+    """The index page for teachers."""
     # Check if user is logged in
     if not request.user.is_authenticated:
         messages.error(request, "You must be logged in to give a commendation.")
