@@ -9,8 +9,6 @@ class Caregiver(models.Model):
     This model has currently not been implemented and will be used in the future.
     """
 
-    pass
-
 
 class Student(models.Model):
     """

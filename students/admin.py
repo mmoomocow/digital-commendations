@@ -26,5 +26,3 @@ class StudentAdmin(admin.ModelAdmin):
 @admin.register(Caregiver)
 class CaregiverAdmin(admin.ModelAdmin):
     """Admin settings for the caregiver model."""
-
-    pass
