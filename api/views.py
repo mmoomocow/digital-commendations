@@ -12,7 +12,6 @@ def KAMAR_check(request):
     Authenticate and respond to KAMAR check requests
     https://directoryservices.kamar.nz/?listening-service/check
     """
-
     # First check basic auth
     if request.META.get("HTTP_AUTHORIZATION") is None:
         return JsonResponse(
