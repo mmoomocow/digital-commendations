@@ -24,6 +24,15 @@ class TeacherTestCase(TestCase):
         self.user.is_teacher = True
         self.user.teacher = self.teacher
 
+        # Create a user to test permissions
+        self.user2 = user_models.User.objects.create_user(
+            username="notTeacher",
+            email="notTeacher@example.com",
+            password="notTeacherpassword",
+            first_name="Not",
+            last_name="Teacher",
+        )
+
     def test_teacher_creation(self):
         self.assertEqual(self.teacher.staff_code, "Te", "Staff code is not correct")
         self.assertEqual(
@@ -54,8 +63,30 @@ class TeacherTestCase(TestCase):
         )
 
     def test_teacher_home(self):
+        # Request will fail as not logged in
+        response = self.client.get("/commendations/award/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to teacher home by unauthenticated users should be forbidden",
+        )
+
+        # Login as user
+        self.client.login(username="notTeacher", password="notTeacherPassword")
+        response = self.client.get("/commendations/award/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to teacher home by non-teachers should be forbidden",
+        )
+        self.client.logout()
+
         response = self.client.get("/teachers/")
-        self.assertEqual(response.status_code, 200, "Home page should be accessible")
+        self.assertEqual(
+            response.status_code,
+            200,
+            "GET request to award commendation by teachers should be successful",
+        )
         self.assertTemplateUsed(
             response,
             "teachers/index.html",
