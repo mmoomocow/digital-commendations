@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from .models import commendation as Commendation
@@ -8,6 +9,15 @@ from students.models import Student
 
 
 def giveCommendation(request):
+    # Check if user is logged in
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to give a commendation.")
+        return HttpResponse(status=403)
+    # Check if user is a teacher
+    if not request.user.is_teacher:
+        messages.error(request, "You must be a teacher to give a commendation.")
+        return HttpResponse(status=403)
+
     if request.method == "POST":
         commendationType = request.POST["commendationType"]
         reason = request.POST["reason"]
@@ -46,8 +56,7 @@ def giveCommendation(request):
     teachers = Teacher.objects.all()
 
     # If there is a teacher signed in, then the only teacher that should show is themselves
-    if request.user.is_authenticated:
-        teachers = Teacher.objects.filter(user=request.user)
+    teachers = Teacher.objects.filter(user=request.user)
 
     context = {
         "commendationTypes": _commendationTypes,
