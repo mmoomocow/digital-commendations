@@ -119,6 +119,8 @@ class User(defaultUser, defaultPermissionsMixin):
     USERNAME_FIELD = "username"
 
     class Meta:
+        """Meta settings for model"""
+
         ordering = ("id",)
         verbose_name = "User"
         verbose_name_plural = "Users"

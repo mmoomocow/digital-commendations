@@ -56,6 +56,8 @@ class Teacher(models.Model):
     )
 
     class Meta:
+        """Meta settings for model"""
+
         ordering = ("staff_code",)
 
     def __str__(self):

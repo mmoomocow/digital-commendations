@@ -67,6 +67,8 @@ class commendation(models.Model):
     )
 
     class Meta:
+        """Meta settings for model"""
+
         verbose_name = "Commendation"
         verbose_name_plural = "Commendations"
 

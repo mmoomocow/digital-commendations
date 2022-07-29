@@ -79,6 +79,8 @@ class Student(models.Model):
     )
 
     class Meta:
+        """Meta settings for model"""
+
         verbose_name = "Student"
         verbose_name_plural = "Students"
 
