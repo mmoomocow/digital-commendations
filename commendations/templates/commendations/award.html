@@ -8,8 +8,8 @@
 
 {% comment %} Content that goes in the HTML head {% endcomment %}
 {% block head %}
-<link rel="stylesheet" href="{% static 'teachers/giveCommendation.min.css' %}">
-<script src="{% static 'teachers/search.js' %}"></script>
+<link rel="stylesheet" href="{% static 'commendations/giveCommendation.min.css' %}">
+<script src="{% static 'commendations/search.js' %}"></script>
 {% endblock head %}
 
 {% comment %} H1 at top of page, page title {% endcomment %}
@@ -17,7 +17,8 @@
 
 {% comment %} Main content {% endcomment %}
 {% block content %}
-<form>
+<form method="post">
+    {% csrf_token %}
     <div class="formField">
         <label for="commendationType">Commendation Type <abbr class="requiredField" title="This field is required">*</abbr></label>
         <br>
@@ -36,7 +37,7 @@
 
     <div class="formField">
         <label for="students">Student(s) <abbr class="requiredField" title="This field is required">*</abbr></label>
-        {% comment %} Hold crtl to select multiple hint {% endcomment %}
+        {% comment %} Hold ctrl to select multiple hint {% endcomment %}
         <p class="hint">Hold Ctrl to select multiple students</p>
         <input type="text" name="students" id="students" placeholder="Search students" onkeydown="filterStudents(this.value)">
         <select name="students" id="students" multiple required>
