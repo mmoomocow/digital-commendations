@@ -1,7 +1,6 @@
 from django.test import TestCase
 from .models import *
 from users import models as user_models
-from commendations.models import commendation as Commendation
 
 # Create your tests here.
 
