@@ -12,11 +12,11 @@ def giveCommendation(request):
     """Award commendations to students. Requires you to be a logged in teacher."""
     # Check if user is logged in
     if not request.user.is_authenticated:
-        messages.error(request, "You must be logged in to give a commendation.")
+        # messages.error(request, "You must be logged in to give a commendation.")
         return HttpResponse(status=403)
     # Check if user is a teacher
     if not request.user.is_teacher:
-        messages.error(request, "You must be a teacher to give a commendation.")
+        # messages.error(request, "You must be a teacher to give a commendation.")
         return HttpResponse(status=403)
 
     if request.method == "POST":
