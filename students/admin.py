@@ -6,6 +6,8 @@ from .models import Student, Caregiver
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
+    """Admin settings for the student model."""
+
     list_display = (
         "id",
         "user",
@@ -23,4 +25,6 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Caregiver)
 class CaregiverAdmin(admin.ModelAdmin):
+    """Admin settings for the caregiver model."""
+
     pass

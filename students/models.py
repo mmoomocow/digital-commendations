@@ -4,6 +4,11 @@ from django.db import models
 
 
 class Caregiver(models.Model):
+    """
+    Model for caregivers
+    This model has currently not been implemented and will be used in the future.
+    """
+
     pass
 
 
