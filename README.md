@@ -62,6 +62,10 @@ Create a `.env` file in the root directory of the project and add the following 
 
   - Example: True
 
+- CONN_MAX_AGE - The number of seconds a database connection should be kept alive
+
+  - Example: `60`
+
 - KAMAR_AUTH_USERNAME - The username that the Kamar API will use to access the site
 
   - Example: `Kamar`
