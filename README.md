@@ -52,7 +52,7 @@ Create a `.env` file in the root directory of the project and add the following 
 
 - ALLOWED_HOSTS - A comma separated list of the allowed hosts
 
-  - Example: *,localhost,www.example.com
+  - Example: `*,localhost,www.example.com`
 
 - Secret key - A secret key used to encrypt and decrypt data
 
@@ -61,6 +61,14 @@ Create a `.env` file in the root directory of the project and add the following 
 - DEBUG - A boolean value indicating if the application should be in debug mode
 
   - Example: True
+
+- SECURE_HSTS_SECONDS - The number of seconds that the browser should remember that the site is HTTPS only
+
+  - Example: `31536000`
+
+- PRODUCTION - A boolean value indicating if the application should run in production mode
+
+  - Example: `True`
 
 - ADMINS - A comma separated list of admins who will receive emails for 500 errors
 

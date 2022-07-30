@@ -170,6 +170,23 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Replace django's default user model with our custom one
 AUTH_USER_MODEL = "users.User"
 
+
+# Security in production
+# This will be forced if in production
+# https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+if not os.environ.get("PRODUCTION", "true").lower() == "false":
+    # Force SSL
+    SECURE_SSL_REDIRECT = True
+    # How long HTTPS is required for - 6 months by default
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", 15778800))
+    # Include subdomains HSTS
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # Preload HSTS
+    SECURE_HSTS_PRELOAD = True
+    # Use secure cookies
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 # Set admins
 ADMINS = []
 for admin in os.environ.get("ADMINS", "").split(","):
