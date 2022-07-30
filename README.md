@@ -62,6 +62,26 @@ Create a `.env` file in the root directory of the project and add the following 
 
   - Example: True
 
+- DB_NAME - The name of the MySQL database schema to use
+
+  - Example: `commendations`
+
+- DB_USER - The username to use to connect to the MySQL database
+
+  - Example: `root`
+
+- DB_PASSWORD - The password to use to connect to the MySQL database
+
+  - Example: `password123`
+
+- DB_HOST - The hostname of the MySQL database server
+
+  - Example: `localhost`
+
+- DB_PORT - The port of the MySQL database server
+
+  - Example: `3306`
+
 - CONN_MAX_AGE - The number of seconds a database connection should be kept alive
 
   - Example: `60`
