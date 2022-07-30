@@ -27,10 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "default-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get("DEBUG", "false").lower() == "true":
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
@@ -178,7 +175,7 @@ if os.environ.get("PRODUCTION", "true").lower() == "true":
     # Force SSL
     SECURE_SSL_REDIRECT = True
     # How long HTTPS is required for - 6 months by default
-    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", 15778800))
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "15778800"))
     # Include subdomains HSTS
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     # Preload HSTS
