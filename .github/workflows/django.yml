@@ -32,6 +32,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ALLOWED_HOSTS: '*'
         DEBUG: True
+        PRODUCTION: False
         KAMAR_AUTH_PASSWORD: 'kamar'
         KAMAR_AUTH_USERNAME: 'Password1234'
       run: |
@@ -61,6 +62,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ALLOWED_HOSTS: '*'
         DEBUG: True
+        PRODUCTION: False
         KAMAR_AUTH_PASSWORD: 'kamar'
         KAMAR_AUTH_USERNAME: 'Password1234'
       run: |

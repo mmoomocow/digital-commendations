@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "default-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
@@ -67,13 +67,22 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
-        "APP_DIRS": True,
+        "APP_DIRS": False,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+            ],
+            "loaders": [
+                (
+                    "django.template.loaders.cached.Loader",
+                    [
+                        "django.template.loaders.filesystem.Loader",
+                        "django.template.loaders.app_directories.Loader",
+                    ],
+                ),
             ],
         },
     },
@@ -85,12 +94,28 @@ WSGI_APPLICATION = "commendationSite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Use mysql if in production, otherwise use sqlite
+if os.environ.get("PRODUCTION", "true").lower() == "true":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("DB_NAME"),
+            "USER": os.environ.get("DB_USER"),
+            "PASSWORD": os.environ.get("DB_PASSWORD"),
+            "HOST": os.environ.get("DB_HOST"),
+            "PORT": os.environ.get("DB_PORT"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+# Max age of database connections
+CONN_MAX_AGE = int(os.environ.get("CONN_MAX_AGE", 0))
 
 
 # Password validation
@@ -128,6 +153,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
+
+# Media files (images, videos, etc.)
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -136,3 +166,30 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Replace django's default user model with our custom one
 AUTH_USER_MODEL = "users.User"
+
+
+# Security in production
+# This will be forced if in production
+# https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+if os.environ.get("PRODUCTION", "true").lower() == "true":
+    # Force SSL
+    SECURE_SSL_REDIRECT = True
+    # How long HTTPS is required for - 6 months by default
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "15778800"))
+    # Include subdomains HSTS
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # Preload HSTS
+    SECURE_HSTS_PRELOAD = True
+    # Use secure cookies
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# Set admins
+ADMINS = []
+for admin in os.environ.get("ADMINS", "").split(","):
+    ADMINS.append(admin.split(":"))
+
+# Set managers
+MANAGERS = []
+for manager in os.environ.get("MANAGERS", "").split(","):
+    MANAGERS.append(manager.split(":"))

@@ -52,7 +52,7 @@ Create a `.env` file in the root directory of the project and add the following 
 
 - ALLOWED_HOSTS - A comma separated list of the allowed hosts
 
-  - Example: *,localhost,www.example.com
+  - Example: `*,localhost,www.example.com`
 
 - Secret key - A secret key used to encrypt and decrypt data
 
@@ -61,6 +61,46 @@ Create a `.env` file in the root directory of the project and add the following 
 - DEBUG - A boolean value indicating if the application should be in debug mode
 
   - Example: True
+
+- SECURE_HSTS_SECONDS - The number of seconds that the browser should remember that the site is HTTPS only
+
+  - Example: `31536000`
+
+- PRODUCTION - A boolean value indicating if the application should run in production mode
+
+  - Example: `True`
+
+- ADMINS - A comma separated list of admins who will receive emails for 500 errors
+
+  - Example: `John:johndoe@example.com,Jane:janedoe@example.com`
+
+- MANAGERS - A comma separated list of managers who will receive emails for 404 errors
+
+  - Example: `John:johndoe@example.com,Jane:janedoe@example.com`
+
+- DB_NAME - The name of the MySQL database schema to use
+
+  - Example: `commendations`
+
+- DB_USER - The username to use to connect to the MySQL database
+
+  - Example: `root`
+
+- DB_PASSWORD - The password to use to connect to the MySQL database
+
+  - Example: `password123`
+
+- DB_HOST - The hostname of the MySQL database server
+
+  - Example: `localhost`
+
+- DB_PORT - The port of the MySQL database server
+
+  - Example: `3306`
+
+- CONN_MAX_AGE - The number of seconds a database connection should be kept alive
+
+  - Example: `60`
 
 - KAMAR_AUTH_USERNAME - The username that the Kamar API will use to access the site
 
