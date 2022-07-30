@@ -98,7 +98,7 @@ WSGI_APPLICATION = "commendationSite.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # Use mysql if in production, otherwise use sqlite
-if os.environ.get("PRODUCTION", False):
+if os.environ.get("PRODUCTION", "true").lower() == "true":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -174,7 +174,7 @@ AUTH_USER_MODEL = "users.User"
 # Security in production
 # This will be forced if in production
 # https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-if not os.environ.get("PRODUCTION", "true").lower() == "false":
+if os.environ.get("PRODUCTION", "true").lower() == "true":
     # Force SSL
     SECURE_SSL_REDIRECT = True
     # How long HTTPS is required for - 6 months by default
