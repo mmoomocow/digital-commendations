@@ -24,5 +24,7 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("admin/doc/", include("django.contrib.admindocs.urls")),
     path("admin/", admin.site.urls),
+    path("teachers/", include("teachers.urls")),
+    path("commendations/", include("commendations.urls")),
     path("", include("home.urls")),
 ]
