@@ -169,3 +169,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Replace django's default user model with our custom one
 AUTH_USER_MODEL = "users.User"
+
+# Set admins
+ADMINS = []
+for admin in os.environ.get("ADMINS", "").split(","):
+    ADMINS.append(admin.split(":"))
+
+# Set managers
+MANAGERS = []
+for manager in os.environ.get("MANAGERS", "").split(","):
+    MANAGERS.append(manager.split(":"))

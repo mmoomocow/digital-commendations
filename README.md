@@ -62,6 +62,14 @@ Create a `.env` file in the root directory of the project and add the following 
 
   - Example: True
 
+- ADMINS - A comma separated list of admins who will receive emails for 500 errors
+
+  - Example: `John:johndoe@example.com,Jane:janedoe@example.com`
+
+- MANAGERS - A comma separated list of managers who will receive emails for 404 errors
+
+  - Example: `John:johndoe@example.com,Jane:janedoe@example.com`
+
 - DB_NAME - The name of the MySQL database schema to use
 
   - Example: `commendations`
