@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}View Students{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'teachers/students.css' %}">
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}All Students{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+
+<form action="" method="get">
+    <input type="text" name="search" id="search" placeholder="Search Students" value="{{query}}">
+    <input type="submit" id="submit" value="Search">
+</form>
+
+<br>
+
+<div class="allStudents">
+    {% for student in students %}
+        <article class="student">
+            <a href="/teachers/students/{{ student.id }}"><h3>{{ student.user.first_name }} {{ student.user.last_name }} ({{ student.id }})</h3></a>
+            <a href="mailto:{{ student.user.email }}">{{ student.user.email }}</a>
+            <p class="commendationCount">{{ student.commendation_set.count }}</p>
+        </article>
+    {% endfor %}
+</div>
+
+{% endblock content %}

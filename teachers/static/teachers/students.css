@@ -1,0 +1,47 @@
+.allStudents {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+.student {
+    box-sizing: border-box;
+    padding: 1rem;
+    margin: 1rem;
+    box-shadow: 0 0 10px rgba(67, 67, 67, 0.5);
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+
+.student a {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.commendationCount::after {
+    content: " commendations";
+}
+
+form input {
+    box-sizing: border-box;
+    display: block;
+    margin: 1rem;
+    padding: 0.5em;
+    border: 1px solid var(--color-grey-dark);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    width: calc(100% - 2rem);
+}
+
+#SubmitButtons {
+    /* 2 col */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+form #submit {
+    background-color: var(--color-gold);
+    color: var(--color-grey-dark);
+    font-weight: bold;
+    cursor: pointer;
+}
