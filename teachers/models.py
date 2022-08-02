@@ -64,6 +64,10 @@ class Teacher(models.Model):
         verbose_name="House Group",
     )
 
+    # Is management
+    # Whether the teacher is a management teacher who can see all students and commendations
+    is_management = models.BooleanField(default=False, verbose_name="Is Management")
+
     class Meta:
         """Meta settings for model"""
 
