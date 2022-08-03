@@ -1,0 +1,1 @@
+#R:before{content:"Respect "}#I:before{content:"Integrity "}#S:before{content:"Service "}#E:before{content:"Excellence "}#commendations{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr))}.commendation{box-sizing:border-box;padding:1rem;margin:1rem;box-shadow:0 0 10px rgba(67,67,67,.5);border-radius:10px;border:1px solid #ccc;overflow:hidden}

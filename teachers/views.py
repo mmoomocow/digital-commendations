@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from students.models import Student
+from commendations.models import commendation as Commendation
 from django.db.models import Q
 
-# from django.contrib import messages
 
 # Create your views here.
 
@@ -57,4 +57,32 @@ def students(request):
         request,
         "teachers/students.html",
         {"students": students, "query": request.GET.get("search")},
+    )
+
+
+def student(request, ID: int = None):
+    """The page where teachers can see students"""
+    # Check if user is logged in
+    if not request.user.is_authenticated:
+        # messages.error(request, "You must be logged in to view students")
+        return HttpResponse(status=403)
+    # Check if user is a teacher
+    if not request.user.is_teacher:
+        # messages.error(request, "You must be a teacher to view students")
+        return HttpResponse(status=403)
+    if not request.user.teacher.is_management:
+        # messages.error(request, "You must be a management teacher to view students")
+        return HttpResponse(status=403)
+    try:
+        student = Student.objects.get(id=ID)
+    except Student.DoesNotExist:
+        return HttpResponse(status=404)
+
+    # Commendations that the student has received
+    commendations = student.commendation_set.all()
+
+    return render(
+        request,
+        "teachers/student.html",
+        {"student": student, "commendations": commendations},
     )
