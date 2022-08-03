@@ -18,8 +18,12 @@
 {% block content %}
 
 <form action="" method="get">
+    {% if query %}
     <input type="text" name="search" id="search" placeholder="Search Students" value="{{query}}">
-    <input type="submit" id="submit" value="Search">
+    {% else %}
+    <input type="text" name="search" id="search" placeholder="Search Students">
+    {% endif %}
+    <input type="submit" id="submit" value="🔎 Search">
 </form>
 
 <br>
