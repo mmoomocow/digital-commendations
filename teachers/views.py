@@ -35,12 +35,12 @@ def students(request):
         # messages.error(request, "You must be a management teacher to view students")
         return HttpResponse(status=403)
 
-    students = Student.objects.all()
+    studentList = Student.objects.all()
 
     # If there is a search query, filter the students
     if request.GET.get("search"):
         # Search user.first_name, user.last_name, user.email, user.username, id
-        students = students.filter(
+        studentList = studentList.filter(
             Q(user__first_name__icontains=request.GET.get("search"))
             | Q(user__last_name__icontains=request.GET.get("search"))
             | Q(user__email__icontains=request.GET.get("search"))
@@ -49,13 +49,13 @@ def students(request):
         )
 
     # Sort the students by first name
-    students = students.order_by("user__first_name", "user__last_name")
+    studentList = studentList.order_by("user__first_name", "user__last_name")
 
     # If there is no id, return all students
     return render(
         request,
         "teachers/students.html",
-        {"students": students, "query": request.GET.get("search")},
+        {"students": studentList, "query": request.GET.get("search")},
     )
 
 
