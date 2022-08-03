@@ -1,8 +1,7 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.http import HttpResponse
 from students.models import Student
-from commendations.models import commendation as Commendation
-from django.db.models import Q
 
 
 # Create your views here.
@@ -74,15 +73,15 @@ def student(request, ID: int = None):
         # messages.error(request, "You must be a management teacher to view students")
         return HttpResponse(status=403)
     try:
-        student = Student.objects.get(id=ID)
+        selectedStudent = Student.objects.get(id=ID)
     except Student.DoesNotExist:
         return HttpResponse(status=404)
 
     # Commendations that the student has received
-    commendations = student.commendation_set.all()
+    commendations = selectedStudent.commendation_set.all()
 
     return render(
         request,
         "teachers/student.html",
-        {"student": student, "commendations": commendations},
+        {"student": selectedStudent, "commendations": commendations},
     )
