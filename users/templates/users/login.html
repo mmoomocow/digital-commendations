@@ -8,7 +8,7 @@
 
 {% comment %} Content that goes in the HTML head {% endcomment %}
 {% block head %}
-	<link rel="stylesheet" href="{% static 'users/css/login.min.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/login.min.css' %}">
 {% endblock head %}
 
 {% comment %} H1 at top of page, page title {% endcomment %}
@@ -17,25 +17,25 @@
 {% comment %} Main content {% endcomment %}
 {% block content %}
 <div class="formContainer">
-	<form action="/users/login/" method="post">
-		{% csrf_token %}
-		<div class="formField">
-			<label for="username">Username <abbr class="requiredField" title="This field is required">*</abbr></label>
-			<input type="text" name="username" id="username" placeholder="Your Username" {% if username %}value={{username}}{% endif %} required/>
-		</div>
-		<div class="formField">
-			<label for="password">Password <abbr class="requiredField" title="This field is required">*</abbr></label>
-			<input type="password" name="password" id="password" placeholder="Your Password" required/>
-		</div>
-		{% comment %} Display the error message, if there is one {% endcomment %}
-		{% if error %}
-			<div class="formField">
-				<div class="errorMessage">{{ error|safe }}</div>
-			</div>
-		{% endif %}
-		<div class="formField">
-			<input id="submit" type="submit" value="Login"/>
-		</div>
-	</form>
+    <form action="/users/login/" method="post">
+        {% csrf_token %}
+        <div class="formField">
+            <label for="username">Username <abbr class="requiredField" title="This field is required">*</abbr></label>
+            <input type="text" name="username" id="username" placeholder="Your Username" {% if username %}value={{username}}{% endif %} required/>
+        </div>
+        <div class="formField">
+            <label for="password">Password <abbr class="requiredField" title="This field is required">*</abbr></label>
+            <input type="password" name="password" id="password" placeholder="Your Password" required/>
+        </div>
+        {% comment %} Display the error message, if there is one {% endcomment %}
+        {% if error %}
+            <div class="formField">
+                <div class="errorMessage">{{ error|safe }}</div>
+            </div>
+        {% endif %}
+        <div class="formField">
+            <input id="submit" type="submit" value="Login"/>
+        </div>
+    </form>
 </div>
 {% endblock content %}
