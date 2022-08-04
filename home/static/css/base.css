@@ -43,26 +43,6 @@ body {
     position: relative;
 }
 
-/* Navigation Bar styles */
-nav {
-    background-color: var(--color-green);
-    font-size: 1.3em;
-}
-
-nav a {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    text-decoration: none;
-    background-color: var(--color-green);
-    color: var(--color-gold);
-    transition: background-color 0.3s ease-in, color 0.3s ease-in;
-}
-
-nav a:hover {
-    background-color: var(--color-gold);
-    color: var(--color-green);
-}
-
 main {
     padding-bottom: 14.5vw;
     width: 80vw;
