@@ -5,19 +5,19 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>{% block title %}{% endblock title %}</title>
-		<meta name="description" content="{% block description %}{% endblock description %}">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="{% static 'css/base.min.css' %}">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-		<script src="{% static 'js/base.min.js' %}"></script>
-		{% block head %}
-		{% endblock head %}
-	</head>
-	<body>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}{% endblock title %}</title>
+        <meta name="description" content="{% block description %}{% endblock description %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/base.min.css' %}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <script src="{% static 'js/base.min.js' %}"></script>
+        {% block head %}
+        {% endblock head %}
+    </head>
+    <body>
         {% if messages %}
         {% comment %} Display messages using django's build in messages framework {% endcomment %}
         <ul class="messages">
@@ -32,22 +32,22 @@
             {% endfor %}
         </ul>
         {% endif %}
-		<header>
-			<nav>
-				<a href="/">Home</a>
-				{% if request.user.is_authenticated %}
-				<a class="right" href="/logout">Logout</a>
-				{% else %}
-				<a class="right" href="/login">Login</a>
-				{% endif %}
-			</nav>
-		</header>
-		<main>
-			<h1 class="textCenter">{% block headerText %}{% endblock headerText %}</h1>
-			{% block content %}{% endblock content %}
-		</main>
-		<footer>
+        <header>
+            <nav>
+                <a href="/">Home</a>
+                {% if request.user.is_authenticated %}
+                <a class="right" href="/logout">Logout</a>
+                {% else %}
+                <a class="right" href="/login">Login</a>
+                {% endif %}
+            </nav>
+        </header>
+        <main>
+            <h1 class="textCenter">{% block headerText %}{% endblock headerText %}</h1>
+            {% block content %}{% endblock content %}
+        </main>
+        <footer>
 
-		</footer>
-	</body>
+        </footer>
+    </body>
 </html>
