@@ -31,10 +31,12 @@
 <div class="allStudents">
     {% for student in students %}
         <article class="student">
-            {% if student.commendation_set.count == 1 %}
-            <p>1 commendation</p>
+            <a href="/teachers/students/{{ student.id }}"><h3>{{ student.user.first_name }} {{ student.user.last_name }} ({{ student.id }})</h3></a>
+            <a href="mailto:{{ student.user.email }}">{{ student.user.email }}</a>
+            {% if student.commendations_set.count == "1" %}
+            <p class="commendationCount">1 commendation</p>
             {% else %}
-            <p>{{ student.commendation_set.count }} commendations</p>
+            <p class="commendationCount">{{ student.commendation_set.count }} commendations</p>
             {% endif %}
         </article>
     {% endfor %}
