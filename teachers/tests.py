@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import *
 from users import models as user_models
+from students.models import Student
 
 # Create your tests here.
 
@@ -22,6 +23,8 @@ class TeacherTestCase(TestCase):
         # Link the user to the teacher
         self.user.is_teacher = True
         self.user.teacher = self.teacher
+        self.teacher.is_management = True
+        self.teacher.save()
         self.user.save()
 
         # Create a user to test permissions
@@ -31,6 +34,13 @@ class TeacherTestCase(TestCase):
             password="notTeacherPassword",
             first_name="Not",
             last_name="Teacher",
+        )
+
+        self.student = Student.objects.create(
+            id="23456",
+            tutor_room="ABc",
+            house_group=Student.ANDERSON,
+            year_level=Student.YEAR9,
         )
 
     def test_teacher_creation(self):
@@ -98,5 +108,86 @@ class TeacherTestCase(TestCase):
             response,
             "base.html",
             "Teacher home page should extend the base.html template",
+        )
+        self.client.logout()
+
+    def test_students_list(self):
+        # Request will fail as not logged in
+        response = self.client.get("/teachers/students/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to students list by unauthenticated users should be forbidden",
+        )
+
+        # Login as user
+        self.client.login(username="notTeacher", password="notTeacherPassword")
+        response = self.client.get("/teachers/students/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to students list by non-teachers should be forbidden",
+        )
+        self.client.logout()
+
+        # Login as teacher
+        self.client.login(username="teacher", password="teacherPassword")
+        response = self.client.get("/teachers/students/")
+        self.assertEqual(
+            response.status_code,
+            200,
+            "GET request to students list by teachers should be successful",
+        )
+        self.assertTemplateUsed(
+            response,
+            "teachers/students.html",
+            "Students list page should use the correct template",
+        )
+        self.assertTemplateUsed(
+            response,
+            "base.html",
+            "Students list page should extend the base.html template",
+        )
+        self.client.logout()
+
+    def test_student_detail(self):
+        # Request will fail as not logged in
+        response = self.client.get("/teachers/students/23456/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to student detail by unauthenticated users should be forbidden",
+        )
+
+        # Login as user
+        self.client.login(username="notTeacher", password="notTeacherPassword")
+        response = self.client.get("/teachers/students/23456/")
+        self.assertEqual(
+            response.status_code,
+            403,
+            "GET request to student detail by non-teachers should be forbidden",
+        )
+        self.client.logout()
+
+        # Login as teacher
+        self.client.login(username="teacher", password="teacherPassword")
+        response = self.client.get("/teachers/students/23456/")
+        self.assertEqual(
+            response.status_code,
+            200,
+            "GET request to student detail by teachers should be successful",
+        )
+        self.assertTemplateUsed(
+            response,
+            "teachers/student.html",
+            "Student detail page should use the correct template",
+        )
+
+        #
+
+        self.assertTemplateUsed(
+            response,
+            "base.html",
+            "Student detail page should extend the base.html template",
         )
         self.client.logout()
