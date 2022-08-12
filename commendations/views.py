@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from .models import Commendation as Commendation
+from .models import Commendation
 from teachers.models import Teacher
 from students.models import Student
 
