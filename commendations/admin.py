@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import commendation
+from .models import Commendation, Milestone
 
 # Register your models here.
 
 
-@admin.register(commendation)
+@admin.register(Commendation)
 class CommendationAdmin(admin.ModelAdmin):
     """Admin settings for the commendation model."""
 
@@ -24,4 +24,32 @@ class CommendationAdmin(admin.ModelAdmin):
         (None, {"fields": ("id",)}),
         ("Commendation", {"fields": ("commendation_type", "reason", "date_time")}),
         ("User Links", {"fields": ("teacher", "students")}),
+    )
+
+
+@admin.register(Milestone)
+class MilestoneAdmin(admin.ModelAdmin):
+    """Admin settings for the milestone model."""
+
+    list_display = (
+        "id",
+        "milestone_type",
+        "student",
+        "date_time",
+    )
+    list_filter = (
+        "milestone_type",
+        "date_time",
+    )
+    search_fields = (
+        "milestone_type",
+        "date_time",
+        "reason",
+        "student",
+    )
+    readonly_fields = ("id", "date_time")
+    fieldsets = (
+        (None, {"fields": ("id",)}),
+        ("Milestone", {"fields": ("milestone_type", "date_time")}),
+        ("User Links", {"fields": ("student",)}),
     )

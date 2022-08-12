@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class commendation(models.Model):
+class Commendation(models.Model):
     """
     The model for commendations.
 
@@ -88,3 +88,79 @@ class commendation(models.Model):
 
     def __str__(self) -> str:
         return f"Commendation ID: {self.id}"
+
+
+class Milestone(models.Model):
+    """
+    The model for commendation Milestones.
+
+    This model stores data for the milestones for numbers of commendations awarded to students.
+
+    Related Models:
+        * :model:`users.User` - The user model that is linked to the Student/Teacher
+        * :model:`students.Student` - The student model of the student who received the milestone award
+
+    Fields:
+        * id (AutoField): The primary key of the commendation
+        * milestone_type (int): The type of commendation that was awarded - based on the number of commendations given
+        * date_time (DateTimeField): The date and time the commendation was awarded
+        * student (ForeignKey): The student who received the milestone award
+
+    Docs updated on: 12/8/2022
+    """
+
+    # Unique id for milestones
+    id = models.AutoField(
+        primary_key=True,
+        unique=True,
+        editable=False,
+        blank=False,
+        null=False,
+        verbose_name="ID",
+    )
+
+    # The type of milestone
+    CERTIFICATE = 25
+    GREEN = 50
+    BLUE = 100
+    GOLD = 150
+    MILESTONE_TYPE_CHOICES = (
+        (CERTIFICATE, "Dean's Certificate"),
+        (GREEN, "Green Jr School spirit badge"),
+        (BLUE, "Blue Jr School spirit badge"),
+        (GOLD, "Gold Jr School spirit badge"),
+    )
+    milestone_type = models.IntegerField(
+        choices=MILESTONE_TYPE_CHOICES,
+        blank=False,
+        null=False,
+        verbose_name="Milestone Type",
+    )
+
+    # The date and time the milestone was given
+    date_time = models.DateTimeField(
+        blank=False, null=False, verbose_name="Date and Time given", auto_now_add=True
+    )
+
+    # The student(s) who received the milestone
+    student = models.ForeignKey(
+        "students.student",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+        verbose_name="Student",
+    )
+
+    class Meta:
+        """Meta settings for model"""
+
+        verbose_name = "Milestone"
+        verbose_name_plural = "Milestones"
+
+    def __str__(self) -> str:
+        milestone_type = [
+            choice[1]
+            for choice in Milestone.MILESTONE_TYPE_CHOICES
+            if choice[0] == self.milestone_type
+        ][0]
+        return f"{milestone_type} - {self.student}"

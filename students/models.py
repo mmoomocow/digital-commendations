@@ -1,4 +1,5 @@
 from django.db import models
+from commendations.models import Milestone
 
 # Create your models here.
 
@@ -88,6 +89,13 @@ class Student(models.Model):
         blank=True,
         null=True,
         verbose_name="Caregiver",
+    )
+
+    next_milestone = models.IntegerField(
+        choices=Milestone.MILESTONE_TYPE_CHOICES,
+        blank=True,
+        null=True,
+        verbose_name="Next Milestone",
     )
 
     class Meta:
