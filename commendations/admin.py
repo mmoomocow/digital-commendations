@@ -26,7 +26,8 @@ class CommendationAdmin(admin.ModelAdmin):
         ("User Links", {"fields": ("teacher", "students")}),
     )
 
-    def students(self, obj):
+    def students(self, obj) -> str:
+        """Return a string of the students in the commendation."""
         return ", ".join([str(student) for student in obj.students.all()])
 
 
