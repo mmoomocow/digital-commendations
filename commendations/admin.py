@@ -8,7 +8,7 @@ from .models import Commendation, Milestone
 class CommendationAdmin(admin.ModelAdmin):
     """Admin settings for the commendation model."""
 
-    list_display = ("id", "commendation_type", "date_time", "teacher")
+    list_display = ("id", "commendation_type", "date_time", "teacher", "students")
     list_filter = ("commendation_type", "date_time", "teacher")
     search_fields = (
         "id",
@@ -25,6 +25,9 @@ class CommendationAdmin(admin.ModelAdmin):
         ("Commendation", {"fields": ("commendation_type", "reason", "date_time")}),
         ("User Links", {"fields": ("teacher", "students")}),
     )
+
+    def students(self, obj):
+        return ", ".join([str(student) for student in obj.students.all()])
 
 
 @admin.register(Milestone)
