@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from .models import Commendation
+from .models import Commendation, Milestone
 from teachers.models import Teacher
 from students.models import Student
 
@@ -40,6 +40,26 @@ def giveCommendation(request):
 
         commendation.save()
 
+        for student in students:
+            student = Student.objects.get(id=student)
+            for milestoneType in Milestone.MILESTONE_TYPE_CHOICES:
+                # Get the int value of the milestone type
+                milestoneValue = milestoneType[0]
+                # Check if the student has now met the milestone number of commendations
+                if student.commendation_set.count() == milestoneValue:
+                    # Create a milestone for the student
+                    milestone = Milestone(
+                        student=student, milestone_type=milestoneValue
+                    )
+                    milestone.save()
+
+                    # Inform the teacher that the student has met the milestone
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        f"{student} has enough commendations to reach a {milestoneType[1]}! This will be awarded automatically.",
+                    )
+
         # Message the user
         messages.add_message(
             request,
@@ -49,6 +69,7 @@ def giveCommendation(request):
 
         return redirect("/teachers/")
 
+    # Process and render the award commendation page
     _commendationTypes = []
 
     for Type in Commendation.COMMENDATION_TYPE_CHOICES:
