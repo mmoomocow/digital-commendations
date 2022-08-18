@@ -164,3 +164,14 @@ class Milestone(models.Model):
             if choice[0] == self.milestone_type
         ][0]
         return f"{milestone_type} - {self.student}"
+
+    def prettyPrint(self) -> str:
+        """
+        Pretty print the milestone type.
+        """
+        milestone_type = [
+            choice[1]
+            for choice in Milestone.MILESTONE_TYPE_CHOICES
+            if choice[0] == self.milestone_type
+        ][0]
+        return milestone_type
