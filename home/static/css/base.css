@@ -107,3 +107,11 @@ footer {
     background-color: #e90000;
     font-weight: bold;
 }
+
+hr {
+    border: 0;
+    height: 2px;
+    background-color: var(--color-grey-dark);
+    width: 90%;
+    margin: 10px 11px;
+}

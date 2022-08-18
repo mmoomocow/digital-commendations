@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.http import HttpResponse
 from students.models import Student
+from commendations.models import Milestone
 
 
 # Create your views here.
@@ -78,10 +79,15 @@ def student(request, ID: int = None):
         return HttpResponse(status=404)
 
     # Commendations that the student has received
-    commendations = selectedStudent.commendation_set.all()
+    commendations = selectedStudent.commendation_set.all().order_by("-date_time")
+    milestones = selectedStudent.milestone_set.all().order_by("-date_time")
 
     return render(
         request,
         "teachers/student.html",
-        {"student": selectedStudent, "commendations": commendations},
+        {
+            "student": selectedStudent,
+            "commendations": commendations,
+            "milestones": milestones,
+        },
     )

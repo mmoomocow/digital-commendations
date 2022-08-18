@@ -1,25 +1,31 @@
-#R:before {
+.R:before {
     content: "Respect ";
 }
 
-#I:before {
+.I:before {
     content: "Integrity ";
 }
 
-#S:before {
+.S:before {
     content: "Service ";
 }
 
-#E:before {
+.E:before {
     content: "Excellence ";
 }
 
-#commendations {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+.O:before {
+    content: "Other ";
 }
 
-.commendation {
+#commendations,
+#milestones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.commendation,
+.milestone {
     box-sizing: border-box;
     padding: 1rem;
     margin: 1rem;
