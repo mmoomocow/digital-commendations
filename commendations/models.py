@@ -120,7 +120,7 @@ class Milestone(models.Model):
     )
 
     # The type of milestone
-    CERTIFICATE = 19
+    CERTIFICATE = 25
     GREEN = 50
     BLUE = 100
     GOLD = 150

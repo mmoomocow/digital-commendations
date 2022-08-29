@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from students.models import Student
 from commendations.models import Milestone
+from django.utils.timezone import now
 
 
 # Create your views here.
@@ -90,4 +91,51 @@ def student(request, ID: int = None):
             "commendations": commendations,
             "milestones": milestones,
         },
+    )
+
+
+def awardMilestones(request):
+    """The page where teachers can award milestones"""
+    # Check if user is logged in
+    if not request.user.is_authenticated:
+        # messages.error(request, "You must be logged in to award milestones")
+        return HttpResponse(status=403)
+    # Check if user is a teacher
+    if not request.user.is_teacher:
+        # messages.error(request, "You must be a teacher to award milestones")
+        return HttpResponse(status=403)
+    if not request.user.teacher.is_management:
+        # messages.error(request, "You must be a management teacher to award milestones")
+        return HttpResponse(status=403)
+
+    milestoneTypes = Milestone.MILESTONE_TYPE_CHOICES
+    milestones = Milestone.objects.all()
+
+    milestoneTypeQuery = request.GET.getlist("type")
+    if milestoneTypeQuery:
+        milestones = milestones.filter(milestone_type__in=milestoneTypeQuery)
+
+    dateQuery = request.GET.get("date")
+    if dateQuery:
+        milestones = milestones.filter(date_time__gte=dateQuery)
+
+    # Sort by the type then by student name
+    milestones = milestones.order_by(
+        "milestone_type", "student__user__first_name", "student__user__last_name"
+    )
+
+    # Untupple the milestone types
+    milestoneTypes = [
+        {"value": milestoneType[0], "name": milestoneType[1]}
+        for milestoneType in milestoneTypes
+    ]
+
+    # If no filters are applied, return no milestones
+    if not milestoneTypeQuery and not dateQuery:
+        milestones = []
+
+    return render(
+        request,
+        "teachers/award_milestones.html",
+        {"milestones": milestones, "milestoneTypes": milestoneTypes},
     )
