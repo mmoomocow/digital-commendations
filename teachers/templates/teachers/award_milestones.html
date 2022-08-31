@@ -37,6 +37,7 @@
     </div>
 </form>
 <br>
+<hr>
 {% if milestones %}
     <hr>
     <article class="results">
@@ -60,5 +61,7 @@
             </tbody>
         </table>
     </article>
+{% else %}
+    <p>No results found.</p>
 {% endif %}
 {% endblock content %}
