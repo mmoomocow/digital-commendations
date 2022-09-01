@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import *
+from .models import Commendation
 from users import models as user_models
 from students import models as student_models
 from teachers import models as teacher_models
@@ -59,8 +59,8 @@ class CommendationTestCase(TestCase):
         self.student2.save()
 
         # Then create a commendation with the teachers and students linked
-        self.commendation = commendation.objects.create(
-            commendation_type=commendation.RESPECT,
+        self.commendation = Commendation.objects.create(
+            commendation_type=Commendation.RESPECT,
             reason="Cupcake ipsum dolor sit amet sweet roll cheesecake jelly. Soufflé carrot cake sesame snaps toffee pie bears chocolate. Muffin halvah bonbon fruitcake marshmallow sweet roll.",
             teacher=self.teacher.teacher,
         )
@@ -78,7 +78,7 @@ class CommendationTestCase(TestCase):
     def test_commendation_creation(self):
         self.assertEqual(
             self.commendation.commendation_type,
-            commendation.RESPECT,
+            Commendation.RESPECT,
             "Commendation type is not correct",
         )
         self.assertEqual(
@@ -164,15 +164,15 @@ class CommendationTestCase(TestCase):
         response = self.client.post(
             "/commendations/award/",
             {
-                "commendationType": commendation.RESPECT,
+                "commendationType": Commendation.RESPECT,
                 "reason": "Post request test",
                 "teacher": self.teacher.teacher.id,
                 "students": [self.student1.student.id, self.student2.student.id],
             },
         )
         self.assertEqual(response.status_code, 302)
-        newCommendation = commendation.objects.get(
-            commendation_type=commendation.RESPECT,
+        newCommendation = Commendation.objects.get(
+            commendation_type=Commendation.RESPECT,
             reason="Post request test",
         )
         self.assertEqual(newCommendation.teacher, self.teacher.teacher)

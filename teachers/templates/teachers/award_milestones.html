@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}Generate Jr School spirit badges{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'teachers/award_milestone.min.css' %}">
+<script src="{% static 'teachers/award_milestone.min.js' %}" defer></script>
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}Generate Jr School spirit badges{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+<form method="get">
+    <p>Select badge types to be awarded:</p>
+    <div class="formField">
+        {% for type in milestoneTypes %}
+            <input type="checkbox" name="type" id="{{ type.value }}" value="{{ type.value }}" />
+            <label for="{{ type.value }}">{{ type.name }}</label>
+            <br>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="formField">
+        <label for="date">Student must have achieved this after: </label>
+        <input type="date" name="date" id="date">
+    </div>
+
+    <div class="formField">
+        <input type="submit" value="Submit" id="submit">
+    </div>
+</form>
+<br>
+<hr>
+{% if milestones %}
+<form class="results" action="/teachers/badges/" method="post">
+    {% csrf_token %}
+    <article class="results">
+        <h2>Results:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="selectAll" id="selectAll" onClick="selectAllCheckboxes();"></th>
+                    <th>Student: </th>
+                    <th>Type: </th>
+                    <th>Date achieved: </th>
+                    <th>Awarded Badge?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for milestone in milestones %}
+                <tr class="clickable-row">
+                    <td><input type="checkbox" name="milestone" value="{{ milestone.id }}"></td>
+                        <td>{{ milestone.student }}</td>
+                        <td>{{ milestone.prettyPrint }}</td>
+                        <td>{{ milestone.date_time }}</td>
+                        <td>
+                            {% if milestone.awarded %}
+                                <span>Yes</span>
+                            {% else %}
+                                <span>No</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </article>
+
+    <div class="formField">
+        <input type="submit" value="Mark badges as awarded" id="submit">
+    </div>
+</form>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+{% endblock content %}
