@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse
 from students.models import Student
 from commendations.models import Milestone
 from django.utils.timezone import now
+from django.contrib import messages
 
 
 # Create your views here.
@@ -108,6 +109,29 @@ def awardMilestones(request):
         # messages.error(request, "You must be a management teacher to award milestones")
         return HttpResponse(status=403)
 
+    if request.method == "POST":
+        # there will be a list of milestone IDs
+        milestoneIDs = request.POST.getlist("milestone")
+
+        # Check that the milestones exist
+        milestones = Milestone.objects.filter(id__in=milestoneIDs)
+        if len(milestones) == 0:
+            # messages.error(request, "Those milestones do not exist")
+            return HttpResponse(status=404)
+        # Check that the milestones are not already awarded
+        milestones = milestones.filter(awarded=False)
+        if len(milestones) == 0:
+            # messages.error(request, "Those milestones have already been awarded")
+            return HttpResponse(status=400)
+
+        # Mark the milestones as awarded
+        for milestone in milestones:
+            milestone.awarded = True
+            milestone.save()
+
+        messages.success(request, f"Marked {len(milestones)} milestones as awarded")
+        return redirect('/teachers/')
+
     milestoneTypes = Milestone.MILESTONE_TYPE_CHOICES
     milestones = Milestone.objects.all()
 
@@ -121,7 +145,10 @@ def awardMilestones(request):
 
     # Sort by the type then by student name
     milestones = milestones.order_by(
-        "milestone_type", "student__user__first_name", "student__user__last_name"
+        "awarded",
+        "milestone_type",
+        "student__user__first_name",
+        "student__user__last_name",
     )
 
     # Untupple the milestone types

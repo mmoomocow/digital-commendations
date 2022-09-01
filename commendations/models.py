@@ -151,6 +151,11 @@ class Milestone(models.Model):
         verbose_name="Student",
     )
 
+    # Has the milestone been awarded?
+    awarded = models.BooleanField(
+        default=False, blank=False, null=False, verbose_name="Awarded"
+    )
+
     class Meta:
         """Meta settings for model"""
 

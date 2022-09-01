@@ -35,12 +35,12 @@ class CommendationAdmin(admin.ModelAdmin):
 class MilestoneAdmin(admin.ModelAdmin):
     """Admin settings for the milestone model."""
 
-    list_display = ("milestone_type", "student", "date_time")
-    list_filter = ("milestone_type", "date_time")
+    list_display = ("milestone_type", "student", "date_time", "awarded")
+    list_filter = ("milestone_type", "date_time", "awarded")
     search_fields = ("milestone_type", "date_time", "reason", "student")
     readonly_fields = ("id", "date_time")
     fieldsets = (
         (None, {"fields": ("id",)}),
-        ("Milestone", {"fields": ("milestone_type", "date_time")}),
+        ("Milestone", {"fields": ("milestone_type", "date_time", "awarded")}),
         ("User Links", {"fields": ("student",)}),
     )

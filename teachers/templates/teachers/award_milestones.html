@@ -39,28 +39,44 @@
 <br>
 <hr>
 {% if milestones %}
-    <hr>
+<form class="results" action="/teachers/badges/" method="post">
+    {% csrf_token %}
     <article class="results">
         <h2>Results:</h2>
         <table>
             <thead>
                 <tr>
+                    <th><input type="checkbox" name="selectAll" id="selectAll" onClick="selectAllCheckboxes();"></th>
                     <th>Student: </th>
                     <th>Type: </th>
                     <th>Date achieved: </th>
+                    <th>Awarded Badge?</th>
                 </tr>
             </thead>
             <tbody>
                 {% for milestone in milestones %}
-                    <tr>
+                <tr class="clickable-row">
+                    <td><input type="checkbox" name="milestone" value="{{ milestone.id }}"></td>
                         <td>{{ milestone.student }}</td>
                         <td>{{ milestone.prettyPrint }}</td>
                         <td>{{ milestone.date_time }}</td>
+                        <td>
+                            {% if milestone.awarded %}
+                                <span>Yes</span>
+                            {% else %}
+                                <span>No</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </article>
+
+    <div class="formField">
+        <input type="submit" value="Mark badges as awarded" id="submit">
+    </div>
+</form>
 {% else %}
     <p>No results found.</p>
 {% endif %}

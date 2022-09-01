@@ -29,3 +29,20 @@ if (types.length > 0) {
         checkbox.checked = true;
     }
 }
+
+// Add select all checkbox functionality
+function selectAllCheckboxes() {
+    var checkboxes = document.getElementsByName('student');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = document.getElementsByName("selectAll")[0].checked;
+    }
+}
+
+// If any table row is clicked, tick the checkbox
+rows = document.getElementsByClassName('clickable-row');
+for (var i = 0; i < rows.length; i++) {
+    rows[i].onclick = function () {
+        var checkbox = this.getElementsByTagName('input')[0];
+        checkbox.checked = !checkbox.checked;
+    };
+}
