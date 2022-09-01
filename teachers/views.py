@@ -130,7 +130,7 @@ def awardMilestones(request):
             milestone.save()
 
         messages.success(request, f"Marked {len(milestones)} milestones as awarded")
-        return redirect('/teachers/')
+        return redirect("/teachers/")
 
     milestoneTypes = Milestone.MILESTONE_TYPE_CHOICES
     milestones = Milestone.objects.all()
