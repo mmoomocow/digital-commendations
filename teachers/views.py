@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse
+from django.contrib import messages
 from students.models import Student
 from commendations.models import Milestone
-from django.utils.timezone import now
-from django.contrib import messages
 
 
 # Create your views here.
@@ -130,7 +129,7 @@ def awardMilestones(request):
             milestone.save()
 
         messages.success(request, f"Marked {len(milestones)} milestones as awarded")
-        return redirect('/teachers/')
+        return redirect("/teachers/")
 
     milestoneTypes = Milestone.MILESTONE_TYPE_CHOICES
     milestones = Milestone.objects.all()

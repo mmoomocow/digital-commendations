@@ -171,9 +171,7 @@ class Milestone(models.Model):
         return f"{milestone_type} - {self.student}"
 
     def prettyPrint(self) -> str:
-        """
-        Pretty print the milestone type.
-        """
+        """Pretty print the milestone type."""
         milestone_type = [
             choice[1]
             for choice in Milestone.MILESTONE_TYPE_CHOICES

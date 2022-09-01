@@ -1,5 +1,4 @@
 from django.db import models
-from commendations.models import Milestone
 
 # Create your models here.
 

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import *
+from .models import Commendation
 from users import models as user_models
 from students import models as student_models
 from teachers import models as teacher_models
