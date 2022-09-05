@@ -66,7 +66,7 @@ class TeacherTestCase(TestCase):
         self.assertFalse(
             self.teacher.user.is_caregiver, "Teacher should not be a caregiver"
         )
-        self.assertEquals(
+        self.assertEqual(
             str(self.teacher.user),
             "Teacher User",
             "User string representation is not correct",
