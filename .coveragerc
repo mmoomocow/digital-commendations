@@ -12,7 +12,7 @@ dynamic_context = test_function
 parallel = True
 
 [report]
-fail_under = 85
+# fail_under = 85
 precision = 2
 skip_empty = True
 
