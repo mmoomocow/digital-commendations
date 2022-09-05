@@ -20,6 +20,7 @@ def index(request):
 
     return render(request, "teachers/index.html")
 
+
 def awardMilestones(request):
     """The page where teachers can award milestones"""
     # Check if user is logged in
