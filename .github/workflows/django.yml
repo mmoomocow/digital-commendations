@@ -77,7 +77,7 @@ jobs:
 
     - name: Generate coverage reports
       run: |
-        coverage report -m --fail-under=85
+        coverage report -m
         coverage xml
 
     - name: Report results to DeepSource
