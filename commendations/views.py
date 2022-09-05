@@ -23,8 +23,13 @@ def giveCommendation(request):
         commendationType = request.POST["commendationType"]
         reason = request.POST["reason"]
         rawStudents = request.POST.getlist("students")
-        # rawStudents starts with an empty list, so we need to remove the empty string that is the first element
-        students = [int(student) for student in rawStudents if student != ""]
+        # rawStudents starts with an empty list, so we need to remove the empty string that is the first element and any non number items
+        students = []
+        for student in rawStudents:
+            try:
+                students.append(int(student))
+            except:
+                pass
         teacher = Teacher.objects.get(id=request.POST["teacher"])
 
         commendation = Commendation(
