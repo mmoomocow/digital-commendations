@@ -28,7 +28,7 @@ def giveCommendation(request):
         for student in rawStudents:
             try:
                 students.append(int(student))
-            except:
+            except ValueError:
                 pass
         teacher = Teacher.objects.get(id=request.POST["teacher"])
 
