@@ -41,5 +41,47 @@ class commendationsTest(TestCase):
             commendation.exists(),
             f"Commendation was not created, expected {data}, got {commendation}",
         )
+
+
+    def test_viewMilestones_get(self):
+        self.teacher.teacher.is_management = True
+        self.teacher.teacher.save()
+        testHelper.testPage(
+            self, "/commendations/spirit/", "commendations/award_milestones.html"
+        )
+        self.teacher.teacher.is_management = False
+        self.teacher.teacher.save()
+
+    def test_viewMilestones_post(self):
+        self.teacher.teacher.is_management = True
+        self.teacher.teacher.save()
+
+        milestone = Milestone.objects.create(
+            milestone_type=Milestone.GREEN,
+            student=self.student.student,
+        )
+
+        data = {
+            "milestone": milestone.id,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            302,
+            f"Page /commendations/spirit/ returned {page.status_code} instead of 302",
+        )
+
+        # Check that the milestone has been marked as awarded
+        milestone = Milestone.objects.get(id=milestone.id)
+        self.assertTrue(
+            milestone.awarded,
+            f"Milestone was not awarded, expected {data}, got {milestone}",
+        )
+
+        self.teacher.teacher.is_management = False
+        self.teacher.teacher.save()
+
     def tearDown(self):
         pass
