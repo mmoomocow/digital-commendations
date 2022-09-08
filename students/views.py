@@ -1,3 +1,4 @@
+from commendationSite.authHelper import teacher_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
@@ -6,19 +7,9 @@ from .models import Student
 # Create your views here.
 
 
+@teacher_required()
 def students(request):
     """The page where teachers can see students"""
-    # Check if user is logged in
-    if not request.user.is_authenticated:
-        # messages.error(request, "You must be logged in to view students")
-        return HttpResponse(status=403)
-    # Check if user is a teacher
-    if not request.user.is_teacher:
-        # messages.error(request, "You must be a teacher to view students")
-        return HttpResponse(status=403)
-    if not request.user.teacher.is_management:
-        # messages.error(request, "You must be a management teacher to view students")
-        return HttpResponse(status=403)
 
     studentList = Student.objects.all()
 
@@ -44,19 +35,10 @@ def students(request):
     )
 
 
+@teacher_required(is_management=True)
 def student(request, ID: int = None):
     """The page where teachers can see students"""
-    # Check if user is logged in
-    if not request.user.is_authenticated:
-        # messages.error(request, "You must be logged in to view students")
-        return HttpResponse(status=403)
-    # Check if user is a teacher
-    if not request.user.is_teacher:
-        # messages.error(request, "You must be a teacher to view students")
-        return HttpResponse(status=403)
-    if not request.user.teacher.is_management:
-        # messages.error(request, "You must be a management teacher to view students")
-        return HttpResponse(status=403)
+
     try:
         selectedStudent = Student.objects.get(id=ID)
     except Student.DoesNotExist:
