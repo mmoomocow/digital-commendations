@@ -1,12 +1,12 @@
-# Test Helper, contains functions to help with testing
-
 from django.test import TestCase
 from users.models import User
 from teachers.models import Teacher
 from students.models import Student
 import random
 
-# Basic page tester, takes a path and template name
+# Helper functions for testing
+
+
 def testPage(self: TestCase, path: str, template: str):
     """_summary_: Tests a page to see if it returns a 200 status code and uses the correct template
 
@@ -24,7 +24,15 @@ def testPage(self: TestCase, path: str, template: str):
 
 
 # Create a user with garbage data
-def createUser(self: TestCase):
+def createUser(_self: TestCase) -> User:
+    """_summary_: Creates a user with garbage data
+
+    Args:
+        _self (TestCase): The test case
+
+    Returns:
+        User: The user that was created
+    """
     user = User.objects.create_user(
         username="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
         email="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
@@ -36,8 +44,17 @@ def createUser(self: TestCase):
 
 
 # Create a teacher and link it to a user
-def createTeacher(self: TestCase, is_management: bool = False):
-    user = createUser(self)
+def createTeacher(_self: TestCase, is_management: bool = False) -> User:
+    """_summary_: Creates a teacher and links it to a user
+
+    Args:
+        _self (TestCase): The test case
+        is_management (bool, optional): Should the teacher be management?. Defaults to False.
+
+    Returns:
+        User: The user that was created
+    """
+    user = createUser(_self)
     teacher = Teacher.objects.create(
         staff_code="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=2)),
         user=user,
@@ -50,8 +67,16 @@ def createTeacher(self: TestCase, is_management: bool = False):
 
 
 # Create a student and link it to a user
-def createStudent(self: TestCase):
-    user = createUser(self)
+def createStudent(_self: TestCase) -> User:
+    """_summary_: Creates a student and links it to a user
+
+    Args:
+        _self (TestCase): The test case
+
+    Returns:
+        User: The user that was created
+    """
+    user = createUser(_self)
     student = Student.objects.create(
         id=random.randint(10000, 99999),
         tutor_room="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=2)),
