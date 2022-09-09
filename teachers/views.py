@@ -7,5 +7,4 @@ from commendationSite.authHelper import teacher_required
 @teacher_required()
 def index(request):
     """The index page for teachers."""
-
     return render(request, "teachers/index.html")

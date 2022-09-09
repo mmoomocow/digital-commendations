@@ -12,7 +12,6 @@ from commendationSite.authHelper import teacher_required
 @teacher_required()
 def giveCommendation(request):
     """Award commendations to students."""
-
     if request.method == "POST":
         commendationType = request.POST["commendationType"]
         reason = request.POST["reason"]
@@ -91,7 +90,6 @@ def giveCommendation(request):
 @teacher_required(is_management=True)
 def viewMilestones(request):
     """The page where teachers can award milestones"""
-
     if request.method == "POST":
         # there will be a list of milestone IDs
         milestoneIDs = request.POST.getlist("milestone")
