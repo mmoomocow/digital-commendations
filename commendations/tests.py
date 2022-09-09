@@ -48,6 +48,21 @@ class commendationsTest(TestCase):
         testHelper.testPage(
             self, "/commendations/spirit/", "commendations/award_milestones.html"
         )
+
+        # Add type filter
+        testHelper.testPage(
+            self,
+            "/commendations/spirit/?type=1",
+            "commendations/award_milestones.html",
+        )
+
+        # Add date filter
+        testHelper.testPage(
+            self,
+            "/commendations/spirit/?date=2020-01-01",
+            "commendations/award_milestones.html",
+        )
+
         self.teacher.teacher.is_management = False
         self.teacher.teacher.save()
 
