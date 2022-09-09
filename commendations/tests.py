@@ -83,5 +83,38 @@ class commendationsTest(TestCase):
         self.teacher.teacher.is_management = False
         self.teacher.teacher.save()
 
+    def test_Commendation(self):
+        commendation = Commendation.objects.create(
+            commendation_type="E",
+            reason="Test",
+            teacher=self.teacher.teacher,
+        )
+        commendation.students.add(self.student.student)
+
+        # Check that the commendation was created and has the correct values
+        self.assertEqual(
+            commendation.commendation_type,
+            "E",
+            f"Commendation type was not set correctly, expected E, got {commendation.commendation_type}",
+        )
+
+        self.assertEqual(
+            commendation.reason,
+            "Test",
+            f"Commendation reason was not set correctly, expected Test, got {commendation.reason}",
+        )
+
+        self.assertEqual(
+            commendation.teacher,
+            self.teacher.teacher,
+            f"Commendation teacher was not set correctly, expected {self.teacher.teacher}, got {commendation.teacher}",
+        )
+
+        self.assertEqual(
+            commendation.students.first(),
+            self.student.student,
+            f"Commendation student was not set correctly, expected {self.student.student}, got {commendation.students.first()}",
+        )
+
     def tearDown(self):
         pass
