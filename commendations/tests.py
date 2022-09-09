@@ -79,6 +79,32 @@ class commendationsTest(TestCase):
             f"Milestone was not awarded, expected {data}, got {milestone}",
         )
 
+        # Filter to a milestone that doesn't exist
+        data = {
+            "milestone": 999,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            404,
+            f"Page /commendations/spirit/ with invalid ID returned {page.status_code} instead of 404",
+        )
+
+        # Filter to a milestone that is already awarded
+        data = {
+            "milestone": milestone.id,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            400,
+            f"Page /commendations/spirit/ with already awarded ID returned {page.status_code} instead of 400",
+        )
+
         self.teacher.teacher.is_management = False
         self.teacher.teacher.save()
 
