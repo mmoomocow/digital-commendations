@@ -140,4 +140,4 @@ class commendationsTest(TestCase):
         )
 
     def tearDown(self):
-        pass
+        self.client.logout()
