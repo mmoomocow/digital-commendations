@@ -42,7 +42,6 @@ class commendationsTest(TestCase):
             f"Commendation was not created, expected {data}, got {commendation}",
         )
 
-
     def test_viewMilestones_get(self):
         self.teacher.teacher.is_management = True
         self.teacher.teacher.save()
@@ -114,6 +113,30 @@ class commendationsTest(TestCase):
             commendation.students.first(),
             self.student.student,
             f"Commendation student was not set correctly, expected {self.student.student}, got {commendation.students.first()}",
+        )
+
+    def test_Milestone(self):
+        milestone = Milestone.objects.create(
+            milestone_type=Milestone.GREEN,
+            student=self.student.student,
+        )
+
+        # Check that the milestone was created and has the correct values
+        self.assertEqual(
+            milestone.milestone_type,
+            Milestone.GREEN,
+            f"Milestone type was not set correctly, expected {Milestone.GREEN}, got {milestone.milestone_type}",
+        )
+
+        self.assertEqual(
+            milestone.student,
+            self.student.student,
+            f"Milestone student was not set correctly, expected {self.student.student}, got {milestone.student}",
+        )
+
+        self.assertFalse(
+            milestone.awarded,
+            f"Milestone awarded was not set correctly, expected False, got {milestone.awarded}",
         )
 
     def tearDown(self):
