@@ -139,5 +139,12 @@ class commendationsTest(TestCase):
             f"Milestone awarded was not set correctly, expected False, got {milestone.awarded}",
         )
 
+        # test the prettyPrint method
+        self.assertEqual(
+            milestone.prettyPrint(),
+            "Green Jr School spirit badge - 50 commendations",
+            f"Milestone prettyPrint was not set correctly, expected Green, got {milestone.prettyPrint()}",
+        )
+
     def tearDown(self):
         self.client.logout()
