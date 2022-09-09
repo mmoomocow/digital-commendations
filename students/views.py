@@ -10,7 +10,6 @@ from .models import Student
 @teacher_required()
 def students(request):
     """The page where teachers can see students"""
-
     studentList = Student.objects.all()
 
     # If there is a search query, filter the students
@@ -38,7 +37,6 @@ def students(request):
 @teacher_required(is_management=True)
 def student(request, ID: int = None):
     """The page where teachers can see students"""
-
     try:
         selectedStudent = Student.objects.get(id=ID)
     except Student.DoesNotExist:
