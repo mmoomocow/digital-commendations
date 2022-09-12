@@ -11,4 +11,9 @@
         "--ignore-rev",
         "64c516f0deeb3aa20e307c4cb169dea46ed5b122",
     ],
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
 }
