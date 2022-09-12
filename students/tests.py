@@ -50,7 +50,7 @@ class studentsTest(TestCase):
             str(self.student.student),
             f"{self.student.first_name} {self.student.last_name} ({self.student.student.id})",
         )
-        #
+
         self.assertEqual(str(student2), f"{student2.id}")
 
     def tearDown(self):
