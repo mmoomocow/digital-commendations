@@ -32,15 +32,22 @@ if (types.length > 0) {
 
 // Add select all checkbox functionality
 function selectAllCheckboxes() {
-    var checkboxes = document.getElementsByName('student');
+    console.log('select all');
+    var checkboxes = document.getElementsByName('milestone');
+    console.log(checkboxes);
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = document.getElementsByName("selectAll")[0].checked;
+        console.log(checkboxes[i]);
     }
 }
 
 // If any table row is clicked, tick the checkbox
+// and if the checkbox is clicked still tick the checkbox
 rows = document.getElementsByClassName('clickable-row');
 for (var i = 0; i < rows.length; i++) {
+    rows[i].getElementsByTagName('input')[0].onclick = function () {
+        this.checked = !this.checked;
+    };
     rows[i].onclick = function () {
         var checkbox = this.getElementsByTagName('input')[0];
         checkbox.checked = !checkbox.checked;
