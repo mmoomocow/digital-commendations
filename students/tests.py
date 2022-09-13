@@ -54,4 +54,4 @@ class studentsTest(TestCase):
         self.assertEqual(str(student2), f"{student2.id}")
 
     def tearDown(self):
-        pass
+        self.client.logout()

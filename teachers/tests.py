@@ -30,5 +30,5 @@ class teachersTest(TestCase):
 
         self.assertEqual(str(teacher2), f"{teacher2.staff_code}")
 
-    def tearDown(self) -> None:
-        pass
+    def tearDown(self):
+        self.client.logout()
