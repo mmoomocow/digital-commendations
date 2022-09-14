@@ -1,13 +1,19 @@
 from django.test import TestCase
 from users.models import User
 from teachers.models import Teacher
-from students.models import Student
+from students.models import Student, Caregiver
 import random
 
 # Helper functions for testing
 
 
-def testPage(self: TestCase, path: str, template: str):
+def get_page(
+    self: TestCase,
+    path: str,
+    template: str,
+    check_templates: bool = True,
+    status_code: int = 200,
+):
     """_summary_: Tests a page to see if it returns a 200 status code and uses the correct template
 
     Args:
@@ -17,10 +23,35 @@ def testPage(self: TestCase, path: str, template: str):
     """
     page = self.client.get(path)
     self.assertEqual(
-        page.status_code, 200, f"Page {path} returned {page.status_code} instead of 200"
+        page.status_code,
+        status_code,
+        f"Page {path} returned {page.status_code} instead of {status_code}",
     )
-    self.assertTemplateUsed(page, "base.html", f"Page {path} did not use base.html")
-    self.assertTemplateUsed(page, template, f"Page {path} did not use {template}")
+    if check_templates:
+        self.assertTemplateUsed(page, "base.html", f"Page {path} did not use base.html")
+        self.assertTemplateUsed(page, template, f"Page {path} did not use {template}")
+
+
+def post_page(
+    self: TestCase,
+    path: str,
+    data: dict,
+    status_code: int = 200,
+):
+    """_summary_: Sends a post request to a page and tests the response
+
+    Args:
+        self (TestCase): The test case
+        path (str): The path to test
+        data (dict): The data to send in the post request
+        status_code (int, optional): The expected status code. Defaults to 200.
+    """
+    page = self.client.post(path, data)
+    self.assertEqual(
+        page.status_code,
+        status_code,
+        f"Page {path} returned {page.status_code} instead of {status_code}",
+    )
 
 
 # Create a user with garbage data
@@ -84,5 +115,22 @@ def createStudent(_self: TestCase) -> User:
     )
     user.student = student
     user.is_student = True
+    user.save()
+    return user
+
+
+def createCaregiver(_self: TestCase) -> User:
+    """_summary_: Creates a caregiver and links it to a user
+
+    Args:
+        _self (TestCase): The test case
+
+    Returns:
+        User: The user that was created
+    """
+    user = createUser(_self)
+    caregiver = Caregiver.objects.create()
+    user.caregiver = caregiver
+    user.is_caregiver = True
     user.save()
     return user

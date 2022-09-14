@@ -12,7 +12,7 @@ class teachersTest(TestCase):
         self.client.login(username=self.teacher.username, password="password")
 
     def test_index(self):
-        testHelper.testPage(self, "/teachers/", "teachers/index.html")
+        testHelper.get_page(self, "/teachers/", "teachers/index.html")
 
     def test_Teacher(self):
         teacher = testHelper.createTeacher(self)

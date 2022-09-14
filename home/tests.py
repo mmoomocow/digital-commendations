@@ -6,4 +6,4 @@ from commendationSite import testHelper
 
 class TestHomePages(TestCase):
     def test_home_page(self):
-        testHelper.testPage(self, "/", "home/index.html")
+        testHelper.get_page(self, "/", "home/index.html")

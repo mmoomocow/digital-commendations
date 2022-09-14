@@ -21,14 +21,14 @@ class studentsTest(TestCase):
         self.client.login(username=self.teacher.username, password="password")
 
     def test_listStudents(self):
-        testHelper.testPage(self, "/students/", "students/list_students.html")
+        testHelper.get_page(self, "/students/", "students/list_students.html")
         # Test with a search query
-        testHelper.testPage(
+        testHelper.get_page(
             self, "/students/?search=Test", "students/list_students.html"
         )
 
     def test_studentInfo(self):
-        testHelper.testPage(
+        testHelper.get_page(
             self, f"/students/{self.student.student.id}/", "students/student_info.html"
         )
         # Test that a student that doesn't exist returns a 404

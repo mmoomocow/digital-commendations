@@ -13,7 +13,7 @@ class commendationsTest(TestCase):
         self.client.login(username=self.teacher.username, password="password")
 
     def test_giveCommendation_get(self):
-        testHelper.testPage(self, "/commendations/award/", "commendations/award.html")
+        testHelper.get_page(self, "/commendations/award/", "commendations/award.html")
 
     def test_giveCommendation_post(self):
         data = {
@@ -46,24 +46,24 @@ class commendationsTest(TestCase):
     def test_viewMilestones_get(self):
         self.teacher.teacher.is_management = True
         self.teacher.teacher.save()
-        testHelper.testPage(
+        testHelper.get_page(
             self, "/commendations/spirit/", "commendations/award_milestones.html"
         )
 
         # Add type filter
-        testHelper.testPage(
+        testHelper.get_page(
             self,
             "/commendations/spirit/?type=1",
             "commendations/award_milestones.html",
         )
 
         # Add date filter
-        ### Awaiting DCS-040 use time zone aware dates ###
-        # testHelper.testPage(
-        #     self,
-        #     "/commendations/spirit/?date=2020-01-01",
-        #     "commendations/award_milestones.html",
-        # )
+        ## Awaiting DCS-040 use time zone aware dates ###
+        testHelper.get_page(
+            self,
+            "/commendations/spirit/?date=2020-01-01",
+            "commendations/award_milestones.html",
+        )
 
         self.teacher.teacher.is_management = False
         self.teacher.teacher.save()
