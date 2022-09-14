@@ -23,33 +23,25 @@ def loginView(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             # Restrict access to active teachers for now
-            if user.is_active:
-                if user.is_teacher:
-                    login(request, user)
-                    messages.add_message(
-                        request,
-                        messages.SUCCESS,
-                        f"Login successful! Welcome back {user.first_name}",
-                    )
-                    return redirect("/")
-                return render(
+            if user.is_teacher:
+                login(request, user)
+                messages.add_message(
                     request,
-                    "users/login.html",
-                    {
-                        "error": "Sorry, only teachers can log in!",
-                        "username": username,
-                    },
-                    status=403,
+                    messages.SUCCESS,
+                    f"Login successful! Welcome back {user.first_name}",
                 )
+                return redirect("/")
+            # Deny all other users
             return render(
                 request,
                 "users/login.html",
                 {
-                    "error": "You have been marked inactive, so cannot log in.",
+                    "error": "Sorry, only teachers can log in!",
                     "username": username,
                 },
                 status=403,
             )
+        # Deny invalid users
         return render(
             request,
             "users/login.html",
