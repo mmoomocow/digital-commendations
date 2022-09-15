@@ -1,61 +1,66 @@
 from django.test import TestCase
-from .models import *
-from users import models as user_models
+from commendationSite import testHelper
+from .models import Student
+import random
 
 # Create your tests here.
 
 
-class StudentCaregiverTestCase(TestCase):
+class studentsModelTest(TestCase):
     def setUp(self):
-        # Create a student
-        self.student = Student.objects.create(
-            id="12345",
-            tutor_room="ABc",
+        self.student = testHelper.createStudent(self)
+        self.teacher = testHelper.createTeacher(self, is_management=True)
+        self.user = testHelper.createUser(self)
+
+        self.client.login(username=self.teacher.username, password="password")
+
+    def test_Student(self):
+        # Create a student and check it exists
+        student = testHelper.createStudent(self)
+        self.assertEqual(Student.objects.get(id=student.student.id), student.student)
+
+    def test_student_str(self):
+        student2 = Student.objects.create(
+            id=random.randint(10000, 99999),
+            tutor_room="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=2)),
             house_group=Student.ANDERSON,
-            year_level=Student.YEAR9,
         )
-        # Create a user object that can be linked to the student
-        self.user = user_models.User.objects.create_user(
-            username="student",
-            email="student@example.com",
-            password="studentpassword",
-            first_name="Student",
-            last_name="User",
-        )
-        # Link the user to the student
-        self.user.is_student = True
-        self.user.student = self.student
-        self.user.save()
-
-    def test_student_creation(self):
-        self.assertEqual(self.student.id, "12345", "Student ID is not correct")
-        self.assertEqual(self.student.tutor_room, "ABc", "Tutor room is not correct")
+        # Test __str__ method
         self.assertEqual(
-            self.student.house_group, Student.ANDERSON, "House group is not correct"
-        )
-        self.assertEqual(
-            self.student.year_level, Student.YEAR9, "Year level is not correct"
-        )
-        self.assertEqual(
-            str(self.student),
-            "Student User (12345)",
-            "Student string representation is not correct",
+            str(self.student.student),
+            f"{self.student.first_name} {self.student.last_name} ({self.student.student.id})",
         )
 
-    def test_user_link(self):
-        # We don't need to test the full user because it is already tested in the UserTestCase
-        self.assertEqual(
-            self.user.student, self.student, "User is not linked to the teacher"
+        # Student with no user
+        self.assertEqual(str(student2), f"{student2.id}")
+
+    def tearDown(self):
+        self.client.logout()
+
+
+class studentsViewsTest(TestCase):
+    def setUp(self):
+        self.student = testHelper.createStudent(self)
+        self.teacher = testHelper.createTeacher(self, is_management=True)
+        self.user = testHelper.createUser(self)
+
+        self.client.login(username=self.teacher.username, password="password")
+
+    def test_listStudents(self):
+        testHelper.get_page(self, "/students/", "students/list_students.html")
+        # Test with a search query
+        testHelper.get_page(
+            self, "/students/?search=Test", "students/list_students.html"
         )
-        self.assertTrue(self.student.user.is_student, "Student should be  a student")
-        self.assertFalse(
-            self.student.user.is_teacher, "Student should not be a teacher"
+
+    def test_studentInfo(self):
+        testHelper.get_page(
+            self, f"/students/{self.student.student.id}/", "students/student_info.html"
         )
-        self.assertFalse(
-            self.student.user.is_caregiver, "Student should not be a caregiver"
-        )
-        self.assertEquals(
-            str(self.student.user),
-            "Student User",
-            "User string representation is not correct",
+        # Test that a student that doesn't exist returns a 404
+        testHelper.get_page(
+            self,
+            f"/students/{self.student.student.id + 1}/",
+            status_code=404,
+            check_templates=False,
         )

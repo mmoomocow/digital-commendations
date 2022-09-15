@@ -1,10 +1,9 @@
 from django.test import TestCase
+from commendationSite import testHelper
 
 # Create your tests here.
 
 
-class testHomePage(TestCase):
+class TestHomePages(TestCase):
     def test_home_page(self):
-        response = self.client.get("/")
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "base.html")
+        testHelper.get_page(self, "/", "home/index.html")

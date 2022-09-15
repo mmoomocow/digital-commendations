@@ -1,184 +1,232 @@
 from django.test import TestCase
-from .models import Commendation
-from users import models as user_models
-from students import models as student_models
-from teachers import models as teacher_models
+from .models import Commendation, Milestone
+from .admin import CommendationAdmin
+from commendationSite import testHelper
 
 # Create your tests here.
 
 
-class CommendationTestCase(TestCase):
+class commendationsMilestoneModelTest(TestCase):
     def setUp(self):
-        # Commendation needs teachers and students
-        # First create a teacher
-        self.teacher = user_models.User.objects.create_user(
-            username="CommendationTeacher",
-            email="testTeacher@example.com",
-            password="teacherpassword",
-            first_name="Commendation",
-            last_name="Teacher",
-        )
-        self.teacher.is_teacher = True
-        self.teacher.teacher = teacher_models.Teacher.objects.create(
-            staff_code="Ab",
-            house_group=teacher_models.Teacher.ANDERSON,
-        )
-        self.teacher.save()
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
 
-        # Then create 2 students
-        self.student1 = user_models.User.objects.create_user(
-            username="CommendationStudent1",
-            email="commendationStudent1@example.com",
-            password="studentpassword",
-            first_name="Commendation",
-            last_name="Student1",
+    def test_Milestone(self):
+        milestone = Milestone.objects.create(
+            milestone_type=Milestone.GREEN,
+            student=self.student.student,
         )
-        self.student1.is_student = True
-        self.student1.student = student_models.Student.objects.create(
-            id="23456",
-            tutor_room="abc",
-            house_group=student_models.Student.BEGG,
-            year_level=student_models.Student.YEAR9,
-        )
-        self.student1.save()
 
-        self.student2 = user_models.User.objects.create_user(
-            username="CommendationStudent2",
-            email="commendationStudent2@example.com",
-            password="studentpassword",
-            first_name="Commendation",
-            last_name="Student2",
+        # Check that the milestone was created and has the correct values
+        self.assertEqual(
+            milestone.milestone_type,
+            Milestone.GREEN,
+            f"Milestone type was not set correctly, expected {Milestone.GREEN}, got {milestone.milestone_type}",
         )
-        self.student2.is_student = True
-        self.student2.student = student_models.Student.objects.create(
-            id="34567",
-            tutor_room="def",
-            house_group=student_models.Student.BEGG,
-            year_level=student_models.Student.YEAR9,
-        )
-        self.student2.save()
 
-        # Then create a commendation with the teachers and students linked
-        self.commendation = Commendation.objects.create(
-            commendation_type=Commendation.RESPECT,
-            reason="Cupcake ipsum dolor sit amet sweet roll cheesecake jelly. Soufflé carrot cake sesame snaps toffee pie bears chocolate. Muffin halvah bonbon fruitcake marshmallow sweet roll.",
+        self.assertEqual(
+            milestone.student,
+            self.student.student,
+            f"Milestone student was not set correctly, expected {self.student.student}, got {milestone.student}",
+        )
+
+        self.assertFalse(
+            milestone.awarded,
+            f"Milestone awarded was not set correctly, expected False, got {milestone.awarded}",
+        )
+
+        # test the prettyPrint method
+        self.assertEqual(
+            milestone.prettyPrint(),
+            "Green Jr School spirit badge - 50 commendations",
+            f"Milestone prettyPrint was not set correctly, expected Green, got {milestone.prettyPrint()}",
+        )
+
+
+class commendationsMilestoneViewTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
+
+    def test_viewMilestones_get(self):
+        self.teacher.teacher.is_management = True
+        self.teacher.teacher.save()
+        testHelper.get_page(
+            self, "/commendations/spirit/", "commendations/award_milestones.html"
+        )
+
+        # Add type filter
+        testHelper.get_page(
+            self,
+            "/commendations/spirit/?type=1",
+            "commendations/award_milestones.html",
+        )
+
+        # Add date filter
+        ## Awaiting DCS-040 use time zone aware dates ###
+        testHelper.get_page(
+            self,
+            "/commendations/spirit/?date=2020-01-01",
+            "commendations/award_milestones.html",
+        )
+
+        self.teacher.teacher.is_management = False
+        self.teacher.teacher.save()
+
+    def test_viewMilestones_post(self):
+        self.teacher.teacher.is_management = True
+        self.teacher.teacher.save()
+
+        milestone = Milestone.objects.create(
+            milestone_type=Milestone.GREEN,
+            student=self.student.student,
+        )
+
+        data = {
+            "milestone": milestone.id,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            302,
+            f"Page /commendations/spirit/ returned {page.status_code} instead of 302",
+        )
+
+        # Check that the milestone has been marked as awarded
+        milestone = Milestone.objects.get(id=milestone.id)
+        self.assertTrue(
+            milestone.awarded,
+            f"Milestone was not awarded, expected {data}, got {milestone}",
+        )
+
+        # Filter to a milestone that doesn't exist
+        data = {
+            "milestone": 999,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            404,
+            f"Page /commendations/spirit/ with invalid ID returned {page.status_code} instead of 404",
+        )
+
+        # Filter to a milestone that is already awarded
+        data = {
+            "milestone": milestone.id,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            400,
+            f"Page /commendations/spirit/ with already awarded ID returned {page.status_code} instead of 400",
+        )
+
+        self.teacher.teacher.is_management = False
+        self.teacher.teacher.save()
+
+
+class commendationsCommendationModelTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
+
+    def test_Commendation(self):
+        commendation = Commendation.objects.create(
+            commendation_type="E",
+            reason="Test",
             teacher=self.teacher.teacher,
         )
-        self.commendation.students.add(self.student1.student, self.student2.student)
+        commendation.students.add(self.student.student)
 
-        # Create a user that's not a teacher to test permissions
-        self.user = user_models.User.objects.create_user(
-            username="CommendationUser",
-            email="commendationUser@example.com",
-            password="userpassword",
-            first_name="Commendation",
-            last_name="User",
+        # Check that the commendation was created and has the correct values
+        self.assertEqual(
+            commendation.commendation_type,
+            "E",
+            f"Commendation type was not set correctly, expected E, got {commendation.commendation_type}",
         )
 
-    def test_commendation_creation(self):
         self.assertEqual(
-            self.commendation.commendation_type,
-            Commendation.RESPECT,
-            "Commendation type is not correct",
-        )
-        self.assertEqual(
-            self.commendation.reason,
-            "Cupcake ipsum dolor sit amet sweet roll cheesecake jelly. Soufflé carrot cake sesame snaps toffee pie bears chocolate. Muffin halvah bonbon fruitcake marshmallow sweet roll.",
-            "Commendation reason is not correct",
+            commendation.reason,
+            "Test",
+            f"Commendation reason was not set correctly, expected Test, got {commendation.reason}",
         )
 
-    def test_commendation_links(self):
         self.assertEqual(
-            self.commendation.teacher,
+            commendation.teacher,
             self.teacher.teacher,
-            "Commendation teacher is not correct",
-        )
-        self.assertEqual(
-            self.commendation.students.count(),
-            2,
-            "Commendation students are not correct",
-        )
-        # The order of students is not important or guaranteed, so we only check if both students are in the list
-        self.assertTrue(
-            self.commendation.students.contains(self.student1.student),
-            "Commendation student #1 is not correct",
-        )
-        self.assertTrue(
-            self.commendation.students.contains(self.student2.student),
-            "Commendation student #2 is not correct",
+            f"Commendation teacher was not set correctly, expected {self.teacher.teacher}, got {commendation.teacher}",
         )
 
-    def test_commendation_str(self):
         self.assertEqual(
-            str(self.commendation),
-            "Commendation ID: 1",
-            "Commendation string is not correct",
+            commendation.students.first(),
+            self.student.student,
+            f"Commendation student was not set correctly, expected {self.student.student}, got {commendation.students.first()}",
         )
 
-    def test_award_commendation_get(self):
-        # Request will fail as not logged in
-        response = self.client.get("/commendations/award/")
+
+class commendationsCommendationAdminTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
+
+    def test_CommendationAdmin(self):
+        # Test that the students function returns the correct value
+        commendation = Commendation.objects.create(
+            commendation_type="E",
+            reason="Test",
+            teacher=self.teacher.teacher,
+        )
+        commendation.students.add(self.student.student)
+        commendation.save()
+
+        admin = CommendationAdmin(commendation, None)
         self.assertEqual(
-            response.status_code,
-            403,
-            "GET request to award commendation by unauthenticated users should be forbidden",
+            admin.students(commendation),
+            self.student.student.__str__(),
+            f"Commendation students was not set correctly, expected {self.student.student}, got {admin.students(commendation)}",
         )
 
-        # Login as user
-        self.client.login(username="CommendationUser", password="userpassword")
-        response = self.client.get("/commendations/award/")
-        self.assertEqual(
-            response.status_code,
-            403,
-            "GET request to award commendation by non-teachers should be forbidden",
-        )
-        self.client.logout()
 
-        # Login as a teacher
-        self.client.login(username="CommendationTeacher", password="teacherpassword")
-        response = self.client.get("/commendations/award/")
-        self.assertEqual(
-            response.status_code,
-            200,
-            "GET request to award commendation by teachers should be successful",
-        )
-        self.assertTemplateUsed(
-            response, "commendations/award.html", "Award commendation template not used"
-        )
-        self.assertTemplateUsed(
-            response, "base.html", "Award commendation did not extend base.html"
-        )
-        # reset client
-        self.client.logout()
+class commendationsCommendationViewTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
 
-    def test_award_commendation_post(self):
-        # Request will fail as not logged in
-        response = self.client.post("/commendations/award/")
-        self.assertEqual(
-            response.status_code,
-            403,
-            "POST request to award commendation by unauthenticated users should be forbidden",
-        )
-        # Login as a teacher
-        self.client.login(username="CommendationTeacher", password="teacherpassword")
-        response = self.client.post(
+    def test_giveCommendation_get(self):
+        testHelper.get_page(self, "/commendations/award/", "commendations/award.html")
+
+    def test_giveCommendation_post(self):
+        testHelper.post_page(
+            self,
             "/commendations/award/",
             {
-                "commendationType": Commendation.RESPECT,
-                "reason": "Post request test",
+                "commendationType": Commendation.EXCELLENCE,
+                "students": [self.student.student.id],
                 "teacher": self.teacher.teacher.id,
-                "students": [self.student1.student.id, self.student2.student.id],
+                "reason": "Test commendation",
             },
+            status_code=302,
         )
-        self.assertEqual(response.status_code, 302)
-        newCommendation = Commendation.objects.get(
-            commendation_type=Commendation.RESPECT,
-            reason="Post request test",
-        )
-        self.assertEqual(newCommendation.teacher, self.teacher.teacher)
-        self.assertEqual(newCommendation.students.count(), 2)
-        self.assertTrue(newCommendation.students.contains(self.student1.student))
-        self.assertTrue(newCommendation.students.contains(self.student2.student))
 
-        # reset client
-        self.client.logout()
+        # Check that the commendation was created
+        commendation = Commendation.objects.filter(
+            commendation_type=Commendation.EXCELLENCE,
+            reason="Test commendation",
+            teacher=self.teacher.teacher.id,
+            students=self.student.student.id,
+        )
+        self.assertTrue(
+            commendation.exists(),
+            "Commendation was not created from post request",
+        )
