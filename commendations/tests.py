@@ -228,5 +228,5 @@ class commendationsCommendationViewTest(TestCase):
         )
         self.assertTrue(
             commendation.exists(),
-            f"Commendation was not created from post request",
+            "Commendation was not created from post request",
         )
