@@ -1,6 +1,8 @@
+from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.utils.timezone import make_aware
 from .models import Commendation, Milestone
 from teachers.models import Teacher
 from students.models import Student
@@ -122,7 +124,9 @@ def viewMilestones(request):
 
     dateQuery = request.GET.get("date")
     if dateQuery:
-        milestones = milestones.filter(date_time__gte=dateQuery)
+        # Convert the date to a datetime object
+        date = make_aware(datetime.strptime(dateQuery, "%Y-%m-%d"))
+        milestones = milestones.filter(date_time__gte=date)
 
     # Sort by the type then by student name
     milestones = milestones.order_by(
