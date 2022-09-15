@@ -6,42 +6,49 @@ from commendationSite import testHelper
 # Create your tests here.
 
 
-class commendationsTest(TestCase):
+class commendationsMilestoneModelTest(TestCase):
     def setUp(self):
         self.teacher = testHelper.createTeacher(self, is_management=False)
         self.student = testHelper.createStudent(self)
         self.client.login(username=self.teacher.username, password="password")
 
-    def test_giveCommendation_get(self):
-        testHelper.get_page(self, "/commendations/award/", "commendations/award.html")
+    def test_Milestone(self):
+        milestone = Milestone.objects.create(
+            milestone_type=Milestone.GREEN,
+            student=self.student.student,
+        )
 
-    def test_giveCommendation_post(self):
-        data = {
-            "commendationType": "E",
-            "reason": "Test",
-            "students": [self.student.student.id],
-            "teacher": self.teacher.id,
-        }
-
-        # Post the commendation
-        page = self.client.post("/commendations/award/", data=data)
+        # Check that the milestone was created and has the correct values
         self.assertEqual(
-            page.status_code,
-            302,
-            f"Page /commendations/award/ returned {page.status_code} instead of 302",
+            milestone.milestone_type,
+            Milestone.GREEN,
+            f"Milestone type was not set correctly, expected {Milestone.GREEN}, got {milestone.milestone_type}",
         )
 
-        # Check that the commendation was created
-        commendation = Commendation.objects.filter(
-            commendation_type="E",
-            reason="Test",
-            teacher=self.teacher.teacher.id,
-            students=self.student.student.id,
+        self.assertEqual(
+            milestone.student,
+            self.student.student,
+            f"Milestone student was not set correctly, expected {self.student.student}, got {milestone.student}",
         )
-        self.assertTrue(
-            commendation.exists(),
-            f"Commendation was not created, expected {data}, got {commendation}",
+
+        self.assertFalse(
+            milestone.awarded,
+            f"Milestone awarded was not set correctly, expected False, got {milestone.awarded}",
         )
+
+        # test the prettyPrint method
+        self.assertEqual(
+            milestone.prettyPrint(),
+            "Green Jr School spirit badge - 50 commendations",
+            f"Milestone prettyPrint was not set correctly, expected Green, got {milestone.prettyPrint()}",
+        )
+
+
+class commendationsMilestoneViewTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
 
     def test_viewMilestones_get(self):
         self.teacher.teacher.is_management = True
@@ -125,6 +132,13 @@ class commendationsTest(TestCase):
         self.teacher.teacher.is_management = False
         self.teacher.teacher.save()
 
+
+class commendationsCommendationModelTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
+
     def test_Commendation(self):
         commendation = Commendation.objects.create(
             commendation_type="E",
@@ -158,6 +172,13 @@ class commendationsTest(TestCase):
             f"Commendation student was not set correctly, expected {self.student.student}, got {commendation.students.first()}",
         )
 
+
+class commendationsCommendationAdminTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
+
     def test_CommendationAdmin(self):
         # Test that the students function returns the correct value
         commendation = Commendation.objects.create(
@@ -175,36 +196,37 @@ class commendationsTest(TestCase):
             f"Commendation students was not set correctly, expected {self.student.student}, got {admin.students(commendation)}",
         )
 
-    def test_Milestone(self):
-        milestone = Milestone.objects.create(
-            milestone_type=Milestone.GREEN,
-            student=self.student.student,
+
+class commendationsCommendationViewTest(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.student = testHelper.createStudent(self)
+        self.client.login(username=self.teacher.username, password="password")
+
+    def test_giveCommendation_get(self):
+        testHelper.get_page(self, "/commendations/award/", "commendations/award.html")
+
+    def test_giveCommendation_post(self):
+        testHelper.post_page(
+            self,
+            "/commendations/award/",
+            {
+                "commendationType": Commendation.EXCELLENCE,
+                "students": [self.student.student.id],
+                "teacher": self.teacher.teacher.id,
+                "reason": "Test commendation",
+            },
+            status_code=302,
         )
 
-        # Check that the milestone was created and has the correct values
-        self.assertEqual(
-            milestone.milestone_type,
-            Milestone.GREEN,
-            f"Milestone type was not set correctly, expected {Milestone.GREEN}, got {milestone.milestone_type}",
+        # Check that the commendation was created
+        commendation = Commendation.objects.filter(
+            commendation_type=Commendation.EXCELLENCE,
+            reason="Test commendation",
+            teacher=self.teacher.teacher.id,
+            students=self.student.student.id,
         )
-
-        self.assertEqual(
-            milestone.student,
-            self.student.student,
-            f"Milestone student was not set correctly, expected {self.student.student}, got {milestone.student}",
+        self.assertTrue(
+            commendation.exists(),
+            f"Commendation was not created from post request",
         )
-
-        self.assertFalse(
-            milestone.awarded,
-            f"Milestone awarded was not set correctly, expected False, got {milestone.awarded}",
-        )
-
-        # test the prettyPrint method
-        self.assertEqual(
-            milestone.prettyPrint(),
-            "Green Jr School spirit badge - 50 commendations",
-            f"Milestone prettyPrint was not set correctly, expected Green, got {milestone.prettyPrint()}",
-        )
-
-    def tearDown(self):
-        self.client.logout()
