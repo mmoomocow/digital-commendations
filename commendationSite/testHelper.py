@@ -10,7 +10,7 @@ import random
 def get_page(
     self: TestCase,
     path: str,
-    template: str,
+    template: str = None,
     check_templates: bool = True,
     status_code: int = 200,
 ):
