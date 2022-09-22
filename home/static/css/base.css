@@ -50,7 +50,7 @@ main {
 }
 
 footer {
-    height: 14.5vh;
+    min-height: 14.5vh;
     background-color: var(--color-green);
     padding: 0.7rem;
     color: var(--color-gold);
