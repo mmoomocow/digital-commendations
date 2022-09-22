@@ -64,7 +64,23 @@
             {% block content %}{% endblock content %}
         </main>
         <footer>
-
+            <div id="footerLeft">
+                <ul>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div id="footerCent">
+                {% block footer %}{% endblock footer %}
+            </div>
+            <div id="footerRight">
+                <li>© 2021 - 2022</li>
+                <li>Created by <a href="mailto:19059@bayfield-high.school.nz">Matthew Gray</a></li>
+                <li>View source code on <a href="https://github.com/mmoomocow/digital-commendations">GitHub</a></li>
+                <li>View project license <a href="https://github.com/mmoomocow/digital-commendations/blob/main/LICENSE">here</a></li>
+                <li>Icons by <a href="https://fontawesome.com/">FontAwesome</a></li>
+            </div>
         </footer>
     </body>
 </html>
