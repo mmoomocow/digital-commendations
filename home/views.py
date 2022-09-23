@@ -16,8 +16,8 @@ def contact(request) -> render:
         email = request.POST.get("email")
         subject = request.POST.get("subject")
         message = request.POST.get("message")
-        contact = Contact(name=name, email=email, subject=subject, message=message)
-        contact.save()
+        newContact = Contact(name=name, email=email, subject=subject, message=message)
+        newContact.save()
 
         return render(request, "home/contacted.html", status=201)
     return render(request, "home/contact.html")
