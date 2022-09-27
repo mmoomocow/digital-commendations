@@ -96,16 +96,11 @@ def viewMilestones(request):
         # there will be a list of milestone IDs
         milestoneIDs = request.POST.getlist("milestone")
 
-        # Check that the milestones exist
+        # Get the milestone objects
         milestones = Milestone.objects.filter(id__in=milestoneIDs)
-        if len(milestones) == 0:
-            # messages.error(request, "Those milestones do not exist")
-            return HttpResponse(status=404)
-        # Check that the milestones are not already awarded
+
+        # Remove any that have already been awarded
         milestones = milestones.filter(awarded=False)
-        if len(milestones) == 0:
-            # messages.error(request, "Those milestones have already been awarded")
-            return HttpResponse(status=400)
 
         # Mark the milestones as awarded
         for milestone in milestones:
