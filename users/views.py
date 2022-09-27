@@ -36,18 +36,13 @@ def loginView(request):
                     if "next" in request.GET:
                         return redirect(request.GET["next"])
                     return redirect("/")
-                return render(
-                    request,
-                    messages.SUCCESS,
-                    f"Login successful! Welcome back {user.first_name}",
-                )
-                return redirect("/")
+
             # Deny all other users
             return render(
                 request,
                 "users/login.html",
                 {
-                    "error": "Sorry, only teachers can log in!",
+                    "error": "Sorry, you are not permitted to login!",
                     "username": username,
                 },
                 status=403,
