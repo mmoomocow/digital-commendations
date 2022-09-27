@@ -23,19 +23,18 @@ def loginView(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             # Restrict access to active teachers for now
-            if user.is_active:
-                if user.is_teacher:
-                    login(request, user)
-                    messages.add_message(
-                        request,
-                        messages.SUCCESS,
-                        f"Login successful! Welcome back {user.first_name}",
-                    )
+            if user.is_active and user.is_teacher:
+                login(request, user)
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    f"Login successful! Welcome back {user.first_name}",
+                )
 
-                    # Check for a next parameter in the URL
-                    if "next" in request.GET:
-                        return redirect(request.GET["next"])
-                    return redirect("/")
+                # Check for a next parameter in the URL
+                if "next" in request.GET:
+                    return redirect(request.GET["next"])
+                return redirect("/")
 
             # Deny all other users
             return render(
