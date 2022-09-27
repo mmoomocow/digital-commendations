@@ -31,6 +31,10 @@ def loginView(request):
                         messages.SUCCESS,
                         f"Login successful! Welcome back {user.first_name}",
                     )
+
+                    # Check for a next parameter in the URL
+                    if "next" in request.GET:
+                        return redirect(request.GET["next"])
                     return redirect("/")
                 return render(
                     request,
@@ -73,8 +77,9 @@ def logoutView(request):
         messages.add_message(
             request, messages.SUCCESS, "You have been logged out, see you next time!"
         )
+        if "next" in request.GET:
+            return redirect(request.GET["next"])
         return redirect("/")
-    messages.add_message(
-        request, messages.INFO, "You are not logged in, so you cannot log out!"
-    )
+
+    messages.add_message(request, messages.INFO, "You are not logged in!")
     return redirect("/")
