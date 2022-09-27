@@ -131,6 +131,19 @@ class UserViewsTest(TestCase):
             status_code=403,
         )
 
+    def test_login_next(self):
+        # Test that a user can log in and be redirected to the next page specified in the url
+        request = self.client.post(
+            "/users/login/?next=/teachers/",
+            data={
+                "username": self.teacher.username,
+                "password": "password",
+            },
+            follow=True,
+        )
+        # Check redirected to the next page
+        self.assertRedirects(request, "/teachers/")
+
     def test_logout_authenticated(self):
         # Test that a user can log out
         self.client.force_login(self.teacher)
@@ -141,6 +154,16 @@ class UserViewsTest(TestCase):
             check_templates=False,
             status_code=302,
         )
+
+    def test_logout_next(self):
+        # Test that a user can log out and be redirected to the next page specified in the url
+        self.client.force_login(self.teacher)
+        request = self.client.get(
+            "/users/logout/?next=/users/login/",
+            follow=True,
+        )
+        # Check redirected to the next page
+        self.assertRedirects(request, "/users/login/")
 
     def test_logout_unauthenticated(self):
         # Test that no user doesn't cause an error

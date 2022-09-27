@@ -23,20 +23,25 @@ def loginView(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             # Restrict access to active teachers for now
-            if user.is_teacher:
+            if user.is_active and user.is_teacher:
                 login(request, user)
                 messages.add_message(
                     request,
                     messages.SUCCESS,
                     f"Login successful! Welcome back {user.first_name}",
                 )
+
+                # Check for a next parameter in the URL
+                if "next" in request.GET:
+                    return redirect(request.GET["next"])
                 return redirect("/")
+
             # Deny all other users
             return render(
                 request,
                 "users/login.html",
                 {
-                    "error": "Sorry, only teachers can log in!",
+                    "error": "Sorry, you are not permitted to login!",
                     "username": username,
                 },
                 status=403,
@@ -65,8 +70,9 @@ def logoutView(request):
         messages.add_message(
             request, messages.SUCCESS, "You have been logged out, see you next time!"
         )
+        if "next" in request.GET:
+            return redirect(request.GET["next"])
         return redirect("/")
-    messages.add_message(
-        request, messages.INFO, "You are not logged in, so you cannot log out!"
-    )
+
+    messages.add_message(request, messages.INFO, "You are not logged in!")
     return redirect("/")
