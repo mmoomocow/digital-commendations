@@ -38,22 +38,21 @@ def loginView(request):
                     return redirect("/")
                 return render(
                     request,
-                    "users/login.html",
-                    {
-                        "error": "Sorry, only teachers can log in!",
-                        "username": username,
-                    },
-                    status=403,
+                    messages.SUCCESS,
+                    f"Login successful! Welcome back {user.first_name}",
                 )
+                return redirect("/")
+            # Deny all other users
             return render(
                 request,
                 "users/login.html",
                 {
-                    "error": "You have been marked inactive, so cannot log in.",
+                    "error": "Sorry, only teachers can log in!",
                     "username": username,
                 },
                 status=403,
             )
+        # Deny invalid users
         return render(
             request,
             "users/login.html",

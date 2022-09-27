@@ -4,7 +4,7 @@
 {% comment %} HTML title {% endcomment %}
 {% block title %}Generate Jr School spirit badges{% endblock title %}
 {% comment %} Meta description {% endcomment %}
-{% block description %}{% endblock description %}
+{% block description %}Generate a list of students who can receive Jr School spirit badges{% endblock description %}
 
 {% comment %} Content that goes in the HTML head {% endcomment %}
 {% block head %}
@@ -39,7 +39,7 @@
 <br>
 <hr>
 {% if milestones %}
-<form class="results" action="/teachers/badges/" method="post">
+<form class="results" method="post">
     {% csrf_token %}
     <article class="results">
         <h2>Results:</h2>
@@ -81,3 +81,8 @@
     <p>No results found.</p>
 {% endif %}
 {% endblock content %}
+
+{% comment %} Center footer section {% endcomment %}
+{% block footer %}
+
+{% endblock footer %}

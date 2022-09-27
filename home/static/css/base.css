@@ -50,14 +50,45 @@ main {
 }
 
 footer {
-    height: 14.5vh;
+    min-height: 14.5vh;
     background-color: var(--color-green);
-    padding: 1rem;
+    padding: 0.7rem;
     color: var(--color-gold);
     text-align: center;
     position: absolute;
     bottom: 0;
     width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-rows: 1fr;
+}
+
+footer a {
+    color: var(--color-gold);
+}
+
+footer li {
+    list-style: none;
+}
+
+#footerLeft {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#footerCenter {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#footerRight {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+footer div {
+    padding: 0.5rem;
 }
 
 /* Style for required field abbreviations */

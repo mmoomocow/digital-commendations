@@ -6,21 +6,14 @@ from django.utils.timezone import make_aware
 from .models import Commendation, Milestone
 from teachers.models import Teacher
 from students.models import Student
+from commendationSite.authHelper import teacher_required
 
 # Create your views here.
 
 
+@teacher_required()
 def giveCommendation(request):
-    """Award commendations to students. Requires you to be a logged in teacher."""
-    # Check if user is logged in
-    if not request.user.is_authenticated:
-        # messages.error(request, "You must be logged in to give a commendation.")
-        return HttpResponse(status=403)
-    # Check if user is a teacher
-    if not request.user.is_teacher:
-        # messages.error(request, "You must be a teacher to give a commendation.")
-        return HttpResponse(status=403)
-
+    """Award commendations to students."""
     if request.method == "POST":
         commendationType = request.POST["commendationType"]
         reason = request.POST["reason"]
@@ -96,20 +89,9 @@ def giveCommendation(request):
     return render(request, "commendations/award.html", context)
 
 
+@teacher_required(is_management=True)
 def viewMilestones(request):
     """The page where teachers can award milestones"""
-    # Check if user is logged in
-    if not request.user.is_authenticated:
-        # messages.error(request, "You must be logged in to award milestones")
-        return HttpResponse(status=403)
-    # Check if user is a teacher
-    if not request.user.is_teacher:
-        # messages.error(request, "You must be a teacher to award milestones")
-        return HttpResponse(status=403)
-    if not request.user.teacher.is_management:
-        # messages.error(request, "You must be a management teacher to award milestones")
-        return HttpResponse(status=403)
-
     if request.method == "POST":
         # there will be a list of milestone IDs
         milestoneIDs = request.POST.getlist("milestone")

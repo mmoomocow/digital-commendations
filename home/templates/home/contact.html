@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}Contact Us{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}Get in contact with the developers and staff of this website{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.min.css' %}">
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}Contact Us{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+
+<div class="formContainer">
+    <form action="/contact/" method="post">
+        <p>To contact us please fill out this form with your email address and name, we will get back to you as soon as we can.</p>
+        {% csrf_token %}
+        <div class="formField">
+            <label for="name">Name <abbr class="requiredField" title="This field is required">*</abbr></label>
+            <input type="text" name="name" id="name" placeholder="Your name" required>
+        </div>
+        <div class="formField">
+            <label for="email">Email <abbr class="requiredField" title="This field is required">*</abbr></label>
+            <input type="email" name="email" id="email" placeholder="Your email" required>
+        </div>
+        <div class="formField">
+            <label for="subject">Subject <abbr class="requiredField" title="This field is required">*</abbr></label>
+            <input type="text" name="subject" id="subject" placeholder="Subject of your message" required>
+        </div>
+        <div class="formField">
+            <label for="message">Message <abbr class="requiredField" title="This field is required">*</abbr></label>
+            <textarea name="message" id="message" placeholder="Your message" required></textarea>
+        </div>
+        {% comment %} Display the error message, if there is one {% endcomment %}
+        {% if error %}
+            <div class="formField">
+                <div class="errorMessage">{{ error|safe }}</div>
+            </div>
+        {% endif %}
+        <div class="formField">
+            <input id="submit" type="submit" value="Send!"/>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% comment %} Center footer section {% endcomment %}
+{% block footer %}
+
+{% endblock footer %}

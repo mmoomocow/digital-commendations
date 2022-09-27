@@ -6,7 +6,8 @@ nav {
 }
 
 /* Links inside the navbar */
-nav a {
+nav a,
+nav span {
     float: left;
     background-color: var(--color-green);
     color: var(--color-gold);
