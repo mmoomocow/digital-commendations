@@ -101,6 +101,17 @@ def viewMilestones(request):
 
         # Remove any that have already been awarded
         milestones = milestones.filter(awarded=False)
+        # If milestones were removed for being awarded, inform the user
+        if len(milestones) != len(milestoneIDs):
+            messages.warning(
+                request,
+                "Some milestones have not been changed as they were already marked as awarded",
+            )
+
+        # If there are no milestones
+        if len(milestones) == 0:
+            messages.warning(request, "No milestones were selected")
+            return redirect("/teachers/milestones/")
 
         # Mark the milestones as awarded
         for milestone in milestones:
