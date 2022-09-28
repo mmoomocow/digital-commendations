@@ -1,5 +1,4 @@
 from datetime import datetime
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.utils.timezone import make_aware
@@ -96,16 +95,22 @@ def viewMilestones(request):
         # there will be a list of milestone IDs
         milestoneIDs = request.POST.getlist("milestone")
 
-        # Check that the milestones exist
+        # Get the milestone objects
         milestones = Milestone.objects.filter(id__in=milestoneIDs)
-        if len(milestones) == 0:
-            # messages.error(request, "Those milestones do not exist")
-            return HttpResponse(status=404)
-        # Check that the milestones are not already awarded
+
+        # Remove any that have already been awarded
         milestones = milestones.filter(awarded=False)
+        # If milestones were removed for being awarded, inform the user
+        if len(milestones) != len(milestoneIDs):
+            messages.warning(
+                request,
+                "Some milestones have not been changed as they were already marked as awarded",
+            )
+
+        # If there are no milestones
         if len(milestones) == 0:
-            # messages.error(request, "Those milestones have already been awarded")
-            return HttpResponse(status=400)
+            messages.warning(request, "No milestones were selected")
+            return redirect("/teachers/milestones/")
 
         # Mark the milestones as awarded
         for milestone in milestones:

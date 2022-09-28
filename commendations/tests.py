@@ -46,13 +46,11 @@ class commendationsMilestoneModelTest(TestCase):
 
 class commendationsMilestoneViewTest(TestCase):
     def setUp(self):
-        self.teacher = testHelper.createTeacher(self, is_management=False)
+        self.teacher = testHelper.createTeacher(self, is_management=True)
         self.student = testHelper.createStudent(self)
         self.client.login(username=self.teacher.username, password="password")
 
     def test_viewMilestones_get(self):
-        self.teacher.teacher.is_management = True
-        self.teacher.teacher.save()
         testHelper.get_page(
             self, "/commendations/spirit/", "commendations/award_milestones.html"
         )
@@ -72,13 +70,7 @@ class commendationsMilestoneViewTest(TestCase):
             "commendations/award_milestones.html",
         )
 
-        self.teacher.teacher.is_management = False
-        self.teacher.teacher.save()
-
     def test_viewMilestones_post(self):
-        self.teacher.teacher.is_management = True
-        self.teacher.teacher.save()
-
         milestone = Milestone.objects.create(
             milestone_type=Milestone.GREEN,
             student=self.student.student,
@@ -103,20 +95,14 @@ class commendationsMilestoneViewTest(TestCase):
             f"Milestone was not awarded, expected {data}, got {milestone}",
         )
 
-        # Filter to a milestone that doesn't exist
-        data = {
-            "milestone": 999,
-        }
-
-        # Post the milestone
-        page = self.client.post("/commendations/spirit/", data=data)
-        self.assertEqual(
-            page.status_code,
-            404,
-            f"Page /commendations/spirit/ with invalid ID returned {page.status_code} instead of 404",
+    def test_milestone_post_awarded(self):
+        # Try and award a milestone that has already been awarded
+        milestone = Milestone.objects.create(
+            milestone_type=Milestone.GREEN,
+            student=self.student.student,
+            awarded=True,
         )
 
-        # Filter to a milestone that is already awarded
         data = {
             "milestone": milestone.id,
         }
@@ -125,12 +111,35 @@ class commendationsMilestoneViewTest(TestCase):
         page = self.client.post("/commendations/spirit/", data=data)
         self.assertEqual(
             page.status_code,
-            400,
-            f"Page /commendations/spirit/ with already awarded ID returned {page.status_code} instead of 400",
+            302,
+            f"Page /commendations/spirit/ returned {page.status_code} instead of 302",
         )
 
-        self.teacher.teacher.is_management = False
-        self.teacher.teacher.save()
+    def test_milestone_post_none(self):
+        # Send a post with no milestone
+        data = {}
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            302,
+            f"Page /commendations/spirit/ returned {page.status_code} instead of 302",
+        )
+
+    def test_milestone_post_invalid(self):
+        # Send a post with an invalid milestone
+        data = {
+            "milestone": 999,
+        }
+
+        # Post the milestone
+        page = self.client.post("/commendations/spirit/", data=data)
+        self.assertEqual(
+            page.status_code,
+            302,
+            f"Page /commendations/spirit/ returned {page.status_code} instead of 302",
+        )
 
 
 class commendationsCommendationModelTest(TestCase):
