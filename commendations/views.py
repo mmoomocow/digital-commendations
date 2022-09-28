@@ -1,5 +1,4 @@
 from datetime import datetime
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.utils.timezone import make_aware
