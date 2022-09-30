@@ -64,7 +64,7 @@ def createUser(_self: TestCase) -> User:
     Returns:
         User: The user that was created
     """
-    user = User.objects.create_user(
+    user = User.objects.create(
         username="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
         email="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
         password="password",

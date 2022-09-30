@@ -30,7 +30,7 @@ def generate_teacher(number: int):
         # Generate a profile for the dummy teacher
         profile = fake.simple_profile()
         # Create the dummy user object
-        user = user_models.User.objects.create_user(
+        user = user_models.User.objects.create(
             username=profile["username"],
             password=fake.password(length=12),
             first_name=profile["name"].split(" ")[0],
@@ -63,7 +63,7 @@ def generate_student(number: int):
         # Generate a profile for the dummy student
         profile = fake.simple_profile()
         # Create the dummy user object
-        user = user_models.User.objects.create_user(
+        user = user_models.User.objects.create(
             username=profile["username"],
             password=fake.password(length=12),
             first_name=profile["name"].split(" ")[0],

@@ -10,75 +10,7 @@ from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMix
 class UserManager(defaultUserManager):
     """Manager for the User model."""
 
-    def create_user(
-        self,
-        username: str,
-        email: str,
-        first_name: str,
-        last_name: str,
-        password: str = None,
-    ) -> User:
-        """
-        Create a new user
-
-        Args:
-            username (str): The username that the user will use to login
-            email (str): The email address of the user
-            first_name (str): The user's first name
-            last_name (str): The user's last name
-            password (str): The password of the user that will be salted and hashes. Defaults to None.
-
-        Raises:
-            ValueError: Users must have a username
-            ValueError: Users must have an email
-
-        Returns:
-            User: Returns the newly created user
-        """
-        if not username:
-            raise ValueError("Users must have a username")
-        if not email:
-            raise ValueError("Users must have an email address")
-
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(
-        self,
-        username: str,
-        email: str,
-        first_name: str,
-        last_name: str,
-        password: str = None,
-    ) -> User:
-        """
-        Create a new user with superuser privileges
-
-        Args:
-            username (str): The username that the user will use to login
-            email (str): The email address of the user
-            first_name (str): The user's first name
-            last_name (str): The user's last name
-            password (str): The password of the user that will be salted and hashes. Defaults to None.
-
-        Returns:
-            User: Returns the newly created user
-        """
-        user = self.create_user(
-            username, email, first_name, last_name, password=password
-        )
-        user.is_superuser = True
-        user.is_staff = True
-        user.save(using=self._db)
-        return user
+    pass  # No custom methods yet
 
 
 class User(defaultUser, defaultPermissionsMixin):
