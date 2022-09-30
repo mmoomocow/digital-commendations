@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import RedirectView
+from os import environ
 
 urlpatterns = [
     path("api/", include("api.urls")),
@@ -30,7 +31,7 @@ urlpatterns = [
     path("", include("home.urls")),
 ]
 
-# Set admin site titles
-admin.site.site_header = "Bayfield Commendations Administration"
-admin.site.site_title = "Bayfield Commendations Admin Portal"
-admin.site.index_title = "Welcome to Bayfield's Commendation Site Admin Portal"
+# Set admin site titles from environment variables
+admin.site.site_header = environ.get("ADMIN_SITE_HEADER", "Commendation Site")
+admin.site.site_title = environ.get("ADMIN_SITE_TITLE", "Commendation Site")
+admin.site.index_title = environ.get("ADMIN_INDEX_TITLE", "Commendation Site")

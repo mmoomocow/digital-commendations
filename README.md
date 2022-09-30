@@ -111,6 +111,18 @@ Create a `.env` file in the root directory of the project and add the following 
 
   - Example: `password`
 
+- ADMIN_SITE_HEADER - The header text for the admin site
+
+  - Example: `Digital Commendations`
+
+- ADMIN_SITE_TITLE - The title text for the admin site
+
+  - Example: `Digital Commendations`
+
+- ADMIN_SITE_INDEX_TITLE - The message that appears on the admin site index page
+
+  - Example: `Welcome to Digital Commendations Admin`
+
 ### Migrate the database
 
 ```cmd
