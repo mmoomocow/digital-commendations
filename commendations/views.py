@@ -109,8 +109,10 @@ def viewMilestones(request):
 
         # If there are no milestones
         if len(milestones) == 0:
-            messages.warning(request, "No milestones were selected")
-            return redirect("/teachers/milestones/")
+            messages.warning(
+                request, "No milestones were awarded as no valid ones were selected"
+            )
+            return redirect("/teachers/spirit/")
 
         # Mark the milestones as awarded
         for milestone in milestones:
