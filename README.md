@@ -1,6 +1,7 @@
 # Digital Commendations
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![DeepSource](https://deepsource.io/gh/mmoomocow/digital-commendations.svg/?label=active+issues&show_trend=true&token=45Ig0mLDEA31v2cda7HmDQBt)](https://deepsource.io/gh/mmoomocow/digital-commendations/?ref=repository-badge)
 
 A digital commendation system being developed for use at Bayfield High School
 
