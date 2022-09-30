@@ -66,11 +66,14 @@ def createUser(_self: TestCase) -> User:
     """
     user = User.objects.create(
         username="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
-        email="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
-        password="password",
-        first_name="Test",
-        last_name="User",
+        first_name="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
+        last_name="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
+        email="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10))
+        + "@"
+        + "".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
     )
+    user.set_password("password")
+    user.save()
     return user
 
 
