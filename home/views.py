@@ -8,9 +8,16 @@ def index(request) -> render:
     """The home page of the website."""
     return render(request, "home/index.html")
 
+
 def about(request) -> render:
     """The about page of the website."""
     return render(request, "home/about.html")
+
+
+def privacy(request) -> render:
+    """The privacy page of the website."""
+    return render(request, "home/privacy.html")
+
 
 def contact(request) -> render:
     """The contact page of the website."""
