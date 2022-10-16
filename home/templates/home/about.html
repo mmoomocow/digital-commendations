@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}About{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}This website is used to award and view Commendations for students of Bayfield High School. It a project being developed by Matthew Gray as a Computer Science task{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}About{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+<p class="justify">
+    This website is used to award and view Commendations for students of Bayfield High School. It a project being developed by Matthew Gray as a Computer Science task.
+</p>
+
+<h2>What are commendations and spirit awards?</h2>
+<p class="justify">
+    Commendations are a way of recognizing students who have done something good. They are awarded by teachers and staff members and can be given to any student in the school. They can be awarded for any of our 4 RISE values: Respect, Integrity, Service and Excellence.
+    <br><br>
+    Spirit awards are a way of recognizing students who repeatedly follow our RISE value. Then number of commendations required for each spirit award is as follows:
+    <table>
+        <tr><th>Commendations Required</th><th>Spirit award</th></tr>
+        <tr><td>25</td><td>Dean's Certificate</td></tr>
+        <tr><td>50</td><td>Green Spirit Badge</td></tr>
+        <tr><td>100</td><td>Blue Spirit Badge</td></tr>
+        <tr><td>150</td><td>Gold Spirit Badge</td></tr>
+    </table> 
+</p>
+
+<hr>
+
+<h2>How do I use this website?</h2>
+<p class="justify">
+    At this stage, only teachers can log in and award commendations. To do this, click Login in the upper right corner of the page and enter your username and password. 
+    Once you are logged in, you can award commendations by hovering over Teachers, then selecting Award Commendation.
+    <br><br>
+    At this stage, students and parents cannot log in, however this is a feature that is being worked on and will be available soon.
+</p>
+
+<hr>
+
+<h2>How do I get a login?</h2>
+<p class="justify">
+    If you are a teacher, you should be able to log in using your school username and password, or you will have received an email with your login details.
+    <br><br>
+    If you are having trouble logging in, please contact Matthew Gray at <a href="mailto:19059@bayfield-high.school.nz">19059@bayfield-high.school.nz</a>.
+</p>
+
+<hr>
+
+<h2>What data does this site store? Is it safe?</h2>
+<p class="justify">
+    For information on what data this site stores, please see the <a href="{% url 'privacy' %}">Privacy Policy and security information</a>.
+</p>
+
+<hr>
+
+<h2>How is this is a computer science project?</h2>
+<p class="justify">
+    This website is being developed by Matthew Gray as a Computer Science project. It is being developed using the Django web framework, which is a Python web framework.
+    <br>
+    The source code for this website is available on <a target="_blank" href="https://github.com/mmoomocow/digital-commendations:">GitHub</a>.
+    <br><br>
+    You can also see the <a href="https://bayfieldhighschool-my.sharepoint.com/:w:/g/personal/19059_bayfield-high_school_nz/EbaDVS0Ah8lCkNTOymVIef0BiFAj8JLns9gbusycTOkIOg?e=VrBDfp">Inquiry, Report and Proposal</a> that I wrote that lead to this project.
+</p>
+
+{% endblock content %}

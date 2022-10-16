@@ -8,6 +8,9 @@ def index(request) -> render:
     """The home page of the website."""
     return render(request, "home/index.html")
 
+def about(request) -> render:
+    """The about page of the website."""
+    return render(request, "home/about.html")
 
 def contact(request) -> render:
     """The contact page of the website."""

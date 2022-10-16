@@ -145,3 +145,7 @@ hr {
     width: 90%;
     margin: 10px 11px;
 }
+
+.justify {
+    text-align: justify;
+}
