@@ -31,8 +31,8 @@
 <div class="allStudents">
     {% for student in students %}
         <article class="student">
-            <a href="/students/{{ student.id }}"><h3>{{ student.user.first_name }} {{ student.user.last_name }} ({{ student.id }})</h3></a>
-            <a href="mailto:{{ student.user.email }}">{{ student.user.email }}</a>
+            <a href="/students/{{ student.id }}"><h2>{{ student.user.first_name }} {{ student.user.last_name }} ({{ student.id }})</h2></a>
+            Email: <a href="mailto:{{ student.user.email }}">{{ student.user.email }}</a>
             {% if student.commendations_set.count == "1" %}
             <p class="commendationCount">1 commendation</p>
             {% else %}
