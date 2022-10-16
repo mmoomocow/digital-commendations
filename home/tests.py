@@ -31,6 +31,12 @@ class TestHomePages(TestCase):
             Contact.objects.count(), 1, "Contact was not created from post request"
         )
 
+    def test_about_page(self):
+        testHelper.get_page(self, "/about/", "home/about.html")
+
+    def test_privacy_page(self):
+        testHelper.get_page(self, "/privacy/", "home/privacy.html")
+
 
 class TestContactModel(TestCase):
     def setUp(self) -> None:
