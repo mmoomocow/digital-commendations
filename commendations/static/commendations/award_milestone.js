@@ -32,12 +32,9 @@ if (types.length > 0) {
 
 // Add select all checkbox functionality
 function selectAllCheckboxes() {
-    console.log('select all');
     var checkboxes = document.getElementsByName('milestone');
-    console.log(checkboxes);
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = document.getElementsByName("selectAll")[0].checked;
-        console.log(checkboxes[i]);
     }
 }
 

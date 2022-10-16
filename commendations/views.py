@@ -112,7 +112,7 @@ def viewMilestones(request):
             messages.warning(
                 request, "No milestones were awarded as no valid ones were selected"
             )
-            return redirect("/teachers/spirit/")
+            return redirect("/commendations/spirit/")
 
         # Mark the milestones as awarded
         for milestone in milestones:
