@@ -39,7 +39,7 @@
         <label for="students">Student(s) <abbr class="requiredField" title="This field is required">*</abbr></label>
         {% comment %} Hold ctrl to select multiple hint {% endcomment %}
         <p class="hint">Hold Ctrl to select multiple students</p>
-        <input type="text" name="students" id="students" placeholder="Search students" onkeydown="filterStudents(this.value)">
+        <input type="text" name="students" id="searchStudents" placeholder="Search students" onkeydown="filterStudents(this.value)">
         <select name="students" id="students" multiple required>
             {% for student in students %}
                 <option class="studentChoice" value="{{ student.id }}">{{ student }}</option>
