@@ -33,7 +33,7 @@
     </div>
 
     <div class="formField">
-        <input type="submit" value="Submit" id="submit">
+        <input type="submit" value="Submit" id="submit-search">
     </div>
 </form>
 <br>
@@ -46,7 +46,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" name="selectAll" id="selectAll" onClick="selectAllCheckboxes();"></th>
+                    <th><input type="checkbox" name="selectAll" id="selectAll" onClick="selectAllCheckboxes();"> <label id="selectAll-label" for="selectAll">All</label></th>
                     <th>Student: </th>
                     <th>Type: </th>
                     <th>Date achieved: </th>
@@ -56,25 +56,25 @@
             <tbody>
                 {% for milestone in milestones %}
                 <tr class="clickable-row">
-                    <td><input type="checkbox" name="milestone" value="{{ milestone.id }}"></td>
-                        <td>{{ milestone.student }}</td>
-                        <td>{{ milestone.prettyPrint }}</td>
-                        <td>{{ milestone.date_time }}</td>
-                        <td>
-                            {% if milestone.awarded %}
-                                <span>Yes</span>
-                            {% else %}
-                                <span>No</span>
-                            {% endif %}
-                        </td>
-                    </tr>
+                    <td class="milestone-checkbox"><input type="checkbox" name="milestone" value="{{ milestone.id }}" id="M#{{milestone.id}}"></td>
+                    <td><label for="M#{{milestone.id}}">{{ milestone.student }}</label></td>
+                    <td>{{ milestone.prettyPrint }}</td>
+                    <td>{{ milestone.date_time }}</td>
+                    <td>
+                        {% if milestone.awarded %}
+                            <span>Yes</span>
+                        {% else %}
+                            <span>No</span>
+                        {% endif %}
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </article>
 
     <div class="formField">
-        <input type="submit" value="Mark badges as awarded" id="submit">
+        <input type="submit" value="Mark badges as awarded" id="submit-awarded">
     </div>
 </form>
 {% else %}
