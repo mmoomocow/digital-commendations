@@ -71,21 +71,6 @@ footer li {
     list-style: none;
 }
 
-#footerLeft {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-#footerCenter {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-#footerRight {
-    grid-column: 3;
-    grid-row: 1;
-}
-
 footer div {
     padding: 0.5rem;
 }
