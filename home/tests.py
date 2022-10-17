@@ -7,8 +7,19 @@ from .admin import ContactAdmin
 
 
 class TestHomePages(TestCase):
+    def test_index_no_auth(self):
+        response = self.client.get("/", follow=True)
+        self.assertRedirects(response, "/home/")
+        self.assertTemplateUsed(response, "home/index.html")
+
+    def test_index_teacher(self):
+        teacher = testHelper.createTeacher(self, is_management=False)
+        self.client.force_login(teacher)
+        response = self.client.get("/")
+        self.assertRedirects(response, "/commendations/award/")
+
     def test_home_page(self):
-        testHelper.get_page(self, "/", "home/index.html")
+        testHelper.get_page(self, "/home/", "home/index.html")
 
     def test_contact_page(self):
         testHelper.get_page(self, "/contact/", "home/contact.html")
@@ -30,6 +41,12 @@ class TestHomePages(TestCase):
         self.assertEqual(
             Contact.objects.count(), 1, "Contact was not created from post request"
         )
+
+    def test_about_page(self):
+        testHelper.get_page(self, "/about/", "home/about.html")
+
+    def test_privacy_page(self):
+        testHelper.get_page(self, "/privacy/", "home/privacy.html")
 
 
 class TestContactModel(TestCase):

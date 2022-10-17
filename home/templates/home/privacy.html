@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}Privacy and Security{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}Privacy and Security information for Bayfield High School's commendation website.{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}Privacy and Security{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+<h2>What data do we store?</h2>
+<p>
+    We have to store some data to allow this website to work, what data is stored depends on if you are a teacher, parent/caregiver or a student. 
+    <br>
+    Please note, this may change in the future as we add more features to the website, so please check back here.
+</p>
+
+<h3>For all users we store:</h3>
+<ul>
+    <li>Your email address</li>
+    <li>Your login information (Username and password) for this site</li>
+    <li>Your name</li>
+    <li>Your role (Teacher, Parent/Caregiver or Student)</li>
+    <li>Your last login date</li>
+</ul>
+
+<h3>For teachers we store:</h3>
+<ul>
+    <li>Your staff code</li>
+    <li>Your house group</li>
+</ul>
+
+<h3>For parents/caregivers we store:</h3>
+<ul>
+    <li>Nothing yet!</li>
+</ul>
+
+<h3>For students we store:</h3>
+<ul>
+    <li>Your student ID</li>
+    <li>Your house group</li>
+    <li>Your year level</li>
+</ul>
+
+<h3>When commendations are awarded we store:</h3>
+<ul>
+    <li>The commendation type (One of the RISE values)</li>
+    <li>The reason for giving the commendation (optional)</li>
+    <li>The date the commendation was given</li>
+    <li>The student(s) who received the commendation</li>
+    <li>The teacher who gave the commendation</li>
+</ul>
+
+<hr>
+
+<h2>How do we store your data?</h2>
+<p>
+    Data is stored locally in a database, this database is only accessible by select website administrators.
+    <br>
+    The database is stored on a server in New Zealand, and is backed up regularly.
+</p>
+
+<hr>
+
+<h2>How do we use your data?</h2>
+<p>
+    We use your data to allow you to login to the website, and to allow you to access the features of the website.
+    <br>
+    We also use your data to allow us to contact you if there is an issue with the website.
+    <br>
+    Your personal information stored on this website is <strong>never</strong> shared with any third parties.
+</p>
+
+<hr>
+
+<h2>How do we protect your data?</h2>
+<p>
+    All data is stored locally, and is only accessible by select website administrators.
+    <br>
+    Your password is encrypted using a method called hashing and salting, this cannot be reversed, even by the website administrators.
+    <br>
+</p>
+
+<hr>
+
+<h2>How long do we store your data?</h2>
+<p>
+    We store your data for as long as you have an account on this website. It can be deleted at any time by a website administrator.
+</p>
+
+<hr>
+
+<h2>What are your rights?</h2>
+<p>
+    You have the right to request a copy of the data we store about you, and you have the right to request that we delete your data.
+    <br>
+    You can request a copy of your data by emailing <a href="mailto:19059@bayfield-high.school.nz?subject=Data request for Digital Commendation System">the website administrator</a>.
+    <br>
+    You can request that we delete your data by emailing <a href="mailto:19059@bayfield-high.school.nz?subject=Data deletion request for Digital Commendation System">the website administrator</a>.
+</p>
+
+<hr>
+
+<h2>How do I contact you?</h2>
+<p>
+    You can contact us at any time using the <a href="/contact/">contact us form</a>. or by emailing <a href="mailto:19059@bayfield-high.school.nz">the website administrator</a>.
+</p>
+
+{% endblock content %}

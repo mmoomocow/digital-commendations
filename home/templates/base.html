@@ -35,7 +35,9 @@
         {% endif %}
         <header>
             <nav>
-                <a href="/">Home</a>
+                <a href="/home">Home</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
                 {% if request.user.is_authenticated %}
                     {% if request.user.is_teacher %}
                     <div class="dropdown">
@@ -66,20 +68,22 @@
         <footer>
             <div id="footerLeft">
                 <ul>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                    <li><a href="/privacy">Privacy</a></li>
+                    <li><a href="/about">About this project</a></li>
+                    <li><a href="/contact">Contact us</a></li>
+                    <li><a href="/privacy">Privacy and security</a></li>
                 </ul>
             </div>
             <div id="footerCent">
-                {% block footer %}{% endblock footer %}
+                <ul>
+                    <li>Created by <a target="_blank" href="mailto:19059@bayfield-high.school.nz">Matthew Gray</a></li>
+                    <li>For <a target="_blank" href="https://www.bayfield-high.school.nz/">Bayfield High School</a></li>
+                </ul>
             </div>
             <div id="footerRight">
                 <ul>
-                    <li><a href="https://github.com/mmoomocow/digital-commendations/blob/main/LICENSE">View project license</a></li>
-                    <li>Created by <a href="mailto:19059@bayfield-high.school.nz">Matthew Gray</a></li>
-                    <li>View source code on <a href="https://github.com/mmoomocow/digital-commendations">GitHub</a></li>
-                    <li>Icons by <a href="https://fontawesome.com/">FontAwesome</a></li>
+                    <li>Icons by <a target="_blank" href="https://fontawesome.com/">FontAwesome</a></li>
+                    <li>Font by <a target="_blank" href="https://fonts.google.com/specimen/Comfortaa">Google Fonts</a></li>
+                    <li>View <a target="_blank" href="https://github.com/mmoomocow/digital-commendations">source code</a></li>
                 </ul>
             </div>
         </footer>
