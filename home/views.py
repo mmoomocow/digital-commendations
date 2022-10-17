@@ -1,10 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Contact
 
 # Create your views here.
 
 
 def index(request) -> render:
+    """Direct users to the appropriate page."""
+    if request.user.is_authenticated:
+        if request.user.is_teacher:
+            return redirect("/commendations/award/")
+        if request.user.is_superuser:
+            return redirect("/admin/")
+    return redirect("/home/")
+
+
+def home(request) -> render:
     """The home page of the website."""
     return render(request, "home/index.html")
 
