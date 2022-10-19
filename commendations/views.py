@@ -66,7 +66,7 @@ def giveCommendation(request):
             f"Commendation awarded to {len(students)} students!",
         )
 
-        return redirect("/teachers/")
+        return redirect("/commendations/award/")
 
     # Process and render the award commendation page
     _commendationTypes = []
