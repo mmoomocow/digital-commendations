@@ -6,11 +6,13 @@ from django.db import models
 class Contact(models.Model):
     """Model for the contact page, where users can send messages to the website owner."""
 
+    # Basic contact information
     name = models.CharField(max_length=100, blank=False, null=False)
     email = models.EmailField(max_length=100, blank=False, null=False)
     subject = models.CharField(max_length=100, blank=False, null=False)
     message = models.TextField(blank=False, null=False)
 
+    # Status
     DONE = "Done"
     REPLIED = "Replied"
     NOT_REPLIED = "Not Replied"

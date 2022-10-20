@@ -26,19 +26,24 @@ def giveCommendation(request):
                 pass
         teacher = Teacher.objects.get(id=request.POST["teacher"])
 
+        # Create a new commendation for the student(s)
         commendation = Commendation(
             teacher=teacher,
             reason=reason,
             commendation_type=commendationType,
         )
+        # Must save the commendation before adding students
         commendation.save()
 
+        # Add the students to the commendation
         for student in students:
             student = Student.objects.get(id=student)
             commendation.students.add(student)
 
+        # Save the commendation
         commendation.save()
 
+        # Check each student for a milestone
         for student in students:
             student = Student.objects.get(id=student)
             for milestoneType in Milestone.MILESTONE_TYPE_CHOICES:
@@ -79,6 +84,7 @@ def giveCommendation(request):
     # If there is a teacher signed in, then the only teacher that should show is themselves
     teachers = Teacher.objects.filter(user=request.user)
 
+    # Generate context and render the page
     context = {
         "commendationTypes": _commendationTypes,
         "students": students,
@@ -122,18 +128,21 @@ def viewMilestones(request):
         messages.success(request, f"Marked {len(milestones)} milestones as awarded")
         return redirect("/teachers/")
 
+    # Get all milestones
     milestoneTypes = Milestone.MILESTONE_TYPE_CHOICES
     milestones = Milestone.objects.all()
 
-    milestoneTypeQuery = request.GET.getlist("type")
-    if milestoneTypeQuery:
-        milestones = milestones.filter(milestone_type__in=milestoneTypeQuery)
-
+    # Filter dates
     dateQuery = request.GET.get("date")
     if dateQuery:
         # Convert the date to a datetime object
         date = make_aware(datetime.strptime(dateQuery, "%Y-%m-%d"))
         milestones = milestones.filter(date_time__gte=date)
+
+    # Filter by type
+    milestoneTypeQuery = request.GET.getlist("type")
+    if milestoneTypeQuery:
+        milestones = milestones.filter(milestone_type__in=milestoneTypeQuery)
 
     # Sort by the type then by student name
     milestones = milestones.order_by(
@@ -153,6 +162,7 @@ def viewMilestones(request):
     if not milestoneTypeQuery and not dateQuery:
         milestones = []
 
+    # return the page
     return render(
         request,
         "commendations/award_milestones.html",
