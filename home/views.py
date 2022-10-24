@@ -16,12 +16,7 @@ def index(request) -> render:
             return redirect("/commendations/award/")
         if request.user.is_superuser:
             return redirect("/admin/")
-    return redirect("/home/")
-
-
-def home(request) -> render:
-    """The home page of the website."""
-    return render(request, "home/index.html")
+    return redirect("/login/")
 
 
 def about(request) -> render:

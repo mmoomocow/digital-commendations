@@ -7,19 +7,11 @@ from .admin import ContactAdmin
 
 
 class TestHomePages(TestCase):
-    def test_index_no_auth(self):
-        response = self.client.get("/", follow=True)
-        self.assertRedirects(response, "/home/")
-        self.assertTemplateUsed(response, "home/index.html")
-
     def test_index_teacher(self):
         teacher = testHelper.createTeacher(self, is_management=False)
         self.client.force_login(teacher)
         response = self.client.get("/")
         self.assertRedirects(response, "/commendations/award/")
-
-    def test_home_page(self):
-        testHelper.get_page(self, "/home/", "home/index.html")
 
     def test_contact_page(self):
         testHelper.get_page(self, "/contact/", "home/contact.html")
