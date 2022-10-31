@@ -17,13 +17,15 @@ def giveCommendation(request):
         commendationType = request.POST["commendationType"]
         reason = request.POST["reason"]
         rawStudents = request.POST.getlist("students")
-        # rawStudents starts with an empty list, so we need to remove the empty string that is the first element and any non number items
+        # rawStudents starts with an empty list, so we need to remove the empty string that is the first element and any non number items and append valid IDs to a new list
         students = []
         for student in rawStudents:
             try:
                 students.append(int(student))
             except ValueError:
                 pass
+
+        # Get the teacher that is awarding the commendation
         teacher = Teacher.objects.get(id=request.POST["teacher"])
 
         # Create a new commendation for the student(s)
