@@ -78,7 +78,7 @@ jobs:
         coverage xml
 
     - name: Report results to DeepSource
-      if: contains(github.ref, 'main')
+      continue-on-error: true
       run: |
         coverage xml
         curl https://deepsource.io/cli | sh
