@@ -3,6 +3,8 @@ name: Test Suite
 on:
   push:
     branches: main
+  pull_request:
+    
 jobs:
   django_test:
 
