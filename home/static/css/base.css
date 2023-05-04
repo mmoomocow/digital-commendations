@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 /* https://fonts.google.com/specimen/Comfortaa */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+/* https://fonts.google.com/specimen/Oswald */
 
 :root {
     --color-gold: #FFD614;
@@ -133,4 +135,34 @@ hr {
 
 .justify {
     text-align: justify;
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3rem;
+}
+
+h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+}
+
+h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+    font-family: 'Oswald', sans-serif;
+}
+
+h5 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+}
+
+h6 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
 }
