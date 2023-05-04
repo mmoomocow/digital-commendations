@@ -3,9 +3,8 @@ name: Test Suite
 on:
   push:
     branches: main
-    
   pull_request:
-
+    
 jobs:
   django_test:
 
@@ -81,10 +80,10 @@ jobs:
         coverage xml
 
     - name: Report results to DeepSource
+      continue-on-error: true
       run: |
         coverage xml
         curl https://deepsource.io/cli | sh
         ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
-
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
