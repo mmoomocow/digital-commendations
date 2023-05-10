@@ -42,7 +42,7 @@ class Student(models.Model):
 
     # The student's tutor room
     tutor_room = models.CharField(
-        max_length=3, blank=True, null=True, verbose_name="Tutor Room"
+        max_length=3, blank=True, default='', verbose_name="Tutor Room"
     )
     # The student's house group
     ANDERSON = "A"
@@ -61,7 +61,7 @@ class Student(models.Model):
         max_length=20,
         choices=HOUSE_GROUP_CHOICES,
         blank=True,
-        null=True,
+        default='',
         verbose_name="House Group",
     )
     # The student's year level
