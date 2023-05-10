@@ -39,7 +39,7 @@ class Teacher(models.Model):
     # Staff code
     # Uniquely identifies the teacher (can be repeated once a teacher has left)
     staff_code = models.CharField(
-        max_length=2, unique=True, blank=True, default='', verbose_name="Staff Code"
+        max_length=2, unique=True, blank=True, default="", verbose_name="Staff Code"
     )
 
     # House group
@@ -60,7 +60,7 @@ class Teacher(models.Model):
         max_length=20,
         choices=HOUSE_GROUP_CHOICES,
         blank=True,
-        default='',
+        default="",
         verbose_name="House Group",
     )
 
