@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django,python,visualstudiocode,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,python,visualstudiocode,git
 
+# Ignore files marked as old
+*.old
+
 ### Django ###
 *.log
 *.pot
