@@ -31,8 +31,9 @@
 
 	<div class="formField">
 		<label for="quickReason">Quick Reasons</label>
-		<br>
+		<p class="hint">Optional. You can also enter a custom reason below</p>
 		<select name="quickReason" id="quickReason">
+			<option value="">No quick reason</option>
 			<option value="Being Truthful">Being Truthful</option>
 			<option value="Doing the right thing">Doing the right thing</option>
 		</select>
@@ -40,7 +41,7 @@
 
     <div class="formField">
         <label for="reason">Reason</label>
-        <br>
+        <p class="hint">Optional. If you have selected a quick reason anything you enter here will still be included</p>
         <textarea name="reason" id="reason"></textarea>
     </div>
 
