@@ -215,7 +215,7 @@ class commendationsCommendationViewTest(TestCase):
     def test_giveCommendation_get(self):
         testHelper.get_page(self, "/commendations/award/", "commendations/award.html")
 
-    def test_giveCommendation_post(self):
+    def test_giveCommendation_post_reason(self):
         testHelper.post_page(
             self,
             "/commendations/award/",
@@ -224,6 +224,7 @@ class commendationsCommendationViewTest(TestCase):
                 "students": [self.student.student.id],
                 "teacher": self.teacher.teacher.id,
                 "reason": "Test commendation",
+                "quickReason": "",
             },
             status_code=302,
         )
@@ -232,6 +233,58 @@ class commendationsCommendationViewTest(TestCase):
         commendation = Commendation.objects.filter(
             commendation_type=Commendation.EXCELLENCE,
             reason="Test commendation",
+            teacher=self.teacher.teacher.id,
+            students=self.student.student.id,
+        )
+        self.assertTrue(
+            commendation.exists(),
+            "Commendation was not created from post request",
+        )
+
+    def test_giveCommendation_post_no_reason(self):
+        testHelper.post_page(
+            self,
+            "/commendations/award/",
+            {
+                "commendationType": Commendation.EXCELLENCE,
+                "students": [self.student.student.id],
+                "teacher": self.teacher.teacher.id,
+                "reason": "",
+                "quickReason": "",
+            },
+            status_code=302,
+        )
+
+        # Check that the commendation was created
+        commendation = Commendation.objects.filter(
+            commendation_type=Commendation.EXCELLENCE,
+            reason="No reason given",
+            teacher=self.teacher.teacher.id,
+            students=self.student.student.id,
+        )
+        self.assertTrue(
+            commendation.exists(),
+            "Commendation was not created from post request",
+        )
+
+    def test_giveCommendation_post_reason_AND_quickReason(self):
+        testHelper.post_page(
+            self,
+            "/commendations/award/",
+            {
+                "commendationType": Commendation.EXCELLENCE,
+                "students": [self.student.student.id],
+                "teacher": self.teacher.teacher.id,
+                "reason": "And very helpful",
+                "quickReason": "Being truthful",
+            },
+            status_code=302,
+        )
+
+        # Check that the commendation was created
+        commendation = Commendation.objects.filter(
+            commendation_type=Commendation.EXCELLENCE,
+            reason="Being truthful: And very helpful",
             teacher=self.teacher.teacher.id,
             students=self.student.student.id,
         )
