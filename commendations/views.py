@@ -15,7 +15,20 @@ def giveCommendation(request):
     """Award commendations to students."""
     if request.method == "POST":
         commendationType = request.POST["commendationType"]
+
+        # Reason processing
+        quickReason = request.POST["quickReason"]
         reason = request.POST["reason"]
+
+        if quickReason == "" and reason == "":
+            reason = "No reason given"
+
+        elif quickReason != "" and reason == "":
+            reason = quickReason
+
+        elif quickReason != "" and reason != "":
+            reason = f"{quickReason}: {reason}"
+
         rawStudents = request.POST.getlist("students")
         # rawStudents starts with an empty list, so we need to remove the empty string that is the first element and any non number items and append valid IDs to a new list
         students = []
