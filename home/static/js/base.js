@@ -13,18 +13,3 @@ setTimeout(() => {
         hideSelf(messages[i]);
     }
 }, 15000);
-
-// Add the correct padding to the bottom of the main content
-// so that the content is not hidden behind the footer
-
-function setMainPadding() {
-    let footerHeight = document.getElementsByTagName("footer")[0].offsetHeight;
-    let mainContent = document.getElementsByTagName("main")[0];
-    let margin = footerHeight + 50;
-    mainContent.style.marginBottom = margin + "px";
-}
-
-// Deferring the execution of the function until the page is loaded
-window.onload = function () {
-    setMainPadding();
-};
