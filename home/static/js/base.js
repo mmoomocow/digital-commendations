@@ -6,6 +6,17 @@ function hideSelf(element) {
     }, 300);
 }
 
+function toggleNavResponsive() {
+    // Toggle the responsive navigation bar
+    // Get nav tag
+    let nav = document.getElementsByTagName("nav")[0];
+    if (nav.className === "responsive") {
+        nav.className = "";
+    } else {
+        nav.className = "responsive";
+    }
+}
+
 // hide all messages after 15 seconds
 setTimeout(() => {
     let messages = document.getElementsByClassName("message");
