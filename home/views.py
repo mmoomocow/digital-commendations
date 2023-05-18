@@ -14,8 +14,6 @@ def index(request) -> render:
     if request.user.is_authenticated:
         if request.user.is_teacher:
             return redirect("/commendations/award/")
-        if request.user.is_superuser:
-            return redirect("/admin/")
     return redirect("/login/")
 
 
