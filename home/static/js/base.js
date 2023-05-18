@@ -6,6 +6,17 @@ function hideSelf(element) {
     }, 300);
 }
 
+function toggleNavResponsive() {
+    // Toggle the responsive navigation bar
+    // Get nav tag
+    let nav = document.getElementsByTagName("nav")[0];
+    if (nav.className === "responsive") {
+        nav.className = "";
+    } else {
+        nav.className = "responsive";
+    }
+}
+
 // hide all messages after 15 seconds
 setTimeout(() => {
     let messages = document.getElementsByClassName("message");
@@ -13,18 +24,3 @@ setTimeout(() => {
         hideSelf(messages[i]);
     }
 }, 15000);
-
-// Add the correct padding to the bottom of the main content
-// so that the content is not hidden behind the footer
-
-function setMainPadding() {
-    let footerHeight = document.getElementsByTagName("footer")[0].offsetHeight;
-    let mainContent = document.getElementsByTagName("main")[0];
-    let margin = footerHeight + 50;
-    mainContent.style.marginBottom = margin + "px";
-}
-
-// Deferring the execution of the function until the page is loaded
-window.onload = function () {
-    setMainPadding();
-};

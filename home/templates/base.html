@@ -12,7 +12,6 @@
         <meta name="description" content="{% block description %}{% endblock description %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'css/base.min.css' %}">
-        <link rel="stylesheet" href="{% static 'css/nav.min.css' %}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
         <script src="{% static 'js/base.min.js' %}"></script>
         {% block head %}
@@ -37,27 +36,32 @@
             <nav>
                 <a href="/about">About</a>
                 <a href="/contact">Contact</a>
+
                 {% if request.user.is_authenticated %}
+
                     {% if request.user.is_teacher %}
-                    <div class="dropdown">
-                        <span class="dropbtn">Teachers</span>
-                        <div class="dropdown-content">
-                            <a href="/teachers/">Teachers Home</a>
-                            <a href="/commendations/award/">Award Commendation</a>
-                            {% if request.user.teacher.is_management %}
-                                <a href="/students/">View Students</a>
-                                <a href="/commendations/spirit/">Award spirit badges</a>
-                            {% endif %}
+                        <div class="dropdown">
+                            <button class="dropbtn">Teachers</button>
+                            <div class="dropdown-content">
+                                <a href="/teachers/">Teachers Home</a>
+                                <a href="/commendations/award/">Award Commendation</a>
+                                {% if request.user.teacher.is_management %}
+                                    <a href="/students/">View Students</a>
+                                    <a href="/commendations/spirit/">Award spirit badges</a>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
-                    <a class="right" href="/logout">Logout</a>
+
+                    <a href="/logout" class="right">Logout</a>
                     {% if request.user.is_staff %}
-                    <a class="right" href="/admin/">Admin Site</a>
+                        <a href="/admin/" class="right">Admin Site</a>
                     {% endif %}
-                {% else %}
-                    <a class="right" href="/login">Login</a>
+                    
+                    {% else %}
+                    <a href="/login" class="right">Login</a>
                 {% endif %}
+                <a href="javascript:void(0);" class="icon" onclick="toggleNavResponsive()">&#9776;</a>
             </nav>
         </header>
         <main>
