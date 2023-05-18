@@ -294,6 +294,10 @@ nav a:hover,
         position: relative;
     }
 
+    nav.responsive .dropdown-content a {
+        margin-left: 25px;
+    }
+
     nav.responsive .dropdown .dropbtn {
         display: block;
         width: 100%;
