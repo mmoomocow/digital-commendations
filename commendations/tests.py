@@ -181,6 +181,12 @@ class commendationsCommendationModelTest(TestCase):
             f"Commendation student was not set correctly, expected {self.student.student}, got {commendation.students.first()}",
         )
 
+        self.assertEqual(
+            commendation.__str__(),
+            f"Commendation ID: {commendation.id}",
+            f"Commendation __str__ was not set correctly, expected Commendation ID: {commendation.id}, got {commendation.__str__()}",
+        )
+
 
 class commendationsCommendationAdminTest(TestCase):
     def setUp(self):
@@ -291,4 +297,36 @@ class commendationsCommendationViewTest(TestCase):
         self.assertTrue(
             commendation.exists(),
             "Commendation was not created from post request",
+        )
+
+    def test_giveCommendation_post_only_quickReason(self):
+        testHelper.post_page(
+            self,
+            "/commendations/award/",
+            {
+                "commendationType": Commendation.EXCELLENCE,
+                "students": [self.student.student.id],
+                "teacher": self.teacher.teacher.id,
+                "reason": "",
+                "quickReason": "Being truthful",
+            },
+            status_code=302,
+        )
+
+        # Check that the commendation was created
+        commendation = Commendation.objects.filter(
+            commendation_type=Commendation.EXCELLENCE,
+            reason="Being truthful",
+            teacher=self.teacher.teacher.id,
+            students=self.student.student.id,
+        )
+        self.assertTrue(
+            commendation.exists(),
+            "Commendation was not created from post request",
+        )
+
+        self.assertEqual(
+            commendation.first().reason,
+            "Being truthful",
+            f"Commendation reason was not set correctly, expected Being truthful, got {commendation.first().reason}",
         )
