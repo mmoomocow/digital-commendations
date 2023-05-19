@@ -12,7 +12,6 @@ def KAMAR_check(request) -> JsonResponse:
     Authenticate and respond to KAMAR check requests
     https://directoryservices.kamar.nz/?listening-service/check
     """
-
     # Translate username password to HTTP basic auth
     expected_auth = "Basic {}".format(
         b64encode(
