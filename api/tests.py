@@ -59,3 +59,17 @@ class ApiTestCase(TestCase):
             403,
             "Invalid credentials were not rejected with 403",
         )
+
+    def test_no_auth(self):
+        # Send a request with no credentials
+        no_auth_req = self.client.post(
+            "/api/check/",
+            self.json_data,
+            content_type="application/json",
+        )
+
+        self.assertEqual(
+            no_auth_req.status_code,
+            403,
+            "No credentials were not rejected with 403",
+        )
