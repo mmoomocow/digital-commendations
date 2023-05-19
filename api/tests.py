@@ -1,4 +1,5 @@
 from django.test import TestCase
+from base64 import b64encode
 import os, json
 
 # Create your tests here.
@@ -35,8 +36,19 @@ class ApiTestCase(TestCase):
         )
 
     def test_bad_request(self):
+        # Send a request with the incorrect credentials
+        bad_req = self.client.post(
+            "/api/check/",
+            self.json_data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=basicAuth(
+                "bad_username",
+                "bad_password",
+            ),
+        )
+
         self.assertEqual(
-            self.bad_req.status_code,
+            bad_req.status_code,
             403,
             "Invalid credentials were not rejected with 403",
         )
