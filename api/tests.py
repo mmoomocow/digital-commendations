@@ -5,32 +5,39 @@ import os, json
 # Create your tests here.
 
 
+def basicAuth(username, password):
+    return "Basic {}".format(
+        b64encode(
+            "{}:{}".format(
+                username,
+                password,
+            ).encode("utf-8")
+        ).decode("utf-8")
+    )
+
+
 class ApiTestCase(TestCase):
     def setUp(self):
         # Get the json data from the sampleCheck.json file
         with open(
             os.path.join(os.path.dirname(__file__), "sampleCheck.json")
         ) as json_file:
-            json_data = json.load(json_file)
-
-            correct_auth = f'Basic {os.getenv("KAMAR_AUTH_USERNAME")}/{os.getenv("KAMAR_AUTH_PASSWORD")}'
-
-            self.good_req = self.client.post(
-                "/api/check/",
-                json_data,
-                content_type="application/json",
-                **{"HTTP_AUTHORIZATION": correct_auth},
-            )
-            self.bad_req = self.client.post(
-                "/api/check/",
-                json_data,
-                content_type="application/json",
-                **{"HTTP_AUTHORIZATION": "Basic invalid"},
-            )
+            self.json_data = json.load(json_file)
 
     def test_good_request(self):
+        # Send a request with the correct credentials
+        good_req = self.client.post(
+            "/api/check/",
+            self.json_data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=basicAuth(
+                os.environ.get("KAMAR_AUTH_USERNAME"),
+                os.environ.get("KAMAR_AUTH_PASSWORD"),
+            ),
+        )
+
         self.assertEqual(
-            self.good_req.status_code,
+            good_req.status_code,
             200,
             "Valid credentials were not accepted with 200",
         )
