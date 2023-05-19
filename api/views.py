@@ -13,14 +13,12 @@ def KAMAR_check(request) -> JsonResponse:
     https://directoryservices.kamar.nz/?listening-service/check
     """
     # Translate username password to HTTP basic auth
-    expected_auth = "Basic {}".format(
-        b64encode(
-            "{}:{}".format(
-                os.environ.get("KAMAR_AUTH_USERNAME"),
-                os.environ.get("KAMAR_AUTH_PASSWORD"),
-            ).encode("utf-8")
-        ).decode("utf-8")
-    )
+    token = b64encode(
+        f"{os.environ.get('KAMAR_AUTH_USERNAME')}:{os.environ.get('KAMAR_AUTH_PASSWORD')}".encode(
+            "utf-8"
+        )
+    ).decode("utf-8")
+    expected_auth = f"Basic {token}"
 
     # First check basic auth
     if request.META.get("HTTP_AUTHORIZATION") is None:
