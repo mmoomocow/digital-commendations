@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}404 - Not found{% endblock title %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/error.min.css' %}">
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}Sorry, page not found{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+
+<div id="err-num">
+    <div class="err-404">4</div>
+    <i class="far fa-question-circle fa-spin"></i>
+    <div class="err-404">4</div>
+</div>
+
+<div id="err-msg">
+    <p class="textCenter">Sorry, the page you are looking for could not be found. Please check the URL and if this error continues to appear, please <a href="/contact/">Contact Us</a></p>
+</div>
+
+<div id="buttons">
+    <a href="/">Home</a>
+    <a href="javascript:history.back()">Back</a>
+</div>
+
+{% endblock content %}
