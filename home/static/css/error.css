@@ -1,5 +1,5 @@
 #err-num {
-    color: var(--color-gold);
+    color: #e01414;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 11rem;
     text-align: center;
@@ -12,7 +12,6 @@
 
 .far {
     font-size: 8.5rem;
-    color: var(--color-gold);
     display: inline-block;
 }
 
