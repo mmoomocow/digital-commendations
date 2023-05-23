@@ -1,8 +1,8 @@
 version = 1
 
-test_patterns = ["**/test**.py"]
+test_patterns = ["**/tests.py"]
 
-exclude_patterns = ["**/migrations/**"]
+exclude_patterns = ["**/migrations/**", "**/tests.py"]
 
 [[analyzers]]
 name = "test-coverage"
