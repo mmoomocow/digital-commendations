@@ -16,8 +16,6 @@ def error_404(request, exception):
     )
 
 
-def error_500(request, exception):
+def error_500(request):
     """Custom 500 error view."""
-    return render(
-        request, "errors/500.html", context={"request": request, "exception": exception}
-    )
+    return render(request, "errors/500.html", context={"request": request})
