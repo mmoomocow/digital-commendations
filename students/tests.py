@@ -57,10 +57,10 @@ class studentsViewsTest(TestCase):
         testHelper.get_page(
             self, f"/students/{self.student.student.id}/", "students/student_info.html"
         )
+
+    def test_studentInfo_404(self):
         # Test that a student that doesn't exist returns a 404
+        # As using handler404 checking status code will not work
         testHelper.get_page(
-            self,
-            f"/students/{self.student.student.id + 1}/",
-            status_code=404,
-            check_templates=False,
+            self, f"/students/{self.student.student.id + 1}/", "errors/404.html"
         )

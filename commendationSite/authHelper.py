@@ -1,4 +1,4 @@
-from django.shortcuts import HttpResponse
+from django.core.exceptions import PermissionDenied
 
 
 def teacher_required(is_management: bool = False):
@@ -15,15 +15,15 @@ def teacher_required(is_management: bool = False):
             """The inner function that checks if the user is a teacher"""
             # Check if the user is logged in
             if not request.user.is_authenticated:
-                return HttpResponse(status=401)
+                raise PermissionDenied
 
             # Check if the user is a teacher
             if not request.user.is_teacher:
-                return HttpResponse(status=403)
+                raise PermissionDenied
 
             # Check if the user is management
             if is_management and not request.user.teacher.is_management:
-                return HttpResponse(status=403)
+                raise PermissionDenied
 
             # If all checks pass, run the view
             return view(request, *args, **kwargs)

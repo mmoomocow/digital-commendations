@@ -1,8 +1,8 @@
 from commendationSite.authHelper import teacher_required
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.db.models import Q
 from .models import Student
+from django.http import Http404
 
 # Create your views here.
 
@@ -42,7 +42,7 @@ def studentInfo(request, ID: int = None):
         selectedStudent = Student.objects.get(id=ID)
     # If the student does not exist, return a 404
     except Student.DoesNotExist:
-        return HttpResponse(status=404)
+        raise Http404("Student does not exist")
 
     # Commendations that the student has received
     commendations = selectedStudent.commendation_set.all().order_by("-date_time")

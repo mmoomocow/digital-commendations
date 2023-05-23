@@ -34,3 +34,8 @@ urlpatterns = [
 admin.site.site_header = "Bayfield Commendations Administration"
 admin.site.site_title = "Bayfield Commendations Admin Portal"
 admin.site.index_title = "Welcome to Bayfield's Commendation Site Admin Portal"
+
+# Custom error views
+handler403 = "home.views_errors.error_403"
+handler404 = "home.views_errors.error_404"
+handler500 = "home.views_errors.error_500"

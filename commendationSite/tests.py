@@ -12,40 +12,28 @@ class TestAuthHelper(TestCase):
         self.user = createUser(self)
         self.teacher = createTeacher(self)
 
-    def test_teacher_required(self):
-        # Create a fake view to test the decorator
-        @teacher_required()
-        def fake_view(request):
-            return HttpResponse("Test")
-
-        # Create a request with an unauthenticated user
-        request = self.client.get("/").wsgi_request
-        response = fake_view(request)
-
-        # Test that the decorator returns a 401 when there is no user
-        response = fake_view(request)
-        self.assertEqual(
-            response.status_code,
-            401,
-            "Teacher auth check did not return 401 for unauthenticated user",
+        self.fake_view = teacher_required()(lambda request: HttpResponse("Test"))
+        self.fake_view_management = teacher_required(is_management=True)(
+            lambda request: HttpResponse("Test")
         )
 
+    def test_teacherRequired_noAuth(self):
+        with self.assertRaises(Exception):
+            request = self.client.get("/").wsgi_request
+            _ = self.fake_view(request)
+
+    def test_teacherRequired_notTeacher(self):
         # Log in as a user that is not a teacher
         self.client.login(username=self.user.username, password="password")
-        request = self.client.get("/").wsgi_request
-        response = fake_view(request)
+        with self.assertRaises(Exception):
+            request = self.client.get("/").wsgi_request
+            _ = self.fake_view(request)
 
-        # Test that the decorator returns a 403 when the user is not a teacher
-        self.assertEqual(
-            response.status_code,
-            403,
-            "Teacher auth check did not return 403 for non-teacher user",
-        )
-
+    def test_teacherRequired_teacher(self):
         # Log in as a teacher
         self.client.login(username=self.teacher.username, password="password")
         request = self.client.get("/").wsgi_request
-        response = fake_view(request)
+        response = self.fake_view(request)
 
         # Test that the decorator returns a 200 when the user is a teacher
         self.assertEqual(
@@ -54,25 +42,20 @@ class TestAuthHelper(TestCase):
             "Teacher auth check did not return 200 for teacher user",
         )
 
-        # Recreate the view but require is_management
-        @teacher_required(is_management=True)
-        def fake_view_management(request):
-            return HttpResponse("Test")
+    def test_managementRequired_teacher(self):
+        # Log in as a teacher
+        self.client.login(username=self.teacher.username, password="password")
+        with self.assertRaises(Exception):
+            request = self.client.get("/").wsgi_request
+            _ = self.fake_view_management(request)
 
-        # Test that the decorator returns a 403 when the user is not a management teacher
-        response = fake_view_management(request)
-        self.assertEqual(
-            response.status_code,
-            403,
-            "Teacher auth check with is_management did not return 403 for non-management teacher user",
-        )
-
+    def test_managementRequired_management(self):
         # Log in as a management teacher
         self.teacher.teacher.is_management = True
         self.teacher.teacher.save()
         self.client.login(username=self.teacher.username, password="password")
         request = self.client.get("/").wsgi_request
-        response = fake_view_management(request)
+        response = self.fake_view_management(request)
 
         # Test that the decorator returns a 200 when the user is a management teacher
         self.assertEqual(
