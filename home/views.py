@@ -11,7 +11,7 @@ def index(request) -> render:
     If the user is a superuser, they are directed to the admin page
     Otherwise, they are directed to the home page
     """
-    if request.user.is_authenticated:
+    if request.user.is_authenticated: # skipcq: PTC-W0048
         if request.user.is_teacher:  # skipcq: PTC-W0048
             return redirect("/commendations/award/")
     return redirect("/login/")
