@@ -1,4 +1,3 @@
-from django.shortcuts import HttpResponse
 from django.core.exceptions import PermissionDenied
 
 

@@ -1,6 +1,5 @@
 from commendationSite.authHelper import teacher_required
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.db.models import Q
 from .models import Student
 from django.http import Http404

@@ -1,7 +1,6 @@
 from django.test import TestCase
 from commendationSite import testHelper
 from .models import Student
-from django.http import Http404
 import random
 
 # Create your tests here.

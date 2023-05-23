@@ -1,5 +1,5 @@
 # Custom error views
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 
 def error_403(request, exception):
