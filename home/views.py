@@ -12,7 +12,7 @@ def index(request) -> render:
     Otherwise, they are directed to the home page
     """
     if request.user.is_authenticated:
-        if request.user.is_teacher:
+        if request.user.is_teacher: # skipcq: PTC-W0048
             return redirect("/commendations/award/")
     return redirect("/login/")
 
