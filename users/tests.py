@@ -1,8 +1,10 @@
 from django.test import TestCase
+
 from commendationSite import testHelper
-from .models import User
+from students.models import Caregiver, Student
 from teachers.models import Teacher
-from students.models import Student, Caregiver
+
+from .models import User
 
 # Create your tests here.
 

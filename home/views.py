@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+
 from .models import Contact
 
 # Create your views here.

@@ -1,7 +1,8 @@
-from django.views.decorators.csrf import csrf_exempt
-from django.http.response import JsonResponse
-from base64 import b64encode
 import os
+from base64 import b64encode
+
+from django.http.response import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 

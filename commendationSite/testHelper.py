@@ -1,8 +1,10 @@
-from django.test import TestCase
-from users.models import User
-from teachers.models import Teacher
-from students.models import Student, Caregiver
 import random
+
+from django.test import TestCase
+
+from students.models import Caregiver, Student
+from teachers.models import Teacher
+from users.models import User
 
 # Helper functions for testing
 

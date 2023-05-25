@@ -1,7 +1,10 @@
-from django.test import TestCase
-from commendationSite import testHelper
-from .models import Teacher
 import random
+
+from django.test import TestCase
+
+from commendationSite import testHelper
+
+from .models import Teacher
 
 # Create your tests here.
 

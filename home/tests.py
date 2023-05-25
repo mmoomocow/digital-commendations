@@ -1,7 +1,9 @@
 from django.test import TestCase
+
 from commendationSite import testHelper
-from .models import Contact
+
 from .admin import ContactAdmin
+from .models import Contact
 
 # Create your tests here.
 

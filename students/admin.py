@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Student, Caregiver
+
+from .models import Caregiver, Student
 
 # Register your models here.
 

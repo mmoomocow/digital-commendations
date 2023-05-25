@@ -1,6 +1,8 @@
-from django.test import TestCase
+import json
+import os
 from base64 import b64encode
-import os, json
+
+from django.test import TestCase
 
 # Create your tests here.
 

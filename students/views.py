@@ -1,8 +1,10 @@
-from commendationSite.authHelper import teacher_required
-from django.shortcuts import render
 from django.db.models import Q
-from .models import Student
 from django.http import Http404
+from django.shortcuts import render
+
+from commendationSite.authHelper import teacher_required
+
+from .models import Student
 
 # Create your views here.
 

@@ -1,8 +1,8 @@
+from django.http import HttpResponse
 from django.test import TestCase
+
 from .authHelper import teacher_required
 from .testHelper import createTeacher, createUser
-from django.http import HttpResponse
-
 
 # Create your tests here.
 

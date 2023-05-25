@@ -1,11 +1,14 @@
 from datetime import datetime
-from django.shortcuts import redirect, render
+
 from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.utils.timezone import make_aware
-from .models import Commendation, Milestone
-from teachers.models import Teacher
-from students.models import Student
+
 from commendationSite.authHelper import teacher_required
+from students.models import Student
+from teachers.models import Teacher
+
+from .models import Commendation, Milestone
 
 # Create your views here.
 
