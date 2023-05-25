@@ -7,3 +7,9 @@ exclude = '''
     | venv
 )/
 '''
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+skip = "migrations"
+line_length = 88
