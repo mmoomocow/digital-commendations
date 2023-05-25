@@ -89,3 +89,31 @@ jobs:
         ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+
+
+  format:
+    # isort and black the code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+      - name: Set up Python 3.10.5
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10.5
+      - name: Install Dependencies
+        run: |
+          pip install black isort
+      - name: Format code
+        run: |
+          isort .
+          black .
+
+      - name: Commit and push changes
+        uses: github-actions-x/commit@v2.9
+        with:
+          github-token: ${{ secrets.TOKEN_GITHUB }}
+          commit-message: "style: beautify ${{ github.sha }}"
+          name: github-actions
+          email: action@github.com
