@@ -81,3 +81,47 @@ class TestContactModel(TestCase):
         self.assertEqual(Contact.objects.get(pk=1).status, Contact.DONE)
         ContactAdmin.mark_as_not_replied(ContactAdmin, None, queryset)
         self.assertEqual(Contact.objects.get(pk=1).status, Contact.NOT_REPLIED)
+
+
+class TestErrorPages(TestCase):
+    def test_403_page(self):
+        # Create a view that will return a 403 error
+        def view_403(request):
+            raise PermissionError
+
+        # create a request
+        request = self.client.get("/").wsgi_request
+
+        # Test that the view returns a 403 error
+        with self.assertRaises(PermissionError):
+            page403 = view_403(request)
+            # Test that the 403 page is returned
+            self.assertTemplateUsed(page403, "403.html")
+
+    def test_404_page(self):
+        # Create a view that will return a 404 error
+        def view_404(request):
+            raise FileNotFoundError
+
+        # create a request
+        request = self.client.get("/").wsgi_request
+
+        # Test that the view returns a 404 error
+        with self.assertRaises(FileNotFoundError):
+            page404 = view_404(request)
+            # Test that the 404 page is returned
+            self.assertTemplateUsed(page404, "404.html")
+
+    def test_500_page(self):
+        # Create a view that will return a 500 error
+        def view_500(request):
+            raise Exception
+
+        # create a request
+        request = self.client.get("/").wsgi_request
+
+        # Test that the view returns a 500 error
+        with self.assertRaises(Exception):
+            page500 = view_500(request)
+            # Test that the 500 page is returned
+            self.assertTemplateUsed(page500, "500.html")
