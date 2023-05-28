@@ -125,3 +125,8 @@ class TestErrorPages(TestCase):
             page500 = view_500(request)
             # Test that the 500 page is returned
             self.assertTemplateUsed(page500, "500.html")
+
+    def test_missing_slash(self):
+        # Test that a missing slash is redirected to the same URL with a trailing slash
+        response = self.client.get("/contact")
+        self.assertRedirects(response, "/contact/", status_code=301)
