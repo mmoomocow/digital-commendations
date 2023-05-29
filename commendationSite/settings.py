@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admindocs",
+    "django.contrib.sites",
 ]
 
 MIDDLEWARE = [
@@ -194,3 +195,6 @@ for admin in os.environ.get("ADMINS", "").split(","):
 MANAGERS = []
 for manager in os.environ.get("MANAGERS", "").split(","):
     MANAGERS.append(manager.split(":"))
+
+# Site ID
+SITE_ID = 1
