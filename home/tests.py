@@ -128,5 +128,10 @@ class TestErrorPages(TestCase):
 
     def test_missing_slash(self):
         # Test that a missing slash is redirected to the same URL with a trailing slash
+        # Do this for a couple of random pages
         response = self.client.get("/contact")
         self.assertRedirects(response, "/contact/", status_code=301)
+        response = self.client.get("/about")
+        self.assertRedirects(response, "/about/", status_code=301)
+        response = self.client.get("/privacy")
+        self.assertRedirects(response, "/privacy/", status_code=301)
