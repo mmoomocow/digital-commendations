@@ -1,4 +1,5 @@
 # Custom error views
+from django.conf import settings
 from django.shortcuts import redirect, render
 
 
@@ -12,9 +13,12 @@ def error_403(request, exception):
 def error_404(request, exception):
     """Custom 404 error view."""
     # If there is no trailing slash, redirect to the same URL with a trailing slash
-    if not request.path.endswith("/"):
+    # See https://github.com/mmoomocow/digital-commendations/issues/153
+    APPEND_SLASH = getattr(settings, "APPEND_SLASH", True)
+    if not request.path.endswith("/") and APPEND_SLASH:
         print("Missing trailing slash; redirecting to " + request.path + "/")
         return redirect(request.path + "/", permanent=True)
+
     return render(
         request, "errors/404.html", context={"request": request, "exception": exception}
     )
