@@ -34,7 +34,6 @@ def generate_teacher(number: int):
         # Create the dummy user object
         user = user_models.User.objects.create(
             username=profile["username"],
-            password=fake.password(length=12),
             first_name=profile["name"].split(" ")[0],
             last_name=profile["name"].split(" ")[1],
             email=profile["mail"],
@@ -44,6 +43,8 @@ def generate_teacher(number: int):
             staff_code=fake.unique.lexify(text="??"),
             house_group=choice(teacher_houses),
         )
+        user.save()
+        user.set_password(fake.password(length=12))
         user.save()
 
 
@@ -67,7 +68,6 @@ def generate_student(number: int):
         # Create the dummy user object
         user = user_models.User.objects.create(
             username=profile["username"],
-            password=fake.password(length=12),
             first_name=profile["name"].split(" ")[0],
             last_name=profile["name"].split(" ")[1],
             email=profile["mail"],
@@ -79,6 +79,8 @@ def generate_student(number: int):
             house_group=choice(student_houses),
             year_level=fake.random_int(min=9, max=13),
         )
+        user.save()
+        user.set_password(fake.password(length=12))
         user.save()
 
 
