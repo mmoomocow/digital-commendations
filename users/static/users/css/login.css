@@ -39,3 +39,17 @@ form #submit {
     font-weight: bold;
     margin-bottom: 1rem;
 }
+
+#ms_button {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--color-gold);
+    color: var(--color-grey-dark);
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    padding: 0.5em;
+    border: 1px solid var(--color-grey-dark);
+    line-height: 1.42857;
+    border-radius: 0.25rem;
+}

@@ -18,6 +18,9 @@
 {% block content %}
 <div class="formContainer">
     <form action="/users/login/" method="post">
+        <button id="ms_button"><i class="fab fa-microsoft"></i> Student Teacher sign in with Microsoft</button>
+        <p>Parents and Caregivers please use your username and password</p>
+        <hr>
         {% csrf_token %}
         <div class="formField">
             <label for="username">Username <abbr class="requiredField" title="This field is required">*</abbr></label>
