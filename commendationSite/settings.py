@@ -90,6 +90,11 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "users.ms_auth_backend.MS_auth_backend",
+]
+
 WSGI_APPLICATION = "commendationSite.wsgi.application"
 
 
