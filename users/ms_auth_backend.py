@@ -49,26 +49,15 @@ class MS_auth_backend(BaseBackend):
             return None
         if "error" in token:
             return None
-        ms_user = self._get_user(token)
-        if not ms_user:
-            return None
-        user, created = User.objects.get_or_create(
-            username=ms_user["userPrincipalName"],
-            defaults={
-                "first_name": ms_user["givenName"],
-                "last_name": ms_user["surname"],
-                "email": ms_user["mail"],
-            },
-        )
-        if self.user_can_authenticate(user):
-            return user
-        return None
-
-    def get_user(self, user_pk):
         try:
-            return User.objects.get(pk=user_pk)
-        except User.DoesNotExist:
+            msuser = self._get_user(token)
+        except ValueError:
             return None
+        if not msuser:
+            return None
+        user = self._get_or_create_user(msuser)
+        self.remove_from_store(request)
+        return user
 
     # Assorted helper functions
     def user_can_authenticate(self, user):
@@ -101,3 +90,15 @@ class MS_auth_backend(BaseBackend):
             user = req.json()
             return user
         return None
+
+    def _get_or_create_user(self, ms_user):
+        try:
+            return User.objects.get(email=ms_user["mail"])
+        except User.DoesNotExist:
+            username = ms_user["mail"].split("@")[0]
+            return User.objects.create(
+                username=f"{username}-ms",
+                email=ms_user["mail"],
+                first_name=ms_user["givenName"],
+                last_name=ms_user["surname"],
+            )
