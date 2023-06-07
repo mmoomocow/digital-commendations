@@ -49,10 +49,10 @@ class MicrosoftAuthBackend(BaseBackend):
         Args:
             request (HttpRequest): The request object.
         """
-        self.app = msal.ConfidentialClientApplication(
+        self.ms_client = msal.ConfidentialClientApplication(
             APP_ID, authority=AUTHORITY, client_credential=APP_SECRET
         )
-        flow = self.app.initiate_auth_code_flow(
+        flow = self.ms_client.initiate_auth_code_flow(
             SCOPES, redirect_uri=REDIRECT
         )  # TODO - Test with domain_hint=TENANT_DOMAIN
 
@@ -91,7 +91,9 @@ class MicrosoftAuthBackend(BaseBackend):
             return None
 
         try:
-            token = self.app.acquire_token_by_auth_code_flow(flow, request.GET.dict())
+            token = self.ms_client.acquire_token_by_auth_code_flow(
+                flow, request.GET.dict()
+            )
         except ValueError:
             return None
 
