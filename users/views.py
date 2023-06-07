@@ -39,22 +39,14 @@ def login(request):
         return redirect(settings.LOGIN_REDIRECT_URL)
     raise PermissionDenied
 
-    return render(request, "users/login.html")
 
+def logout(request):
+    """Logout view."""
 
-def logoutView(request):
-    """
-    View for the logout page.
-    Requests will log the user out and redirect them to the home page.
-    """
-    if request.user.is_authenticated:
-        logout(request)
-        messages.add_message(
-            request, messages.SUCCESS, "You have been logged out, see you next time!"
-        )
-        if "next" in request.GET:
-            return redirect(request.GET["next"])
-        return redirect("/")
+    if not request.user.is_authenticated:
+        messages.info(request, "You were not logged in, nothing has changed.")
+        return redirect(settings.LOGOUT_REDIRECT_URL)
 
-    messages.add_message(request, messages.INFO, "You are not logged in!")
-    return redirect("/")
+    django_logout(request)
+    messages.success(request, "You have successfully logged out.")
+    return redirect(settings.LOGOUT_REDIRECT_URL)
