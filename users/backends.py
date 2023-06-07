@@ -92,9 +92,7 @@ class MicrosoftAuthBackend(BaseBackend):
             return None
 
         try:
-            token = self.ms_client.acquire_token_by_auth_code_flow(
-                flow, request.GET.dict()
-            )
+            token = self.ms_client.acquire_token_by_auth_code_flow(flow, request.GET)
         except ValueError:
             return None
 
