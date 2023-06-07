@@ -83,7 +83,8 @@ class MicrosoftAuthBackend(BaseBackend):
         Returns:
             AbstractBaseUser | None: The user object if authenticated, None otherwise.
         """
-        if "code" not in request.GET:
+        # Dont authenticate if there is no request or no code in the request
+        if not request or not request.GET.get("code"):
             return None
 
         flow = request.session.get(self.SESSION_KEY, {}).get("flow")
