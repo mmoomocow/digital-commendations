@@ -16,30 +16,36 @@
 
 {% comment %} Main content {% endcomment %}
 {% block content %}
-<div class="formContainer">
-    <form action="/users/login/" method="post">
-        <button id="ms_button"><i class="fab fa-microsoft"></i> Student Teacher sign in with Microsoft</button>
-        <p>Parents and Caregivers please use your username and password</p>
-        <hr>
-        {% csrf_token %}
-        <div class="formField">
-            <label for="username">Username <abbr class="requiredField" title="This field is required">*</abbr></label>
-            <input type="text" name="username" id="username" placeholder="Your Username" {% if username %}value={{username}}{% endif %} required/>
-        </div>
-        <div class="formField">
-            <label for="password">Password <abbr class="requiredField" title="This field is required">*</abbr></label>
-            <input type="password" name="password" id="password" placeholder="Your Password" required/>
-        </div>
-        {% comment %} Display the error message, if there is one {% endcomment %}
-        {% if error %}
+<div class="login-split">
+    <div class="microsoft">
+        <h2>Students and Teachers</h2>
+        <p>Use your school microsoft account to sign in</p>
+        <button id="ms_button", onclick="location.href = '{{ auth_uri }}'"><object type="image/svg+xml" data="https://s3-eu-west-1.amazonaws.com/cdn-testing.web.bas.ac.uk/scratch/bas-style-kit/ms-pictogram/ms-pictogram.svg" id="ms_icon"></object>  Login with Microsoft</button>
+    </div>
+    <div class="formContainer">
+        <form action="/users/login/" method="post">
+            <h2>Parents and Caregivers</h2>
+            <p>Use your username and password to sign in</p>
+            {% csrf_token %}
             <div class="formField">
-                <div class="errorMessage">{{ error|safe }}</div>
+                <label for="username">Username <abbr class="requiredField" title="This field is required">*</abbr></label>
+                <input type="text" name="username" id="username" placeholder="Your Username" {% if username %}value={{username}}{% endif %} required/>
             </div>
-        {% endif %}
-        <div class="formField">
-            <input id="submit" type="submit" value="Login"/>
-        </div>
-    </form>
+            <div class="formField">
+                <label for="password">Password <abbr class="requiredField" title="This field is required">*</abbr></label>
+                <input type="password" name="password" id="password" placeholder="Your Password" required/>
+            </div>
+            {% comment %} Display the error message, if there is one {% endcomment %}
+            {% if error %}
+                <div class="formField">
+                    <div class="errorMessage">{{ error|safe }}</div>
+                </div>
+            {% endif %}
+            <div class="formField">
+                <input id="submit" type="submit" value="Login"/>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock content %}
 

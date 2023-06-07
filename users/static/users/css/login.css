@@ -3,8 +3,6 @@ form {
     max-width: 500px;
     padding: 1rem;
     background-color: var(--color-grey-light);
-    border-radius: 0.5rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
 .formField {
@@ -52,4 +50,22 @@ form #submit {
     border: 1px solid var(--color-grey-dark);
     line-height: 1.42857;
     border-radius: 0.25rem;
+}
+
+#ms_icon {
+    height: 1em;
+    width: 1em;
+    top: .125em;
+    position: relative;
+}
+
+.login-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
+}
+
+.microsoft {
+    padding: 1rem;
 }

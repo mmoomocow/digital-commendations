@@ -2,8 +2,8 @@ import os
 
 import msal
 import requests
+from django.contrib.auth import login as django_login
 from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.base_user import AbstractBaseUser
 from dotenv import load_dotenv
 
 from .models import User
@@ -43,21 +43,19 @@ class MS_auth_backend(BaseBackend):
         if not flow:
             return None
         app = self._get_confidential_app()
-        try:
-            token = app.acquire_token_by_auth_code_flow(flow, request.GET)
-        except ValueError:
-            return None
-        if "error" in token:
-            return None
-        try:
-            msuser = self._get_user(token)
-        except ValueError:
-            return None
-        if not msuser:
-            return None
-        user = self._get_or_create_user(msuser)
-        self.remove_from_store(request)
-        return user
+        # try:
+        token = app.acquire_token_by_auth_code_flow(flow, request.GET)
+        if token:
+            ms_user = self._get_user(token)
+            if ms_user:
+                user = self._get_or_create_user(ms_user)
+                if user:
+                    return user
+        return None
+
+    def login(self, request, user):
+        print("MS AUTH LOGGING IN")
+        django_login(request, user)
 
     # Assorted helper functions
     def user_can_authenticate(self, user):
@@ -93,8 +91,11 @@ class MS_auth_backend(BaseBackend):
 
     def _get_or_create_user(self, ms_user):
         try:
-            return User.objects.get(email=ms_user["mail"])
+            user = User.objects.get(email=ms_user["mail"])
+            print(f"Found user: {user}")
+            return user
         except User.DoesNotExist:
+            print("User does not exist, creating")
             username = ms_user["mail"].split("@")[0]
             return User.objects.create(
                 username=f"{username}-ms",

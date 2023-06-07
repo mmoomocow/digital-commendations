@@ -3,8 +3,6 @@ from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.views.decorators.debug import sensitive_variables
 
-from users.ms_auth_backend import MS_auth_backend as ms_backend
-
 BACKEND_PATH = "users.ms_auth_backend.MS_auth_backend"
 
 if BACKEND_PATH not in settings.AUTHENTICATION_BACKENDS:
