@@ -143,7 +143,10 @@ class MicrosoftAuthBackend(BaseBackend):
         Returns:
             AbstractBaseUser | None: The user object if found, None otherwise.
         """
-        return super().get_user(user_id)
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
 
     def user_can_authenticate(self, user: User) -> bool:
         """user_can_authenticate Check if the user can authenticate.
