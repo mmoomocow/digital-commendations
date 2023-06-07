@@ -90,11 +90,6 @@ TEMPLATES = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    "users.ms_auth_backend.MS_auth_backend",
-    "django.contrib.auth.backends.ModelBackend",
-]
-
 WSGI_APPLICATION = "commendationSite.wsgi.application"
 
 
@@ -190,10 +185,6 @@ if os.environ.get("PRODUCTION", "true").lower() == "true":
     # Use secure cookies
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-else:
-    # Don't use secure cookies
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
 
 # Set admins
 ADMINS = []

@@ -1,10 +1,8 @@
 from django.urls import path
 
-from . import views
+from .views import loginView, logoutView
 
 urlpatterns = [
-    path("login/", views.login, name="login"),
-    path("logout/", views.logout, name="logout"),
-    path("callback/", views.callback, name="callback"),
-    path("test/", views.test, name="test"),
+    path("login/", loginView, name="login"),
+    path("logout/", logoutView, name="logout"),
 ]
