@@ -31,10 +31,24 @@ GRAPH_ENDPOINT = "https://graph.microsoft.com/v1.0"
 
 
 class MicrosoftAuthBackend(BaseBackend):
+    """MicrosoftAuthBackend A custom authentication backend for Microsoft authentication.
+
+    Args:
+        BaseBackend (_type_): Django's base authentication backend to extend.
+
+    Returns:
+        MicrosoftAuthBackend: The authentication backend.
+    """
+
     SESSION_KEY = "microsoft_auth"
     AUTH = "Microsoft"
 
     def setup(self, request: HttpRequest) -> None:
+        """setup Set up the backend by creating a flow and storing it in the session.
+
+        Args:
+            request (HttpRequest): The request object.
+        """
         self.app = msal.ConfidentialClientApplication(
             APP_ID, authority=AUTHORITY, client_credential=APP_SECRET
         )
@@ -53,6 +67,14 @@ class MicrosoftAuthBackend(BaseBackend):
         request: HttpRequest,
         **kwargs: Any,
     ) -> AbstractBaseUser | None:
+        """authenticate Authenticate the user by getting the token from the auth code flow.
+
+        Args:
+            request (HttpRequest): The request object.
+
+        Returns:
+            AbstractBaseUser | None: The user object if authenticated, None otherwise.
+        """
         flow = request.session.get(self.SESSION_KEY, {}).get("flow")
         if not flow:
             return None
@@ -77,23 +99,58 @@ class MicrosoftAuthBackend(BaseBackend):
         return None
 
     def login(self, request: HttpRequest, user: User) -> None:
+        """login Log the user in.
+
+        Args:
+            request (HttpRequest): The request object.
+            user (User): The user object.
+        """
         django_login(request, user)
 
     def logout(self, request: HttpRequest) -> None:
+        """logout Log the user out.
+
+        Args:
+            request (HttpRequest): The request object.
+        """
         self._delete_from_session(request, "flow")
 
     # OTHER HELPER METHODS
 
     def get_user(self, user_id: int) -> AbstractBaseUser | None:
+        """get_user Get the user object.
+
+        Args:
+            user_id (int): The user id.
+
+        Returns:
+            AbstractBaseUser | None: The user object if found, None otherwise.
+        """
         return super().get_user(user_id)
 
     def user_can_authenticate(self, user: User) -> bool:
+        """user_can_authenticate Check if the user can authenticate.
+
+        Args:
+            user (User): The user object.
+
+        Returns:
+            bool: True if the user can authenticate, False otherwise.
+        """
         if user is None:
             return False
         is_active = getattr(user, "is_active", None)
         return is_active or is_active is None
 
     def _get_create_user(self, ms_user: dict[str, Any]) -> User:
+        """_get_create_user Get or create the user.
+
+        Args:
+            ms_user (dict[str, Any]): The user object from Microsoft Graph.
+
+        Returns:
+            User: The found/created user object.
+        """
         try:
             user = User.objects.get(email=ms_user["mail"])
             print(f"Found user: {user}")
@@ -109,9 +166,32 @@ class MicrosoftAuthBackend(BaseBackend):
             )
 
     def _store_to_session(self, request: HttpRequest, key: str, value: Any) -> None:
+        """_store_to_session Store a value in the session using the SESSION_KEY.
+
+        Args:
+            request (HttpRequest): The request object.
+            key (str): The key to store the value under.
+            value (Any): The value to store.
+        """
         request.session[self.SESSION_KEY][key] = value
 
     def _get_from_session(self, request: HttpRequest, key: str) -> Any:
+        """_get_from_session Get a value from the session using the SESSION_KEY.
+
+        Args:
+            request (HttpRequest): The request object.
+            key (str): The key to get the value from.
+
+        Returns:
+            Any: The value from the session.
+        """
+        return request.session[self.SESSION_KEY].get(key)
 
     def _delete_from_session(self, request: HttpRequest, key: str) -> None:
+        """_delete_from_session Delete a value from the session using the SESSION_KEY.
+
+        Args:
+            request (HttpRequest): The request object.
+            key (str): The key to delete the value from.
+        """
         del request.session[self.SESSION_KEY][key]
