@@ -119,6 +119,12 @@ else:
 # Max age of database connections
 CONN_MAX_AGE = int(os.environ.get("CONN_MAX_AGE", 0))
 
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    "users.backends.MicrosoftAuthBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
