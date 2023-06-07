@@ -7,7 +7,7 @@ A digital commendation system being developed for use at Bayfield High School
 
 ## Install Instructions
 
-This project uses Python version 3.9.9 which is a prerequisite to install.
+This project requires Python 3.10 or higher!
 
 ### Cloning the repo
 
