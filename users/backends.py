@@ -59,6 +59,14 @@ class MicrosoftAuthBackend(BaseBackend):
         self._store_to_session(request, "flow", flow)
 
     def get_auth_uri(self, request: HttpRequest) -> str:
+        """get_auth_uri Get the auth URI from the session.
+
+        Args:
+            request (HttpRequest): The request object.
+
+        Returns:
+            str: The auth URI.
+        """
         self.setup(request)
         return self._get_from_session(request, "flow")["auth_uri"]
 
