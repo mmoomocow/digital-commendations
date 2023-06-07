@@ -40,6 +40,12 @@ class MicrosoftAuthBackend(BaseBackend):
         MicrosoftAuthBackend: The authentication backend.
     """
 
+    def __init__(self) -> None:
+        self.ms_client = msal.ConfidentialClientApplication(
+            APP_ID, authority=AUTHORITY, client_credential=APP_SECRET
+        )
+        super().__init__()
+
     SESSION_KEY = "microsoft_auth"
     AUTH = "Microsoft"
 
@@ -49,9 +55,8 @@ class MicrosoftAuthBackend(BaseBackend):
         Args:
             request (HttpRequest): The request object.
         """
-        self.ms_client = msal.ConfidentialClientApplication(
-            APP_ID, authority=AUTHORITY, client_credential=APP_SECRET
-        )
+        if request.session.get(self.SESSION_KEY):
+            request.session[self.SESSION_KEY] = {}
         flow = self.ms_client.initiate_auth_code_flow(
             SCOPES, redirect_uri=REDIRECT
         )  # TODO - Test with domain_hint=TENANT_DOMAIN
