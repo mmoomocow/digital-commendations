@@ -173,6 +173,8 @@ class MicrosoftAuthBackend(BaseBackend):
             key (str): The key to store the value under.
             value (Any): The value to store.
         """
+        if self.SESSION_KEY not in request.session:
+            request.session[self.SESSION_KEY] = {}
         request.session[self.SESSION_KEY][key] = value
 
     def _get_from_session(self, request: HttpRequest, key: str) -> Any:
@@ -185,6 +187,8 @@ class MicrosoftAuthBackend(BaseBackend):
         Returns:
             Any: The value from the session.
         """
+        if self.SESSION_KEY not in request.session:
+            return None
         return request.session[self.SESSION_KEY].get(key)
 
     def _delete_from_session(self, request: HttpRequest, key: str) -> None:
@@ -194,4 +198,6 @@ class MicrosoftAuthBackend(BaseBackend):
             request (HttpRequest): The request object.
             key (str): The key to delete the value from.
         """
+        if self.SESSION_KEY not in request.session:
+            return
         del request.session[self.SESSION_KEY][key]
