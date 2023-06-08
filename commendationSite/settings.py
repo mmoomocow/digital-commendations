@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admindocs",
+    "django.contrib.sites",
 ]
 
 MIDDLEWARE = [
@@ -117,6 +118,12 @@ else:
 
 # Max age of database connections
 CONN_MAX_AGE = int(os.environ.get("CONN_MAX_AGE", 0))
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    "users.backends.MicrosoftAuthBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 
 # Password validation
@@ -194,3 +201,12 @@ for admin in os.environ.get("ADMINS", "").split(","):
 MANAGERS = []
 for manager in os.environ.get("MANAGERS", "").split(","):
     MANAGERS.append(manager.split(":"))
+
+# Site ID
+SITE_ID = 1
+
+# Login URL
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/"
+LOGOUT_URL = "/logout/"

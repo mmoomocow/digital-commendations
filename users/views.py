@@ -1,78 +1,78 @@
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate as django_authenticate
+from django.contrib.auth import login as django_login
+from django.contrib.auth import logout as django_logout
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.shortcuts import redirect, render
+
+from .backends import MicrosoftAuthBackend
 
 # Create your views here.
 
+ms_backend_path = "users.backends.MicrosoftAuthBackend"
 
-def loginView(request):
-    """
-    View for the login page.
-    GET requests will render the login page.
-    POST requests will authenticate the user and redirect them to the home page.
-    """
+
+def login(request):
+    """Login view."""
+    if ms_backend_path not in settings.AUTHENTICATION_BACKENDS:
+        raise ImproperlyConfigured(
+            f"{ms_backend_path} not in AUTHENTICATION_BACKENDS, please add it."
+        )
+    ms_auth = MicrosoftAuthBackend()
+
     if request.user.is_authenticated:
-        messages.add_message(request, messages.INFO, "You are already logged in!")
-        return redirect("/")
+        messages.info(request, "You are already logged in.")
+        return redirect(settings.LOGIN_REDIRECT_URL)
 
-    if request.method == "POST":
-        # Triggered if the client has submitted the form
-        username = request.POST["username"]
-        password = request.POST["password"]
-        # Checks if the user is valid
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            # Restrict access to active teachers for now
-            if user.is_active and user.is_teacher:
-                login(request, user)
-                messages.add_message(
-                    request,
-                    messages.SUCCESS,
-                    f"Login successful! Welcome back {user.first_name}",
-                )
-
-                # Check for a next parameter in the URL
-                if "next" in request.GET:
-                    return redirect(request.GET["next"])
-                return redirect("/")
-
-            # Deny all other users
-            return render(
-                request,
-                "users/login.html",
-                {
-                    "error": "Sorry, you are not permitted to login!",
-                    "username": username,
-                },
-                status=403,
-            )
-        # Deny invalid users
+    if request.method != "POST":
+        ms_auth.setup(request)
         return render(
-            request,
-            "users/login.html",
-            {
-                "error": 'Invalid username or password, <a href="/users/forgot/">forgot your password?</a>',
-                "username": username,
-            },
-            status=403,
+            request, "users/login.html", {"auth_uri": ms_auth.get_auth_uri(request)}
         )
 
-    return render(request, "users/login.html")
+    # Must be a POST request with username and password - attempt to authenticate
+
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+
+    user = django_authenticate(
+        request,
+        username=username,
+        password=password,
+        backend="django.contrib.auth.backends.ModelBackend",
+    )
+    if user is not None and user.is_active:
+        django_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        messages.success(request, "You have successfully logged in.")
+        return redirect(settings.LOGIN_REDIRECT_URL)
+    raise PermissionDenied
 
 
-def logoutView(request):
-    """
-    View for the logout page.
-    Requests will log the user out and redirect them to the home page.
-    """
-    if request.user.is_authenticated:
-        logout(request)
-        messages.add_message(
-            request, messages.SUCCESS, "You have been logged out, see you next time!"
+def logout(request):
+    """Logout view."""
+    if not request.user.is_authenticated:
+        messages.info(request, "You were not logged in, nothing has changed.")
+        return redirect(settings.LOGOUT_REDIRECT_URL)
+
+    django_logout(request)
+    messages.success(request, "You have successfully logged out.")
+    return redirect(settings.LOGOUT_REDIRECT_URL)
+
+
+def callback(request):
+    """Callback for microsoft auth."""
+    if ms_backend_path not in settings.AUTHENTICATION_BACKENDS:
+        raise ImproperlyConfigured(
+            f"{ms_backend_path} not in AUTHENTICATION_BACKENDS, please add it."
         )
-        if "next" in request.GET:
-            return redirect(request.GET["next"])
-        return redirect("/")
+    # Reject if not a GET request with a code parameter
+    if request.method != "GET" or "code" not in request.GET:
+        raise PermissionDenied
 
-    messages.add_message(request, messages.INFO, "You are not logged in!")
-    return redirect("/")
+    user = django_authenticate(request)
+    if user is not None and user.is_active:
+        django_login(request, user, backend="users.backends.MicrosoftAuthBackend")
+        messages.success(request, "You have successfully logged in.")
+        return redirect(settings.LOGIN_REDIRECT_URL)
+    raise PermissionDenied

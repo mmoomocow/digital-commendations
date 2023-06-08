@@ -11,7 +11,9 @@ from .models import Contact
 class TestHomePages(TestCase):
     def test_index_teacher(self):
         teacher = testHelper.createTeacher(self, is_management=False)
-        self.client.force_login(teacher)
+        self.client.force_login(
+            teacher, backend="django.contrib.auth.backends.ModelBackend"
+        )
         response = self.client.get("/")
         self.assertRedirects(response, "/commendations/award/")
 

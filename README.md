@@ -7,7 +7,7 @@ A digital commendation system being developed for use at Bayfield High School
 
 ## Install Instructions
 
-This project uses Python version 3.9.9 which is a prerequisite to install.
+This project requires Python 3.10 or higher!
 
 ### Cloning the repo
 
@@ -110,6 +110,22 @@ Create a `.env` file in the root directory of the project and add the following 
 - KAMAR_AUTH_PASSWORD - The password that the Kamar API will use to access the site
 
   - Example: `password`
+
+- MY_HOST - The hostname of the site. Used for redirect callbacks
+
+  - Example: `localhost:8000`
+
+- MICROSOFT_AUTH_TENANT_DOMAIN - The domain of the Microsoft tenant
+
+  - Example: `example.com`
+
+- MICROSOFT_AUTH_CLIENT_ID - The client ID of the Microsoft application
+
+    - Example: `12345678-1234-1234-1234-123456789012`
+
+- MICROSOFT_AUTH_CLIENT_SECRET - The client secret of the Microsoft application
+
+    - Example: `1234567890123456789012345678901234567890`
 
 ### Migrate the database
 
