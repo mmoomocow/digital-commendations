@@ -1,7 +1,7 @@
-name: Main branch testing
+name: Pull Request testing
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
