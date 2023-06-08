@@ -111,6 +111,22 @@ Create a `.env` file in the root directory of the project and add the following 
 
   - Example: `password`
 
+- MY_HOST - The hostname of the site. Used for redirect callbacks
+
+  - Example: `localhost:8000`
+
+- MICROSOFT_AUTH_TENANT_DOMAIN - The domain of the Microsoft tenant
+
+  - Example: `example.com`
+
+- MICROSOFT_AUTH_CLIENT_ID - The client ID of the Microsoft application
+
+    - Example: `12345678-1234-1234-1234-123456789012`
+
+- MICROSOFT_AUTH_CLIENT_SECRET - The client secret of the Microsoft application
+
+    - Example: `1234567890123456789012345678901234567890`
+
 ### Migrate the database
 
 ```cmd
