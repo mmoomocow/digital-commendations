@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from .backends import MicrosoftAuthBackend
@@ -52,7 +51,6 @@ def login(request):
 
 def logout(request):
     """Logout view."""
-
     if not request.user.is_authenticated:
         messages.info(request, "You were not logged in, nothing has changed.")
         return redirect(settings.LOGOUT_REDIRECT_URL)
