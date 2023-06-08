@@ -11,9 +11,15 @@ from .backends import MicrosoftAuthBackend
 
 # Create your views here.
 
+ms_backend_path = "users.backends.MicrosoftAuthBackend"
+
 
 def login(request):
     """Login view."""
+    if ms_backend_path not in settings.AUTHENTICATION_BACKENDS:
+        raise ImproperlyConfigured(
+            f"{ms_backend_path} not in AUTHENTICATION_BACKENDS, please add it."
+        )
     ms_auth = MicrosoftAuthBackend()
 
     if request.user.is_authenticated:
@@ -58,6 +64,10 @@ def logout(request):
 
 def callback(request):
     """Callback for microsoft auth."""
+    if ms_backend_path not in settings.AUTHENTICATION_BACKENDS:
+        raise ImproperlyConfigured(
+            f"{ms_backend_path} not in AUTHENTICATION_BACKENDS, please add it."
+        )
     # Reject if not a GET request with a code parameter
     if request.method != "GET" or "code" not in request.GET:
         raise PermissionDenied
