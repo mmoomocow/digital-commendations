@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from .backends import MicrosoftAuthBackend
@@ -13,14 +14,17 @@ from .backends import MicrosoftAuthBackend
 
 def login(request):
     """Login view."""
+    ms_auth = MicrosoftAuthBackend()
 
     if request.user.is_authenticated:
         messages.info(request, "You are already logged in.")
         return redirect(settings.LOGIN_REDIRECT_URL)
 
     if request.method != "POST":
-        auth_uri = MicrosoftAuthBackend().get_auth_uri(request)
-        return render(request, "users/login.html", {"auth_uri": auth_uri})
+        ms_auth.setup(request)
+        return render(
+            request, "users/login.html", {"auth_uri": ms_auth.get_auth_uri(request)}
+        )
 
     # Must be a POST request with username and password - attempt to authenticate
 
@@ -50,3 +54,18 @@ def logout(request):
     django_logout(request)
     messages.success(request, "You have successfully logged out.")
     return redirect(settings.LOGOUT_REDIRECT_URL)
+
+
+def callback(request):
+    """Callback for microsoft auth."""
+    # Reject if not a GET request with a code parameter
+    if request.method != "GET" or "code" not in request.GET:
+        raise PermissionDenied
+
+    user = django_authenticate(request)
+    print(user)
+    if user is not None and user.is_active:
+        django_login(request, user, backend="users.backends.MicrosoftAuthBackend")
+        messages.success(request, "You have successfully logged in.")
+        return redirect("/users/test/")
+    raise PermissionDenied
