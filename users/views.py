@@ -71,9 +71,8 @@ def callback(request):
         raise PermissionDenied
 
     user = django_authenticate(request)
-    print(user)
     if user is not None and user.is_active:
         django_login(request, user, backend="users.backends.MicrosoftAuthBackend")
         messages.success(request, "You have successfully logged in.")
-        return redirect("/users/test/")
+        return redirect(settings.LOGIN_REDIRECT_URL)
     raise PermissionDenied
