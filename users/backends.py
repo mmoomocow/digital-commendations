@@ -23,7 +23,7 @@ TENANT_DOMAIN = os.getenv("MICROSOFT_AUTH_TENANT_DOMAIN")
 
 REDIRECT = f"{MY_HOST}/users/callback/"
 SCOPES = ["https://graph.microsoft.com/user.read"]
-AUTHORITY = f"https://login.microsoftonline.com/organizations"
+AUTHORITY = "https://login.microsoftonline.com/organizations"
 LOGOUTURL = f"{MY_HOST}/users/logout/"
 
 GRAPH_ENDPOINT = "https://graph.microsoft.com/v1.0"
