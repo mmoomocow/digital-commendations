@@ -19,12 +19,11 @@ MY_HOST = os.getenv("MY_HOST")
 
 APP_ID = os.getenv("MICROSOFT_AUTH_CLIENT_ID")
 APP_SECRET = os.getenv("MICROSOFT_AUTH_CLIENT_SECRET")
-TENANT_ID = os.getenv("MICROSOFT_AUTH_TENANT_ID")
 TENANT_DOMAIN = os.getenv("MICROSOFT_AUTH_TENANT_DOMAIN")
 
 REDIRECT = f"{MY_HOST}/users/callback/"
 SCOPES = ["https://graph.microsoft.com/user.read"]
-AUTHORITY = f"https://login.microsoftonline.com/common"  # TODO - Test with tenant_id
+AUTHORITY = f"https://login.microsoftonline.com/organizations"
 LOGOUTURL = f"{MY_HOST}/users/logout/"
 
 GRAPH_ENDPOINT = "https://graph.microsoft.com/v1.0"
@@ -58,8 +57,8 @@ class MicrosoftAuthBackend(BaseBackend):
         if request.session.get(self.SESSION_KEY):
             request.session[self.SESSION_KEY] = {}
         flow = self.ms_client.initiate_auth_code_flow(
-            SCOPES, redirect_uri=REDIRECT
-        )  # TODO - Test with domain_hint=TENANT_DOMAIN
+            SCOPES, redirect_uri=REDIRECT, domain_hint=TENANT_DOMAIN
+        )
 
         self._store_to_session(request, "flow", flow)
 
@@ -108,6 +107,10 @@ class MicrosoftAuthBackend(BaseBackend):
             f"{GRAPH_ENDPOINT}/me",
             headers={"Authorization": f"Bearer {token['access_token']}"},
         ).json()
+
+        # Check that the email is the tenant domain
+        if ms_user["mail"].split("@")[1] != TENANT_DOMAIN:
+            return None
 
         user = self._get_create_user(ms_user)
         if self.user_can_authenticate(user):
@@ -173,10 +176,8 @@ class MicrosoftAuthBackend(BaseBackend):
         """
         try:
             user = User.objects.get(email=ms_user["mail"])
-            print(f"Found user: {user}")
             return user
         except User.DoesNotExist:
-            print("User does not exist, creating")
             username = ms_user["mail"].split("@")[0]
             return User.objects.create(
                 username=f"{username}",
