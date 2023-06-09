@@ -49,6 +49,8 @@ jobs:
         pip install -r requirements_dev.txt
 
     - name: Run tests
+      env:
+        DJANGO_SETTINGS_MODULE: commendationSite.settings_CI
       run: |
         coverage run manage.py test --noinput
         coverage combine
