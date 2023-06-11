@@ -44,7 +44,9 @@ def login(request):
     )
     if user is not None and user.is_active:
         django_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-        messages.success(request, "You have successfully logged in.")
+        messages.success(
+            request, f"You have successfully logged in. Welcome back {user.first_name}!"
+        )
         return redirect(settings.LOGIN_REDIRECT_URL)
     raise PermissionDenied
 
@@ -73,6 +75,9 @@ def callback(request):
     user = django_authenticate(request)
     if user is not None and user.is_active:
         django_login(request, user, backend="users.backends.MicrosoftAuthBackend")
-        messages.success(request, "You have successfully logged in.")
+        messages.success(
+            request, f"You have successfully logged in. Welcome back {user.first_name}!"
+        )
         return redirect(settings.LOGIN_REDIRECT_URL)
+    messages.error(request, "Could not get user information.")
     raise PermissionDenied
