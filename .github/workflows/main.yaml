@@ -80,6 +80,8 @@ jobs:
     # Run isort and black to check for import order and code formatting
     name: Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10.5
@@ -100,12 +102,11 @@ jobs:
         black .
 
     - name: Commit and push changes
-      uses: github-actions-x/commit@v2.9
+      uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        github-token: ${{ secrets.TOKEN_GITHUB }}
-        commit-message: "style: beautify ${{ github.sha }}"
-        name: github-actions
-        email: action@github.com
+        commit_message: "style: Format ${{ github.sha }}"
+        commit_options: '--no-verify --signoff'
+        
 
   deploy:
     name: Deploy to dev
