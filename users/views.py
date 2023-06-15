@@ -48,7 +48,14 @@ def login(request):
             request, f"You have successfully logged in. Welcome back {user.first_name}!"
         )
         return redirect(settings.LOGIN_REDIRECT_URL)
-    raise PermissionDenied
+    return render(
+        request,
+        "users/login.html",
+        {
+            "auth_uri": ms_auth.get_auth_uri(request),
+            "error": "Invalid username or password",
+        },
+    )
 
 
 def logout(request):
@@ -70,7 +77,8 @@ def callback(request):
         )
     # Reject if not a GET request with a code parameter
     if request.method != "GET" or "code" not in request.GET:
-        raise PermissionDenied
+        messages.error(request, "No code was provided in the request.")
+        return redirect(settings.LOGIN_URL)
 
     user = django_authenticate(request)
     if user is not None and user.is_active:
@@ -79,5 +87,5 @@ def callback(request):
             request, f"You have successfully logged in. Welcome back {user.first_name}!"
         )
         return redirect(settings.LOGIN_REDIRECT_URL)
-    messages.error(request, "Could not get user information.")
-    raise PermissionDenied
+    messages.error(request, "Something went wrong, please try again.")
+    return redirect(settings.LOGIN_URL)
