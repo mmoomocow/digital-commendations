@@ -16,7 +16,6 @@ def error_404(request, exception):
     # See https://github.com/mmoomocow/digital-commendations/issues/153
     APPEND_SLASH = getattr(settings, "APPEND_SLASH", True)
     if not request.path.endswith("/") and APPEND_SLASH:
-        print("Missing trailing slash; redirecting to " + request.path + "/")
         return redirect(request.path + "/", permanent=True)
 
     return render(
