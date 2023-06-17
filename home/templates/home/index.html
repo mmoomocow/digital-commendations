@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% comment %} HTML title{% endcomment %}
+{% block title %}Bayfield Digital Commendations{% endblock title %}
+{% comment %} Meta description{% endcomment %}
+{% block description %}The Bayfield commendation system is used to track commendations (Awarded for following our RISE values) to students. From here teachers can award commendations, and students and teachers can see the awarded commendations and track progress toward school spirit badges.{% endblock description %}
+
+
+{% comment %} HTML head, for css styles etc{% endcomment %}
+{% block head %}
+{% endblock head %}
+
+
+{% comment %} H1 at top of page, page title{% endcomment %}
+{% block headerText %}Bayfield High School{% endblock headerText %}
+
+
+{% comment %} Main content{% endcomment %}
+{% block content %}
+<p>
+    Welcome to Bayfield High School's online commendation system. This site allows teachers to award commendations to students, and will allow students and teachers to track progress toward school spirit badges.
+    <br><br>
+    This site is still in active development by Matthew Gray, a year 13 at Bayfield who is developing this for a scholarship project.
+    Because it is still being developed, there may be unexpected errors and issues and if these occur please <a href="/contact/">Contact us</a>.
+</p>
+<hr>
+<h2>Teachers</h2>
+<p>
+    Teachers can now log in and begin awarding commendations. To get started, <a href="/login/">log in</a> with microsoft.
+</p>
+<h2>Students and caregivers</h2>
+<p>
+    Due to development, students and caregivers are not yet able to log in. This will be available soon so please check back later.
+</p>
+{% endblock content %}
