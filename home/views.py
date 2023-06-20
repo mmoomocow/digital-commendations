@@ -15,8 +15,7 @@ def index(request) -> render:
     if request.user.is_authenticated:  # skipcq: PTC-W0048
         if request.user.is_teacher:  # skipcq: PTC-W0048
             return redirect("/commendations/award/")
-        return redirect("/about/")
-    return redirect("/login/")
+    return render(request, "home/index.html")
 
 
 def about(request) -> render:

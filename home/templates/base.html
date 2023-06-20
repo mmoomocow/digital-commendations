@@ -35,8 +35,15 @@
         {% endif %}
         <header>
             <nav>
-                <a href="/about/">About</a>
-                <a href="/contact/">Contact</a>
+                <a href="/">Home</a>
+                <div class="dropdown">
+                    <button class="dropbtn">About</button>
+                    <div class="dropdown-content">
+                        <a href="/about/">About this project</a>
+                        <a href="/contact/">Contact us</a>
+                        <a href="/privacy/">Privacy and security</a>
+                    </div>
+                </div>
 
                 {% if request.user.is_authenticated %}
 
