@@ -49,14 +49,11 @@ def login(request):
     if not user.is_active:
         messages.error(request, "Your account is not active, please contact support.")
         return redirect(settings.LOGIN_URL)
-    if not user.is_teacher and not user.is_superuser:
-        messages.error(request, "Sorry, only teachers can log in currently for now :(")
-        return redirect(settings.LOGIN_URL)
-    django_login(request, user)
-    messages.success(
-        request, f"You have successfully logged in. Welcome back {user.first_name}!"
-    )
-    return redirect(settings.LOGIN_REDIRECT_URL)
+
+    if user.can_login(request):
+        django_login(request, user)
+        return redirect(settings.LOGIN_REDIRECT_URL)
+    return redirect(settings.LOGIN_URL)
 
 
 def logout(request):
@@ -85,14 +82,8 @@ def callback(request):
     if user is None:
         messages.error(request, "Something went wrong, please try again.")
         return redirect(settings.LOGIN_URL)
-    if not user.is_active:
-        messages.error(request, "Your account is not active, please contact support.")
-        return redirect(settings.LOGIN_URL)
-    if not user.is_teacher and not user.is_superuser:
-        messages.error(request, "Sorry, only teachers can log in currently for now :(")
-        return redirect(settings.LOGIN_URL)
-    django_login(request, user)
-    messages.success(
-        request, f"You have successfully logged in. Welcome back {user.first_name}!"
-    )
-    return redirect(settings.LOGIN_REDIRECT_URL)
+
+    if user.can_login(request):
+        django_login(request, user)
+        return redirect(settings.LOGIN_REDIRECT_URL)
+    return redirect(settings.LOGIN_URL)
