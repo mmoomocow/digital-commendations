@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import Optional
+
+from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
 from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
 from django.contrib.auth.models import UserManager as defaultUserManager
 from django.db import models
+from django.http.request import HttpRequest
 
 # Create your models here.
 
@@ -143,3 +147,22 @@ class User(defaultUser, defaultPermissionsMixin):
         elif self.is_caregiver:
             self.caregiver.delete()
         super().delete(*args, **kwargs)
+
+    def can_login(self, request: Optional[HttpRequest], *args, **kwargs):
+        """Check if a user can login."""
+        if not self.is_active:
+            if request:
+                messages.error(
+                    request, "Your account is not active, please contact support."
+                )
+            return False
+        if not self.is_teacher and not self.is_superuser:
+            if request:
+                messages.error(
+                    request, "Sorry, only teachers can log in currently for now :("
+                )
+            return False
+        messages.success(
+            request, f"You have successfully logged in! Welcome back {self.first_name}"
+        )
+        return True

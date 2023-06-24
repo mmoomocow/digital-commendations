@@ -36,26 +36,24 @@ def login(request):
     username = request.POST.get("username")
     password = request.POST.get("password")
 
-    user = django_authenticate(
-        request,
-        username=username,
-        password=password,
-        backend="django.contrib.auth.backends.ModelBackend",
-    )
-    if user is not None and user.is_active:
-        django_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-        messages.success(
-            request, f"You have successfully logged in. Welcome back {user.first_name}!"
+    if not username or not password:
+        messages.error(request, "Please enter both username and password.")
+        return redirect(settings.LOGIN_URL)
+    user = django_authenticate(request, username=username, password=password)
+    if user is None:
+        messages.error(
+            request,
+            "We couldn't find your account, are you sure you entered he correct username and password?",
         )
+        return redirect(settings.LOGIN_URL)
+    if not user.is_active:
+        messages.error(request, "Your account is not active, please contact support.")
+        return redirect(settings.LOGIN_URL)
+
+    if user.can_login(request):
+        django_login(request, user)
         return redirect(settings.LOGIN_REDIRECT_URL)
-    return render(
-        request,
-        "users/login.html",
-        {
-            "auth_uri": ms_auth.get_auth_uri(request),
-            "error": "Invalid username or password",
-        },
-    )
+    return redirect(settings.LOGIN_URL)
 
 
 def logout(request):
@@ -81,11 +79,11 @@ def callback(request):
         return redirect(settings.LOGIN_URL)
 
     user = django_authenticate(request)
-    if user is not None and user.is_active:
-        django_login(request, user, backend="users.backends.MicrosoftAuthBackend")
-        messages.success(
-            request, f"You have successfully logged in. Welcome back {user.first_name}!"
-        )
+    if user is None:
+        messages.error(request, "Something went wrong, please try again.")
+        return redirect(settings.LOGIN_URL)
+
+    if user.can_login(request):
+        django_login(request, user)
         return redirect(settings.LOGIN_REDIRECT_URL)
-    messages.error(request, "Something went wrong, please try again.")
     return redirect(settings.LOGIN_URL)
