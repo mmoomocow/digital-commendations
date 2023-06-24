@@ -1,11 +1,7 @@
 from unittest.mock import patch
 
-from django.contrib.auth import get_backends, get_user_model
-from django.contrib.auth.models import AnonymousUser, User
-from django.contrib.messages.storage.fallback import FallbackStorage
-from django.contrib.sessions.middleware import SessionMiddleware
+from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
-from django.shortcuts import reverse
 from django.test import RequestFactory, TestCase
 
 from commendationSite import testHelper
@@ -113,34 +109,19 @@ class UserViewsTest(TestCase):
         self.assertEqual(response.url, "/")
         self.assertEqual(response.wsgi_request.user.is_authenticated, False)
 
-    def test_callback_view_successful_authentication(self):
-        # Simulate a successful authentication callback
-        user = User.objects.create(email="johndoe@example.com")
-        request = self.request_factory.get("/", {"code": "dummy_code"})
-        request.user = user
-        request.session = {}
-        middleware = SessionMiddleware(get_response=lambda r: None)
-        middleware.process_request(request)
-        messages = FallbackStorage(request)
-        request._messages = messages
+    def test_successful_callback(self):
+        def mock_login(request, user):
+            """Mock login function"""
+            request.session["user_id"] = user.id
 
-        response = callback(request)
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(request.user.is_authenticated)
-
-    def test_callback_view_invalid_authentication(self):
-        # Simulate an authentication callback with invalid user
-        request = self.request_factory.get("/", {"code": "dummy_code"})
-        request.user = AnonymousUser()
-        request.session = {}
-        middleware = SessionMiddleware(get_response=lambda r: None)
-        middleware.process_request(request)
-        messages = FallbackStorage(request)
-        request._messages = messages
-
-        response = callback(request)
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(request.user.is_authenticated)
+        with patch("users.views.django_authenticate", return_value=self.teacher) as MA:
+            # with patch("users.views.django_login", side_effect=mock_login) as ML:
+            response = self.client.get(
+                "/users/callback/?code=123&state=456", follow=True
+            )
+        self.assertTrue(MA.called)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
 
     def test_no_backend(self):
         # Remove the MicrosoftAuthBackend from the settings and test that login and callback return ImproperlyConfigured
@@ -200,6 +181,15 @@ class MicrosoftAuthBackendTest(TestCase):
     def setUp(self):
         self.backend = MicrosoftAuthBackend()
         self.request_factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username="johndoe",
+            password="password",
+            is_active=True,
+            is_teacher=True,
+            email=f"johndoe@{TENANT_DOMAIN}",
+            first_name="John",
+            last_name="Doe",
+        )
 
     def test_setup(self):
         request = self.request_factory.get("/")
@@ -217,9 +207,10 @@ class MicrosoftAuthBackendTest(TestCase):
     def test_authenticate_successful(self):
         # Simulate a successful authentication request
         user_data = {
-            "givenName": "John",
-            "surname": "Doe",
-            "mail": f"johndoe@{TENANT_DOMAIN}",
+            "givenName": self.user.first_name,
+            "surname": self.user.last_name,
+            "mail": self.user.email,
+            "id": "dummy_id",
         }
         access_token = "dummy_access_token"
         request = self.request_factory.get("/")
@@ -234,9 +225,10 @@ class MicrosoftAuthBackendTest(TestCase):
 
         # Patch the ms_client.acquire_token_by_auth_code_flow method
         with patch.object(
-            self.backend.ms_client, "acquire_token_by_auth_code_flow"
-        ) as mock_acquire_token:
-            mock_acquire_token.return_value = {"access_token": access_token}
+            self.backend.ms_client,
+            "acquire_token_by_auth_code_flow",
+            return_value={"access_token": access_token},
+        ):
             with patch("requests.get", side_effect=mock_get):
                 user = self.backend.authenticate(request)
 
