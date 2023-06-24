@@ -160,10 +160,7 @@ class MicrosoftAuthBackend(BaseBackend):
         Returns:
             bool: True if the user can authenticate, False otherwise.
         """
-        if user is None:
-            return False
-        is_active = getattr(user, "is_active", None)
-        return is_active or is_active is None
+        return user.can_login()
 
     def _get_create_user(self, ms_user: dict[str, Any]) -> User:
         """_get_create_user Get or create the user.
