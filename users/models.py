@@ -148,7 +148,7 @@ class User(defaultUser, defaultPermissionsMixin):
             self.caregiver.delete()
         super().delete(*args, **kwargs)
 
-    def can_login(self, request: Optional[HttpRequest], *args, **kwargs):
+    def can_login(self, request: Optional[HttpRequest] = None, *args, **kwargs):
         """Check if a user can login."""
         if not self.is_active:
             if request:
@@ -162,7 +162,9 @@ class User(defaultUser, defaultPermissionsMixin):
                     request, "Sorry, only teachers can log in currently for now :("
                 )
             return False
-        messages.success(
-            request, f"You have successfully logged in! Welcome back {self.first_name}"
-        )
+        if request:
+            messages.success(
+                request,
+                f"You have successfully logged in! Welcome back {self.first_name}",
+            )
         return True
