@@ -8,6 +8,7 @@ jobs:
   django_test:
     name: pytest
     runs-on: ubuntu-latest
+    environment: PR testing
     strategy:
         matrix:
             python-version: [3.10.5, 3.11.2]
