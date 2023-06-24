@@ -55,3 +55,49 @@ class UserViewsTest(TestCase):
         self.teacher = testHelper.createTeacher(self, is_management=True)
         self.student = testHelper.createStudent(self)
         self.user = testHelper.createUser(self)
+
+    def test_login_redirect(self):
+        response = self.client.get("/login/")
+        self.assertEqual(response.status_code, 301)
+        response = self.client.get("/login/", follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "users/login.html")
+
+    def test_login_get(self):
+        response = self.client.get("/users/login/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "users/login.html")
+
+    def test_login_post_valid(self):
+        response = self.client.post(
+            "/users/login/",
+            {"username": self.teacher.username, "password": "password"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/")
+        self.assertEqual(response.wsgi_request.user, self.teacher)
+
+    def test_login_post_invalid(self):
+        response = self.client.post(
+            "/users/login/",
+            {"username": self.teacher.username, "password": "wrong"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/login/")
+        self.assertEqual(response.wsgi_request.user.is_authenticated, False)
+
+    def test_login_not_allowed(self):
+        response = self.client.post(
+            "/users/login/",
+            {"username": self.student.username, "password": "password"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/login/")
+        self.assertEqual(response.wsgi_request.user.is_authenticated, False)
+
+    def test_logout(self):
+        self.client.force_login(self.teacher)
+        response = self.client.get("/users/logout/")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/")
+        self.assertEqual(response.wsgi_request.user.is_authenticated, False)
