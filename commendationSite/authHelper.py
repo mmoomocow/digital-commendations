@@ -1,11 +1,25 @@
+from typing import Optional
+
 from django.core.exceptions import PermissionDenied
 
 
-def teacher_required(is_management: bool = False):
+def role_required(
+    student: Optional[bool] = False,
+    teacher: Optional[bool] = False,
+    management: Optional[bool] = False,
+    caregiver: Optional[bool] = False,
+    staff: Optional[bool] = False,
+    superuser: Optional[bool] = True,
+):
     """Checks if the user is logged in as a teacher and optionally if they are management
 
     Args:
-        is_management (bool, optional): If true the teacher must be management to view the page. Defaults to False.
+        student (Optional[bool], optional): Whether the user must be a student. Defaults to False.
+        teacher (Optional[bool], optional): Whether the user must be a teacher. Defaults to False.
+        management (Optional[bool], optional): Whether the user must be management. Defaults to False.
+        caregiver (Optional[bool], optional): Whether the user must be a caregiver. Defaults to False.
+        staff (Optional[bool], optional): Whether the user must be staff. Defaults to False.
+        superuser (Optional[bool], optional): Whether the user must be a superuser. Defaults to True.
     """
 
     def decorator(view):
@@ -17,16 +31,25 @@ def teacher_required(is_management: bool = False):
             if not request.user.is_authenticated:
                 raise PermissionDenied
 
-            # Check if the user is a teacher
-            if not request.user.is_teacher:
-                raise PermissionDenied
+            # If the user is any of the roles, allow the view
+            # If there are multiple roles, allow the view if the user is any of them
+            if (
+                (student and request.user.is_student)
+                or (teacher and request.user.is_teacher)
+                or (management and request.user.is_teacher)
+                or (caregiver and request.user.is_caregiver)
+                or (staff and request.user.is_staff)
+                or (superuser and request.user.is_superuser)
+            ):
+                if management and request.user.teacher is not None:
+                    if not request.user.teacher.is_management:
+                        raise PermissionDenied
 
-            # Check if the user is management
-            if is_management and not request.user.teacher.is_management:
-                raise PermissionDenied
+                # Return the view
+                return view(request, *args, **kwargs)
 
-            # If all checks pass, run the view
-            return view(request, *args, **kwargs)
+            # If the user is not any of the roles, deny the view
+            raise PermissionDenied
 
         return inner
 
