@@ -28,7 +28,7 @@ jobs:
       env:
         DJANGO_SETTINGS_MODULE: commendationSite.settings_CI
       run: |
-        python manage.py test --failfast --noinput --verbosity=3 --parallel
+        python manage.py test --failfast --noinput --verbosity=3
 
 
   coverage:
