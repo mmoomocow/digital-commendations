@@ -3,6 +3,7 @@ from typing import Any
 
 import msal
 import requests
+from django.conf import settings
 from django.contrib.auth import login as django_login
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -15,18 +16,19 @@ load_dotenv()
 
 # Create auth backend with django.contrib.auth.backends.ModelBackend as parent class
 
-MY_HOST = os.getenv("MY_HOST")
+# MS auth settings
+MY_HOST = settings.MICROSOFT_MY_HOST
 
-APP_ID = os.getenv("MICROSOFT_AUTH_CLIENT_ID")
-APP_SECRET = os.getenv("MICROSOFT_AUTH_CLIENT_SECRET")
-TENANT_DOMAIN = os.getenv("MICROSOFT_AUTH_TENANT_DOMAIN")
+APP_ID = settings.MICROSOFT_APP_ID
+APP_SECRET = settings.MICROSOFT_APP_SECRET
+TENANT_DOMAIN = settings.MICROSOFT_TENANT_DOMAIN
 
-REDIRECT = f"{MY_HOST}/users/callback/"
-SCOPES = ["https://graph.microsoft.com/user.read"]
-AUTHORITY = "https://login.microsoftonline.com/organizations"
-LOGOUTURL = f"{MY_HOST}/users/logout/"
+REDIRECT = settings.MICROSOFT_REDIRECT
+SCOPES = settings.MICROSOFT_SCOPES
+AUTHORITY = settings.MICROSOFT_AUTHORITY
+LOGOUTURL = settings.MICROSOFT_LOGOUTURL
 
-GRAPH_ENDPOINT = "https://graph.microsoft.com/v1.0"
+GRAPH_ENDPOINT = settings.MICROSOFT_GRAPH_ENDPOINT
 
 
 class MicrosoftAuthBackend(BaseBackend):

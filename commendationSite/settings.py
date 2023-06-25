@@ -210,3 +210,18 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 LOGOUT_REDIRECT_URL = "/"
 LOGOUT_URL = "/logout/"
+
+
+# MS auth settings
+MICROSOFT_MY_HOST = os.getenv("MY_HOST")
+
+MICROSOFT_APP_ID = os.getenv("MICROSOFT_AUTH_CLIENT_ID")
+MICROSOFT_APP_SECRET = os.getenv("MICROSOFT_AUTH_CLIENT_SECRET")
+MICROSOFT_TENANT_DOMAIN = os.getenv("MICROSOFT_AUTH_TENANT_DOMAIN")
+
+MICROSOFT_REDIRECT = f"{MICROSOFT_MY_HOST}/users/callback/"
+MICROSOFT_SCOPES = ["https://graph.microsoft.com/user.read"]
+MICROSOFT_AUTHORITY = "https://login.microsoftonline.com/organizations"
+MICROSOFT_LOGOUTURL = LOGOUT_URL
+
+MICROSOFT_GRAPH_ENDPOINT = "https://graph.microsoft.com/v1.0"
