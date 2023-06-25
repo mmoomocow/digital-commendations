@@ -148,7 +148,7 @@ class User(defaultUser, defaultPermissionsMixin):
             self.caregiver.delete()
         super().delete(*args, **kwargs)
 
-    def can_login(self, request: Optional[HttpRequest] = None, *args, **kwargs):
+    def can_login(self, *args, request: Optional[HttpRequest] = None, **kwargs):
         """Check if a user can login."""
         if not self.is_active:
             if request:
