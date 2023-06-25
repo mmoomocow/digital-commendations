@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        // Python: Pytest with justMyCode disabled
+        {
+            "name": "Python: Pytest with justMyCode disabled",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                ""
+            ]
+        },
+    ]
+}
