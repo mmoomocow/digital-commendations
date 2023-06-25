@@ -283,7 +283,7 @@ class MicrosoftAuthBackendTest(TestCase):
         user_data = {
             "givenName": "John",
             "surname": "Doe",
-            "mail": f"johndoe@example.com",
+            "mail": f"johndoe@invalid.com",
         }
         access_token = "dummy_access_token"
         request = self.request_factory.get("/")
