@@ -59,6 +59,13 @@
                                 {% endif %}
                             </div>
                         </div>
+                    {% elif request.user.is_student%}
+                        <div class="dropdown">
+                            <button class="dropbtn">Students</button>
+                            <div class="dropdown-content">
+                                <a href="/students/">Student Portal</a>
+                            </div>
+                        </div>
                     {% endif %}
 
                     <a href="/logout/" class="right">Logout</a>
