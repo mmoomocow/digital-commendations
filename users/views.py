@@ -84,6 +84,6 @@ def callback(request):
         return redirect(settings.LOGIN_URL)
 
     if user.can_login(request):
-        django_login(request, user)
+        django_login(request, user, backend=ms_backend_path)
         return redirect(settings.LOGIN_REDIRECT_URL)
     return redirect(settings.LOGIN_URL)

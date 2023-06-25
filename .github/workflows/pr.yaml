@@ -27,8 +27,10 @@ jobs:
       name: Run tests
       env:
         DJANGO_SETTINGS_MODULE: commendationSite.settings_CI
+        MICROSOFT_AUTH_CLIENT_ID: ${{ secrets.MICROSOFT_AUTH_CLIENT_ID }}
+        MICROSOFT_AUTH_CLIENT_SECRET: ${{ secrets.MICROSOFT_AUTH_CLIENT_SECRET }}
       run: |
-        python manage.py test --failfast --noinput --verbosity=3 --parallel
+        python manage.py test --failfast --noinput --verbosity=3
 
   
   coverage:

@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -166,3 +171,18 @@ LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 LOGOUT_REDIRECT_URL = "/"
 LOGOUT_URL = "/logout/"
+
+
+# MS auth settings
+MICROSOFT_MY_HOST = "http://localhost:8000"
+
+MICROSOFT_APP_ID = os.getenv("MICROSOFT_AUTH_CLIENT_ID")
+MICROSOFT_APP_SECRET = os.getenv("MICROSOFT_AUTH_CLIENT_SECRET")
+MICROSOFT_TENANT_DOMAIN = "example.com"
+
+MICROSOFT_REDIRECT = f"{MICROSOFT_MY_HOST}/users/callback/"
+MICROSOFT_SCOPES = ["https://graph.microsoft.com/user.read"]
+MICROSOFT_AUTHORITY = "https://login.microsoftonline.com/organizations"
+MICROSOFT_LOGOUTURL = LOGOUT_URL
+
+MICROSOFT_GRAPH_ENDPOINT = "https://graph.microsoft.com/v1.0"
