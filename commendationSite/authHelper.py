@@ -42,6 +42,7 @@ def role_required(
                 or (superuser and request.user.is_superuser)
             ):
                 if management and request.user.teacher is not None:
+                    # Nested if statement to prevent errors if the user is not a teacher
                     if not request.user.teacher.is_management:
                         raise PermissionDenied
 
