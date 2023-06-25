@@ -50,20 +50,22 @@ class studentsViewsTest(TestCase):
         self.client.login(username=self.teacher.username, password="password")
 
     def test_listStudents(self):
-        testHelper.get_page(self, "/students/", "students/list_students.html")
+        testHelper.get_page(self, "/students/list/", "students/list_students.html")
         # Test with a search query
         testHelper.get_page(
-            self, "/students/?search=Test", "students/list_students.html"
+            self, "/students/list/?search=Test", "students/list_students.html"
         )
 
     def test_studentInfo(self):
         testHelper.get_page(
-            self, f"/students/{self.student.student.id}/", "students/student_info.html"
+            self,
+            f"/students/list/{self.student.student.id}/",
+            "students/student_info.html",
         )
 
     def test_studentInfo_404(self):
         # Test that a student that doesn't exist returns a 404
         # As using handler404 checking status code will not work
         testHelper.get_page(
-            self, f"/students/{self.student.student.id + 1}/", "errors/404.html"
+            self, f"/students/list/{self.student.student.id + 1}/", "errors/404.html"
         )
