@@ -186,3 +186,14 @@ def viewMilestones(request):
         "commendations/award_milestones.html",
         {"milestones": milestones, "milestoneTypes": milestoneTypes},
     )
+
+
+@role_required(student=True)
+def myCommendations(request):
+    """The page where students can view their commendations"""
+    student = Student.objects.get(user=request.user)
+    commendations = student.commendation_set.all().order_by("-date_time")
+
+    return render(
+        request, "commendations/my_commendations.html", {"commendations": commendations}
+    )
