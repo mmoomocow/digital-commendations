@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}Student Home{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}The landing page for all students when they sign in{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'students/home.min.css' %}">
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}Hello {{ request.user.first_name }}{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+<h2>Welcome to the student portal</h2>
+<p>
+    This is the student portal for the commendation system. Here you can view your commendations, and see your
+    progress towards your next award.
+    <br><br>
+    Use the navigation bar at the top of the page to navigate the site.
+    <br><br>
+    If you have any questions, please contact your teacher.
+</p>
+{% endblock content %}
+
+{% comment %} Center footer section {% endcomment %}
+{% block footer %}
+
+{% endblock footer %}

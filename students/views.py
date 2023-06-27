@@ -2,14 +2,14 @@ from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render
 
-from commendationSite.authHelper import teacher_required
+from commendationSite.authHelper import role_required
 
 from .models import Student
 
 # Create your views here.
 
 
-@teacher_required()
+@role_required(teacher=True, management=True)
 def listStudents(request):
     """The page where teachers can see students"""
     studentList = Student.objects.all()
@@ -36,7 +36,7 @@ def listStudents(request):
     )
 
 
-@teacher_required(is_management=True)
+@role_required(teacher=True, management=True)
 def studentInfo(request, ID: int = None):
     """The page where teachers can see students"""
     # Get the student
@@ -59,3 +59,9 @@ def studentInfo(request, ID: int = None):
             "milestones": milestones,
         },
     )
+
+
+@role_required(student=True)
+def studentHome(request):
+    """The home landing page for students"""
+    return render(request, "students/student_home.html")

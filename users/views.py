@@ -50,7 +50,7 @@ def login(request):
         messages.error(request, "Your account is not active, please contact support.")
         return redirect(settings.LOGIN_URL)
 
-    if user.can_login(request):
+    if user.can_login(request=request):
         django_login(request, user)
         return redirect(settings.LOGIN_REDIRECT_URL)
     return redirect(settings.LOGIN_URL)

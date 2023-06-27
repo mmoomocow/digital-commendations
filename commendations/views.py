@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.timezone import make_aware
 
-from commendationSite.authHelper import teacher_required
+from commendationSite.authHelper import role_required
 from students.models import Student
 from teachers.models import Teacher
 
@@ -13,7 +13,7 @@ from .models import Commendation, Milestone
 # Create your views here.
 
 
-@teacher_required()
+@role_required(teacher=True)
 def giveCommendation(request):
     """Award commendations to students."""
     if request.method == "POST":
@@ -112,7 +112,7 @@ def giveCommendation(request):
     return render(request, "commendations/award.html", context)
 
 
-@teacher_required(is_management=True)
+@role_required(teacher=True, management=True)
 def viewMilestones(request):
     """The page where teachers can award milestones"""
     if request.method == "POST":

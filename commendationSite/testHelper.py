@@ -57,7 +57,7 @@ def post_page(
 
 
 # Create a user with garbage data
-def createUser(_self: TestCase) -> User:
+def createUser(_self: TestCase, *args, **kwargs) -> User:
     """_summary_: Creates a user with garbage data
 
     Args:
@@ -73,6 +73,8 @@ def createUser(_self: TestCase) -> User:
         email="".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10))
         + "@"
         + "".join(random.choices("abcdefghijklmnopqrstuvwxyz", k=10)),
+        *args,
+        **kwargs,
     )
     user.set_password("password")
     user.save()

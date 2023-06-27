@@ -1,68 +1,546 @@
+from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.test import TestCase
+from django.test.client import RequestFactory
 
-from .authHelper import teacher_required
-from .testHelper import createTeacher, createUser
+from .authHelper import role_required
+from .testHelper import createCaregiver, createStudent, createTeacher, createUser
 
 # Create your tests here.
+
+# General rules:
+# - A user can only access a view if they are logged in
+# - Only users with the assigned role can access the view
+# - Superusers can access any view by default
+# - If multiple roles are specified, the user can access the view if they are ANY of the roles
 
 
 class TestAuthHelper(TestCase):
     def setUp(self):
         self.user = createUser(self)
+        self.staff = createUser(self, is_staff=True)
+        self.superuser = createUser(self, is_superuser=True)
         self.teacher = createTeacher(self)
+        self.management = createTeacher(self, is_management=True)
+        self.student = createStudent(self)
+        self.caregiver = createCaregiver(self)
+        self.anon = AnonymousUser()
+        self.factory = RequestFactory()
 
-        self.fake_view = teacher_required()(lambda request: HttpResponse("Test"))
-        self.fake_view_management = teacher_required(is_management=True)(
-            lambda request: HttpResponse("Test")
-        )
+    def test_student_required(self):
+        @role_required(student=True)
+        def testView(request):
+            return HttpResponse("test")
 
-    def test_teacherRequired_noAuth(self):
-        with self.assertRaises(Exception):
-            request = self.client.get("/").wsgi_request
-            _ = self.fake_view(request)
+        # Test that a student can access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
 
-    def test_teacherRequired_notTeacher(self):
-        # Log in as a user that is not a teacher
-        self.client.login(username=self.user.username, password="password")
-        with self.assertRaises(Exception):
-            request = self.client.get("/").wsgi_request
-            _ = self.fake_view(request)
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
 
-    def test_teacherRequired_teacher(self):
-        # Log in as a teacher
-        self.client.login(username=self.teacher.username, password="password")
-        request = self.client.get("/").wsgi_request
-        response = self.fake_view(request)
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
 
-        # Test that the decorator returns a 200 when the user is a teacher
-        self.assertEqual(
-            response.status_code,
-            200,
-            "Teacher auth check did not return 200 for teacher user",
-        )
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
 
-    def test_managementRequired_teacher(self):
-        # Log in as a teacher
-        self.client.login(username=self.teacher.username, password="password")
-        with self.assertRaises(Exception):
-            request = self.client.get("/").wsgi_request
-            _ = self.fake_view_management(request)
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
 
-    def test_managementRequired_management(self):
-        # Log in as a management teacher
-        self.teacher.teacher.is_management = True
-        self.teacher.teacher.save()
-        self.client.login(username=self.teacher.username, password="password")
-        request = self.client.get("/").wsgi_request
-        response = self.fake_view_management(request)
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
 
-        # Test that the decorator returns a 200 when the user is a management teacher
-        self.assertEqual(
-            response.status_code,
-            200,
-            "Teacher auth check with is_management did not return 200 for management teacher user",
-        )
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
 
-    def tearDown(self):
-        self.client.logout()
+    def test_teacher_required(self):
+        @role_required(teacher=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher can access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_management_required(self):
+        @role_required(teacher=True, management=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_caregiver_required(self):
+        @role_required(caregiver=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver can access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_staff_required(self):
+        @role_required(staff=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff can access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_superuser_required(self):
+        @role_required(superuser=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_teacher_student_required(self):
+        @role_required(teacher=True, student=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher can access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a student can access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_teacher_caregiver_required(self):
+        @role_required(teacher=True, caregiver=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher can access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver can access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_student_caregiver_required(self):
+        @role_required(student=True, caregiver=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a student can access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a caregiver can access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_staff_student_required(self):
+        @role_required(staff=True, student=True)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher cannot access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a student can access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff can access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a superuser can access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+    def test_teacher_NOT_superuser_required(self):
+        @role_required(teacher=True, superuser=False)
+        def testView(request):
+            return HttpResponse("test")
+
+        # Test that a teacher can access the view
+        request = self.factory.get("/")
+        request.user = self.teacher
+        response = testView(request)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that a student cannot access the view
+        request = self.factory.get("/")
+        request.user = self.student
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a caregiver cannot access the view
+        request = self.factory.get("/")
+        request.user = self.caregiver
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a staff cannot access the view
+        request = self.factory.get("/")
+        request.user = self.staff
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a superuser cannot access the view
+        request = self.factory.get("/")
+        request.user = self.superuser
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that a user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.user
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)
+
+        # Test that an anonymous user cannot access the view
+        request = self.factory.get("/")
+        request.user = self.anon
+        with self.assertRaises(PermissionDenied):
+            response = testView(request)

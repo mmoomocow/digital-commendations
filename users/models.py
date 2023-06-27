@@ -156,10 +156,11 @@ class User(defaultUser, defaultPermissionsMixin):
                     request, "Your account is not active, please contact support."
                 )
             return False
-        if not self.is_teacher and not self.is_superuser:
+        if not self.is_teacher and not self.is_superuser and not self.is_student:
             if request:
                 messages.error(
-                    request, "Sorry, only teachers can log in currently for now :("
+                    request,
+                    "Sorry, only teachers and students can log in currently for now :(",
                 )
             return False
         if request:
