@@ -24,14 +24,14 @@
 
 <table id="myCommendations">
     <tr>
-        <th>Commendation Type</th>
+        <th>Type</th>
         <th>Date</th>
         <th>Reason</th>
     </tr>
     {% for commendation in commendations %}
         <tr onclick="window.location.href='/commendations/detail/{{commendation.id}}'">
             <td>{{commendation.get_commendation_type_display}}</td>
-            <td>{{commendation.date_time}}</td>
+            <td>{{ commendation.date_time|date:"F j, Y" }}</td>
             <td>{{commendation.reason}}</td>
         </tr>
     {% endfor %}
