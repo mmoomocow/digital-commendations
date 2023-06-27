@@ -69,3 +69,21 @@ class studentsViewsTest(TestCase):
         testHelper.get_page(
             self, f"/students/list/{self.student.student.id + 1}/", "errors/404.html"
         )
+
+    def test_student_home(self):
+        # Login as a student and check they can access their home page
+        self.client.force_login(self.student)
+        testHelper.get_page(
+            self,
+            f"/students/",
+            "students/student_home.html",
+        )
+
+    def test_student_home_not_student(self):
+        # Login as a teacher and check they can't access the student home page
+        self.client.force_login(self.teacher)
+        testHelper.get_page(
+            self,
+            f"/students/",
+            "errors/403.html",
+        )
