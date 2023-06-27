@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
 from django.utils.timezone import make_aware
 
@@ -197,3 +198,16 @@ def myCommendations(request):
     return render(
         request, "commendations/my_commendations.html", {"commendations": commendations}
     )
+
+
+def commendationDetail(request, commendation_id):
+    """The page where students can view the details of a commendation"""
+    commendation = Commendation.objects.get(id=commendation_id)
+
+    if commendation.students.filter(user=request.user).exists():
+        return render(
+            request,
+            "commendations/detailed_commendation.html",
+            {"commendation": commendation},
+        )
+    raise PermissionDenied
