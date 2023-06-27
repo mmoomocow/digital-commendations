@@ -61,6 +61,7 @@ class UserViewsTest(TestCase):
         self.request_factory = RequestFactory()
         self.teacher = testHelper.createTeacher(self, is_management=True)
         self.student = testHelper.createStudent(self)
+        self.caregiver = testHelper.createCaregiver(self)
         self.user = testHelper.createUser(self)
 
     def test_login_redirect(self):
@@ -96,7 +97,7 @@ class UserViewsTest(TestCase):
     def test_login_not_allowed(self):
         response = self.client.post(
             "/users/login/",
-            {"username": self.student.username, "password": "password"},
+            {"username": self.caregiver.username, "password": "password"},
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/login/")
