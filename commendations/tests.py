@@ -1,3 +1,5 @@
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.test import TestCase
 
 from commendationSite import testHelper
@@ -331,4 +333,61 @@ class commendationsCommendationViewTest(TestCase):
             commendation.first().reason,
             "Being truthful",
             f"Commendation reason was not set correctly, expected Being truthful, got {commendation.first().reason}",
+        )
+
+
+class commendationsStudentViews(TestCase):
+    def setUp(self):
+        self.teacher = testHelper.createTeacher(self)
+        self.student = testHelper.createStudent(self)
+        self.student2 = testHelper.createStudent(self)
+
+    def test_my_commendations(self):
+        self.client.force_login(self.student)
+        testHelper.get_page(
+            self,
+            "/commendations/my/",
+            "commendations/my_commendations.html",
+        )
+
+    def test_detail_404(self):
+        self.client.force_login(self.student)
+        testHelper.get_page(
+            self,
+            "/commendations/1/",
+            "errors/404.html",
+        )
+
+    def test_detail(self):
+        self.client.force_login(self.student)
+
+        commendation = Commendation.objects.create(
+            commendation_type="E",
+            reason="Test",
+            teacher=self.teacher.teacher,
+        )
+        commendation.students.add(self.student.student)
+        commendation.save()
+
+        testHelper.get_page(
+            self,
+            f"/commendations/detail/{commendation.id}/",
+            "commendations/detailed_commendation.html",
+        )
+
+    def test_detail_wrong_student(self):
+        self.client.force_login(self.student2)
+
+        commendation = Commendation.objects.create(
+            commendation_type="E",
+            reason="Test",
+            teacher=self.teacher.teacher,
+        )
+        commendation.students.add(self.student.student)
+        commendation.save()
+
+        testHelper.get_page(
+            self,
+            f"/commendations/detail/{commendation.id}/",
+            "errors/403.html",
         )
