@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.utils.timezone import make_aware
 
@@ -200,9 +201,13 @@ def myCommendations(request):
     )
 
 
+@role_required(student=True)
 def commendationDetail(request, commendation_id):
     """The page where students can view the details of a commendation"""
-    commendation = Commendation.objects.get(id=commendation_id)
+    try:
+        commendation = Commendation.objects.get(id=commendation_id)
+    except Commendation.DoesNotExist:
+        raise Http404("Commendation does not exist")
 
     if commendation.students.filter(user=request.user).exists():
         return render(
