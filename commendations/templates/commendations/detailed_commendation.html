@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title{% endcomment %}
+{% block title %}Commendation Information{% endblock title %}
+{% comment %} Meta description{% endcomment %}
+{% block description %}Get detailed information about a Commendation{% endblock description %}
+
+
+{% comment %} HTML head, for css styles etc{% endcomment %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'commendations/certificate.min.css' %}">
+{% endblock head %}
+
+
+{% comment %} H1 at top of page, page title{% endcomment %}
+
+
+{% comment %} Main content{% endcomment %}
+{% block content %}
+<div class="container">
+    <div class="cert">
+        <div class="organisation">
+            Bayfield High School
+        </div>
+
+        <div class="title">
+            {{ commendation.get_commendation_type_display }} commendation
+        </div>
+
+        <div class="date">
+            This commendation was awarded on {{ commendation.date_time|date:"F j, Y" }} to<br/>
+        </div>
+
+        <div class="person">
+            {{request.user.first_name}} {{request.user.last_name}}
+        </div>
+
+        <div class="reason">
+            For {{ commendation.reason }}
+        </div>
+    </div>
+</div>
+{% endblock content %}

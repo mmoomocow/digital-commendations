@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title {% endcomment %}
+{% block title %}My Commendations{% endblock title %}
+{% comment %} Meta description {% endcomment %}
+{% block description %}{% endblock description %}
+
+{% comment %} Content that goes in the HTML head {% endcomment %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'commendations/my_commendations.min.css' %}">
+{% endblock head %}
+
+{% comment %} H1 at top of page, page title {% endcomment %}
+{% block headerText %}My Commendations{% endblock headerText %}
+
+{% comment %} Main content {% endcomment %}
+{% block content %}
+<p>
+    You can view more details about a commendation by clicking on the row.
+    <br>
+    So far you have {{commendations|length}} commendations.
+</p>
+
+<table id="myCommendations">
+    <tr>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Reason</th>
+    </tr>
+    {% for commendation in commendations %}
+        <tr onclick="window.location.href='/commendations/detail/{{commendation.id}}'">
+            <td>{{commendation.get_commendation_type_display}}</td>
+            <td>{{ commendation.date_time|date:"F j, Y" }}</td>
+            <td>{{commendation.reason}}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

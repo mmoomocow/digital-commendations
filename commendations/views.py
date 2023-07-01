@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.utils.timezone import make_aware
 
@@ -186,3 +188,31 @@ def viewMilestones(request):
         "commendations/award_milestones.html",
         {"milestones": milestones, "milestoneTypes": milestoneTypes},
     )
+
+
+@role_required(student=True)
+def myCommendations(request):
+    """The page where students can view their commendations"""
+    student = Student.objects.get(user=request.user)
+    commendations = student.commendation_set.all().order_by("-date_time")
+
+    return render(
+        request, "commendations/my_commendations.html", {"commendations": commendations}
+    )
+
+
+@role_required(student=True)
+def commendationDetail(request, commendation_id):
+    """The page where students can view the details of a commendation"""
+    try:
+        commendation = Commendation.objects.get(id=commendation_id)
+    except Commendation.DoesNotExist:
+        raise Http404("Commendation does not exist")
+
+    if commendation.students.filter(user=request.user).exists():
+        return render(
+            request,
+            "commendations/detailed_commendation.html",
+            {"commendation": commendation},
+        )
+    raise PermissionDenied

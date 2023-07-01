@@ -1,0 +1,41 @@
+.container {
+    text-align: center;
+    display: table;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.cert {
+    border: 20px solid var(--color-green);
+    width: 750px;
+    height: 563px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.organisation {
+    color: var(--color-green);
+}
+
+.title {
+    color: var(--color-green);
+    font-size: 48px;
+    margin: 20px;
+}
+
+.date {
+    margin: 20px;
+}
+
+.person {
+    border-bottom: 2px solid black;
+    font-size: 32px;
+    font-style: italic;
+    margin: 20px auto;
+    width: 400px;
+}
+
+.reason {
+    margin: 20px;
+}
