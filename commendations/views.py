@@ -225,7 +225,7 @@ def milestoneProgress(request):
     milestones = Milestone.objects.filter(student=student).order_by("-milestone_type")
     commendations = student.commendation_set.all().order_by("-date_time")
     # For each milestone type, calculate the progress as a percentage
-    milestoneProgress = []
+    progress = []
     for milestoneType in Milestone.MILESTONE_TYPE_CHOICES:
         # Get the int value of the milestone type
         milestoneValue = milestoneType[0]
@@ -234,10 +234,9 @@ def milestoneProgress(request):
         # Calculate the percentage
         percentage = (commendationCount / milestoneValue) * 100
         # Dont allow the percentage to be over 100
-        if percentage > 100:
-            percentage = 100
+        min(percentage, 100)
         # Add the percentage to the list
-        milestoneProgress.append(
+        progress.append(
             {
                 "type": milestoneType[1],
                 "percentage": round(percentage),
@@ -253,6 +252,6 @@ def milestoneProgress(request):
             "milestones": milestones,
             "commendations": commendations,
             "commendationCount": commendationCount,
-            "milestoneProgress": milestoneProgress,
+            "milestoneProgress": progress,
         },
     )
