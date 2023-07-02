@@ -125,10 +125,10 @@ class Milestone(models.Model):
     BLUE = 100
     GOLD = 150
     MILESTONE_TYPE_CHOICES = (
-        (CERTIFICATE, f"Dean's Certificate - {CERTIFICATE} commendations"),
-        (GREEN, f"Green Jr School spirit badge - {GREEN} commendations"),
-        (BLUE, f"Blue Jr School spirit badge - {BLUE} commendations"),
-        (GOLD, f"Gold Jr School spirit badge - {GOLD} commendations"),
+        (CERTIFICATE, f"Dean's Certificate for {CERTIFICATE} commendations"),
+        (GREEN, f"Green Jr School spirit badge for {GREEN} commendations"),
+        (BLUE, f"Blue Jr School spirit badge for {BLUE} commendations"),
+        (GOLD, f"Gold Jr School spirit badge for {GOLD} commendations"),
     )
     milestone_type = models.IntegerField(
         choices=MILESTONE_TYPE_CHOICES,
