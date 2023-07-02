@@ -43,7 +43,7 @@ class commendationsMilestoneModelTest(TestCase):
         # test the prettyPrint method
         self.assertEqual(
             milestone.prettyPrint(),
-            "Green Jr School spirit badge - 50 commendations",
+            "Green Jr School spirit badge for 50 commendations",
             f"Milestone prettyPrint was not set correctly, expected Green, got {milestone.prettyPrint()}",
         )
 
@@ -390,4 +390,12 @@ class commendationsStudentViews(TestCase):
             self,
             f"/commendations/detail/{commendation.id}/",
             "errors/403.html",
+        )
+
+    def test_milestone_progress(self):
+        self.client.force_login(self.student)
+        testHelper.get_page(
+            self,
+            "/commendations/progress/",
+            "commendations/milestone_progress.html",
         )

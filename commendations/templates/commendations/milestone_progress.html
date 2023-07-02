@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} HTML title{% endcomment %}
+{% block title %}RISE award progress{% endblock title %}
+{% comment %} Meta description{% endcomment %}
+{% block description %}Allows students to track their progress toward RISE awards{% endblock description %}
+
+
+{% comment %} HTML head, for css styles etc{% endcomment %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'commendations/milestone_progress.min.css' %}">
+{% endblock head %}
+
+
+{% comment %} H1 at top of page, page title{% endcomment %}
+{% block headerText %}RISE award progress{% endblock headerText %}
+
+
+{% comment %} Main content{% endcomment %}
+{% block content %}
+<h2>Your Commendations</h2>
+<p>You have {{ commendationCount }} commendations that are being counted toward RISE awards.</p>
+<h2>Your progress</h2>
+{% for i in milestoneProgress %}
+
+    {% if i.percentage == 100 %}
+        <div>
+            <h3>{{i.type}}</h3>
+            <p>You have achieved this RISE award! Congratulations 🎉</p>
+            <div class="barContainer">
+                <div class="bar" style="width: 100%;"></div>
+            </div>
+        </div>
+    {% else %}
+        <div>
+            <h3>{{i.type}}</h3>
+            <p>You have got {{commendationCount}}/{{i.value}} commendations needed to achieve this RISE award. Only {{i.remaining}} to go!</p>
+            <div class="barContainer">
+                <div class="bar" style="width: {{i.percentage}}%;"></div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+{% endblock content %}
