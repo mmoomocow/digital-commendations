@@ -216,3 +216,43 @@ def commendationDetail(request, commendation_id):
             {"commendation": commendation},
         )
     raise PermissionDenied
+
+
+@role_required(student=True)
+def milestoneProgress(request):
+    """The page where students can view their progress towards milestones"""
+    student = Student.objects.get(user=request.user)
+    milestones = Milestone.objects.filter(student=student).order_by("-milestone_type")
+    commendations = student.commendation_set.all().order_by("-date_time")
+    # For each milestone type, calculate the progress as a percentage
+    milestoneProgress = []
+    for milestoneType in Milestone.MILESTONE_TYPE_CHOICES:
+        # Get the int value of the milestone type
+        milestoneValue = milestoneType[0]
+        # Get the number of commendations the student has
+        commendationCount = commendations.count()
+        # Calculate the percentage
+        percentage = (commendationCount / milestoneValue) * 100
+        # Dont allow the percentage to be over 100
+        if percentage > 100:
+            percentage = 100
+        # Add the percentage to the list
+        milestoneProgress.append(
+            {
+                "type": milestoneType[1],
+                "percentage": round(percentage),
+                "value": round(milestoneValue),
+                "remaining": round(milestoneValue - commendationCount),
+            }
+        )
+
+    return render(
+        request,
+        "commendations/milestone_progress.html",
+        {
+            "milestones": milestones,
+            "commendations": commendations,
+            "commendationCount": commendationCount,
+            "milestoneProgress": milestoneProgress,
+        },
+    )

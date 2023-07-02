@@ -11,4 +11,5 @@ urlpatterns = [
         views.commendationDetail,
         name="commendationDetail",
     ),
+    path("progress/", views.milestoneProgress, name="milestoneProgress"),
 ]
