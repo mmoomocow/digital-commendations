@@ -391,3 +391,11 @@ class commendationsStudentViews(TestCase):
             f"/commendations/detail/{commendation.id}/",
             "errors/403.html",
         )
+
+    def test_milestone_progress(self):
+        self.client.force_login(self.student)
+        testHelper.get_page(
+            self,
+            "/commendations/progress/",
+            "commendations/milestone_progress.html",
+        )
