@@ -69,3 +69,10 @@ form #submit {
 .microsoft {
     padding: 1rem;
 }
+
+/* Mobile friendly remove split */
+@media screen and (max-width: 600px) {
+    .login-split {
+        grid-template-columns: 1fr;
+    }
+}
