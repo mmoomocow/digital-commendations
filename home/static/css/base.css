@@ -257,6 +257,12 @@ nav a:hover,
 
 @media screen and (max-width: 600px) {
 
+    main {
+        width: 90vw;
+        margin-left: 5vw;
+        margin-right: 5vw;
+    }
+
     nav a:not(:first-child),
     .dropbtn {
         display: none;
@@ -266,10 +272,7 @@ nav a:hover,
         float: right;
         display: block;
     }
-}
 
-
-@media screen and (max-width: 600px) {
     nav.responsive {
         position: relative;
     }
