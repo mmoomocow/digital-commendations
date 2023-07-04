@@ -1,30 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from commendationSite.authHelper import role_required
-
 from .models import Contact
 
 # Create your views here.
 
 
 def index(request) -> render:
-    """
-    Direct users to the appropriate page.
-    """
+    """Direct users to the appropriate page."""
     return render(request, "home/index.html")
 
 
 @login_required()
 def portals(request) -> render:
-    """
-    Display the appropriate portal for the user.
-    """
+    """Display the appropriate portal for the user."""
     if request.user.is_teacher:
         return render(request, "home/home_teacher.html")
-    elif request.user.is_student:
+    if request.user.is_student:
         return render(request, "home/home_student.html")
-    elif request.user.is_superuser:
+    if request.user.is_superuser:
         return redirect("/admin/", permanent=False)
     return redirect("/", permanent=False)
 
