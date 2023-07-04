@@ -19,18 +19,25 @@ class TestHomePages(TestCase):
     def test_index_page(self):
         testHelper.get_page(self, "/", "home/index.html")
 
-    def test_portals_page(self):
+    def test_portal_teacher(self):
         self.client.force_login(self.teacher)
         testHelper.get_page(self, "/portal/", "home/home_teacher.html")
+
+    def test_portal_student(self):
         self.client.force_login(self.student)
         testHelper.get_page(self, "/portal/", "home/home_student.html")
-        self.client.force_login(self.superuser)
-        response = self.client.get("/portal/")
-        self.assertEqual(response.status_code, 302)
 
-        # Caregiver redirects to home page
+    def test_portal_superuser(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get("/portal/", follow=True)
+        self.assertRedirects(
+            response, "/admin/login/?next=%2Fadmin%2F", status_code=302
+        )
+
+    def test_portal_caregiver(self):
+        # Redirects to home page
         self.client.force_login(self.caregiver)
-        response = self.client.get("/portals/")
+        response = self.client.get("/portal/", follow=True)
         self.assertRedirects(response, "/", status_code=302)
 
     def test_contact_page(self):
