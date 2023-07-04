@@ -6,6 +6,8 @@ from django.contrib.auth import logout as django_logout
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.shortcuts import redirect, render
 
+from commendationSite.authHelper import can_login
+
 from .backends import MicrosoftAuthBackend
 
 # Create your views here.
@@ -46,13 +48,17 @@ def login(request):
             "We couldn't find your account, are you sure you entered he correct username and password?",
         )
         return redirect(settings.LOGIN_URL)
-    if not user.is_active:
-        messages.error(request, "Your account is not active, please contact support.")
-        return redirect(settings.LOGIN_URL)
 
-    if user.can_login(request=request):
+    if can_login(user):
         django_login(request, user)
+        messages.success(
+            request, f"You have successfully logged in. Welcome back {user.first_name}!"
+        )
         return redirect(settings.LOGIN_REDIRECT_URL)
+    messages.error(
+        request,
+        "You do not have permission to login. If you believe this is an error, please contact support.",
+    )
     return redirect(settings.LOGIN_URL)
 
 
@@ -80,10 +86,20 @@ def callback(request):
 
     user = django_authenticate(request)
     if user is None:
-        messages.error(request, "Something went wrong, please try again.")
+        messages.error(
+            request,
+            "We couldn't find your account in our system. Please contact support if you believe this unexpected.",
+        )
         return redirect(settings.LOGIN_URL)
 
-    if user.can_login(request):
+    if can_login(user):
         django_login(request, user, backend=ms_backend_path)
+        messages.success(
+            request, f"You have successfully logged in. Welcome back {user.first_name}!"
+        )
         return redirect(settings.LOGIN_REDIRECT_URL)
+    messages.error(
+        request,
+        "You do not have permission to login. If you believe this is an error, please contact support.",
+    )
     return redirect(settings.LOGIN_URL)
