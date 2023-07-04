@@ -68,4 +68,10 @@ def can_login(user: User) -> bool:
     Returns:
         bool: Whether the user can login or not
     """
-    return user.is_active and (user.is_teacher or user.is_student or user.is_superuser)
+    return (
+        user.is_active
+        and (
+            user.is_teacher or user.is_student or user.is_caregiver or user.is_superuser
+        )
+        and not user.is_anonymous
+    )
