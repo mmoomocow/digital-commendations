@@ -32,12 +32,3 @@ class teachersTest(TestCase):
 
     def tearDown(self):
         self.client.logout()
-
-
-class teachersViewsTest(TestCase):
-    def setUp(self) -> None:
-        self.teacher = testHelper.createTeacher(self, is_management=True)
-        self.client.login(username=self.teacher.username, password="password")
-
-    def test_index(self):
-        testHelper.get_page(self, "/teachers/", "teachers/index.html")

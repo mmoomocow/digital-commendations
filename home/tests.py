@@ -9,13 +9,29 @@ from .models import Contact
 
 
 class TestHomePages(TestCase):
-    def test_index_teacher(self):
-        teacher = testHelper.createTeacher(self, is_management=False)
-        self.client.force_login(
-            teacher, backend="django.contrib.auth.backends.ModelBackend"
-        )
-        response = self.client.get("/")
-        self.assertRedirects(response, "/commendations/award/")
+    def setUp(self):
+        self.user = testHelper.createUser(self)
+        self.teacher = testHelper.createTeacher(self)
+        self.student = testHelper.createStudent(self)
+        self.caregiver = testHelper.createCaregiver(self)
+        self.superuser = testHelper.createUser(self, is_superuser=True)
+
+    def test_index_page(self):
+        testHelper.get_page(self, "/", "home/index.html")
+
+    def test_portals_page(self):
+        self.client.force_login(self.teacher)
+        testHelper.get_page(self, "/portal/", "home/home_teacher.html")
+        self.client.force_login(self.student)
+        testHelper.get_page(self, "/portal/", "home/home_student.html")
+        self.client.force_login(self.superuser)
+        response = self.client.get("/portal/")
+        self.assertEqual(response.status_code, 302)
+
+        # Caregiver redirects to home page
+        self.client.force_login(self.caregiver)
+        response = self.client.get("/portals/")
+        self.assertRedirects(response, "/", status_code=302)
 
     def test_contact_page(self):
         testHelper.get_page(self, "/contact/", "home/contact.html")
