@@ -1,4 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+
+from commendationSite.authHelper import role_required
 
 from .models import Contact
 
@@ -6,18 +9,24 @@ from .models import Contact
 
 
 def index(request) -> render:
-    """Direct users to the appropriate page.
-
-    If the user is a teacher, they are directed to the award commendation page
-    If the user is a superuser, they are directed to the admin page
-    Otherwise, they are directed to the home page
     """
-    if request.user.is_authenticated:  # skipcq: PTC-W0048
-        if request.user.is_teacher:  # skipcq: PTC-W0048
-            return redirect("/commendations/award/")
-        elif request.user.is_student:  # skipcq: PTC-W0048
-            return redirect("/students/")
+    Direct users to the appropriate page.
+    """
     return render(request, "home/index.html")
+
+
+@login_required()
+def portals(request) -> render:
+    """
+    Display the appropriate portal for the user.
+    """
+    if request.user.is_teacher:
+        return render(request, "home/home_teacher.html")
+    elif request.user.is_student:
+        return render(request, "home/home_student.html")
+    elif request.user.is_superuser:
+        return redirect("/admin/", permanent=False)
+    return redirect("/", permanent=False)
 
 
 def about(request) -> render:

@@ -59,9 +59,3 @@ def studentInfo(request, ID: int = None):
             "milestones": milestones,
         },
     )
-
-
-@role_required(student=True)
-def studentHome(request):
-    """The home landing page for students"""
-    return render(request, "students/student_home.html")
