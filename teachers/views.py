@@ -1,3 +1,3 @@
-# from django.shortcuts import render
+# from django.shortcuts import render #  skipcq: PY-W0069
 
 # Create your views here.
