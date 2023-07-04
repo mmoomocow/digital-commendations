@@ -565,7 +565,7 @@ class TestAuthHelper(TestCase):
         self.assertTrue(can_login(self.student))
 
         # Test that a caregiver can login
-        self.assertFalse(can_login(self.caregiver))
+        self.assertTrue(can_login(self.caregiver))
 
         # Test that an anonymous user cannot login
         self.assertFalse(can_login(self.anon))
