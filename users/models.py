@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-from typing import Optional
-
-from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser as defaultUser
 from django.contrib.auth.models import PermissionsMixin as defaultPermissionsMixin
 from django.contrib.auth.models import UserManager as defaultUserManager
 from django.db import models
-from django.http.request import HttpRequest
 
 # Create your models here.
 
