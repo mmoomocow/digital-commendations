@@ -38,7 +38,8 @@ class CaregiverAdmin(admin.ModelAdmin):
 
     ordering = ("id", "user__first_name", "user__last_name")
 
-    list_students = lambda _, obj: ", ".join(
-        [str(s) for s in obj.students.all().order_by("id")]
-    )
+    def list_students(self, obj):
+        """Return a list of students for the caregiver."""
+        return ", ".join([str(student) for student in obj.students.all()])
+
     list_students.short_description = "Students"
