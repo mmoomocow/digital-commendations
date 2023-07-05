@@ -11,8 +11,16 @@ class Caregiver(models.Model):
 
     students = models.ManyToManyField("Student", blank=True)
 
+    class Meta:
+        """Meta settings for model"""
+
+        verbose_name = "Caregiver"
+        verbose_name_plural = "Caregivers"
+
     def __str__(self) -> str:
-        return f"{self.user.first_name} {self.user.last_name} ({self.id})"
+        if not hasattr(self, "user"):
+            return f"{self.id}"
+        return str(f"{self.user.first_name} {self.user.last_name} ({self.id})")
 
 
 class Student(models.Model):
