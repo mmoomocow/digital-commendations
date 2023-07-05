@@ -35,10 +35,8 @@ class TestHomePages(TestCase):
         )
 
     def test_portal_caregiver(self):
-        # Redirects to home page
         self.client.force_login(self.caregiver)
-        response = self.client.get("/portal/", follow=True)
-        self.assertRedirects(response, "/", status_code=302)
+        testHelper.get_page(self, "/portal/", "home/home_caregiver.html")
 
     def test_contact_page(self):
         testHelper.get_page(self, "/contact/", "home/contact.html")
