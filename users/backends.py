@@ -9,6 +9,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.http.request import HttpRequest
 from dotenv import load_dotenv
 
+from commendationSite.authHelper import can_login
+
 from .models import User
 
 load_dotenv()
@@ -161,7 +163,7 @@ class MicrosoftAuthBackend(BaseBackend):
         Returns:
             bool: True if the user can authenticate, False otherwise.
         """
-        return user.can_login()
+        return can_login(user)
 
     def _get_create_user(self, ms_user: dict[str, Any]) -> User:
         """_get_create_user Get or create the user.

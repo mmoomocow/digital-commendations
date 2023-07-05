@@ -2,6 +2,8 @@ from typing import Optional
 
 from django.core.exceptions import PermissionDenied
 
+from users.models import User
+
 
 def role_required(
     student: Optional[bool] = False,
@@ -55,3 +57,21 @@ def role_required(
         return inner
 
     return decorator
+
+
+def can_login(user: User) -> bool:
+    """Checks if the user can login
+
+    Args:
+        user (User): The user to check
+
+    Returns:
+        bool: Whether the user can login or not
+    """
+    return (
+        user.is_active
+        and (
+            user.is_teacher or user.is_student or user.is_caregiver or user.is_superuser
+        )
+        and not user.is_anonymous
+    )

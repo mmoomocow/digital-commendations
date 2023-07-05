@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from .authHelper import role_required
+from .authHelper import can_login, role_required
 from .testHelper import createCaregiver, createStudent, createTeacher, createUser
 
 # Create your tests here.
@@ -544,3 +544,28 @@ class TestAuthHelper(TestCase):
         request.user = self.anon
         with self.assertRaises(PermissionDenied):
             response = testView(request)
+
+    def test_can_login(self):
+        # Test that a user cannot login
+        self.assertFalse(can_login(self.user))
+
+        # Test that a staff member can login
+        self.assertFalse(can_login(self.staff))
+
+        # Test that a superuser can login
+        self.assertTrue(can_login(self.superuser))
+
+        # Test that a teacher can login
+        self.assertTrue(can_login(self.teacher))
+
+        # Test that a management teacher can login
+        self.assertTrue(can_login(self.management))
+
+        # Test that a student can login
+        self.assertTrue(can_login(self.student))
+
+        # Test that a caregiver can login
+        self.assertTrue(can_login(self.caregiver))
+
+        # Test that an anonymous user cannot login
+        self.assertFalse(can_login(self.anon))

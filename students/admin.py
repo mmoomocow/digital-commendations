@@ -27,3 +27,19 @@ class StudentAdmin(admin.ModelAdmin):
 @admin.register(Caregiver)
 class CaregiverAdmin(admin.ModelAdmin):
     """Admin settings for the caregiver model."""
+
+    list_display = (
+        "id",
+        "user",
+        "list_students",
+    )
+
+    search_fields = ("id", "user__first_name", "user__last_name")
+
+    ordering = ("id", "user__first_name", "user__last_name")
+
+    def list_students(self, obj):
+        """Return a list of students for the caregiver."""
+        return ", ".join([str(student) for student in obj.students.all()])
+
+    list_students.short_description = "Students"

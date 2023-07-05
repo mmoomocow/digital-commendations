@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from commendationSite import testHelper
 
-from .models import Student
+from .models import Caregiver, Student
 
 # Create your tests here.
 
@@ -41,6 +41,28 @@ class studentsModelTest(TestCase):
         self.client.logout()
 
 
+class caregiverModelTest(TestCase):
+    def setUp(self):
+        self.student = testHelper.createStudent(self)
+        self.user = testHelper.createUser(self)
+
+    def test_Caregiver(self):
+        caregiver = testHelper.createCaregiver(self, self.student.student)
+        self.assertIn(caregiver.caregiver, self.student.student.caregiver_set.all())
+
+    def test_caregiver_str(self):
+        caregiver = testHelper.createCaregiver(self)
+        # Test __str__ method
+        self.assertEqual(
+            str(caregiver.caregiver),
+            f"{caregiver.first_name} {caregiver.last_name} ({caregiver.caregiver.id})",
+        )
+
+        # Caregiver with no user
+        caregiver2 = Caregiver.objects.create()
+        self.assertEqual(str(caregiver2), f"{caregiver2.id}")
+
+
 class studentsViewsTest(TestCase):
     def setUp(self):
         self.student = testHelper.createStudent(self)
@@ -68,22 +90,4 @@ class studentsViewsTest(TestCase):
         # As using handler404 checking status code will not work
         testHelper.get_page(
             self, f"/students/list/{self.student.student.id + 1}/", "errors/404.html"
-        )
-
-    def test_student_home(self):
-        # Login as a student and check they can access their home page
-        self.client.force_login(self.student)
-        testHelper.get_page(
-            self,
-            f"/students/",
-            "students/student_home.html",
-        )
-
-    def test_student_home_not_student(self):
-        # Login as a teacher and check they can't access the student home page
-        self.client.force_login(self.teacher)
-        testHelper.get_page(
-            self,
-            f"/students/",
-            "errors/403.html",
         )

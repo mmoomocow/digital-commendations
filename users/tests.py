@@ -97,7 +97,7 @@ class UserViewsTest(TestCase):
     def test_login_not_allowed(self):
         response = self.client.post(
             "/users/login/",
-            {"username": self.caregiver.username, "password": "password"},
+            {"username": self.user.username, "password": "password"},
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/login/")
