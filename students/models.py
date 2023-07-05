@@ -9,6 +9,11 @@ class Caregiver(models.Model):
     This model has currently not been implemented and will be used in the future.
     """
 
+    students = models.ManyToManyField("Student", blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.first_name} {self.user.last_name} ({self.id})"
+
 
 class Student(models.Model):
     """
@@ -79,15 +84,6 @@ class Student(models.Model):
     )
     year_level = models.IntegerField(
         choices=YEAR_LEVEL_CHOICES, blank=True, null=True, verbose_name="Year Level"
-    )
-
-    # Parent/caregiver
-    caregiver = models.ForeignKey(
-        Caregiver,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        verbose_name="Caregiver",
     )
 
     class Meta:
