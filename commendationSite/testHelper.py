@@ -1,4 +1,5 @@
 import random
+from typing import Optional
 
 from django.test import TestCase
 
@@ -126,7 +127,7 @@ def createStudent(_self: TestCase) -> User:
     return user
 
 
-def createCaregiver(_self: TestCase) -> User:
+def createCaregiver(_self: TestCase, student: Optional[Student] = None) -> User:
     """_summary_: Creates a caregiver and links it to a user
 
     Args:
@@ -137,6 +138,8 @@ def createCaregiver(_self: TestCase) -> User:
     """
     user = createUser(_self)
     caregiver = Caregiver.objects.create()
+    if student is not None:
+        caregiver.students.add(student)
     user.caregiver = caregiver
     user.is_caregiver = True
     user.save()

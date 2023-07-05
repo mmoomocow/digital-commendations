@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from commendationSite import testHelper
 
-from .models import Student
+from .models import Caregiver, Student
 
 # Create your tests here.
 
@@ -39,6 +39,28 @@ class studentsModelTest(TestCase):
 
     def tearDown(self):
         self.client.logout()
+
+
+class caregiverModelTest(TestCase):
+    def setUp(self):
+        self.student = testHelper.createStudent(self)
+        self.user = testHelper.createUser(self)
+
+    def test_Caregiver(self):
+        caregiver = testHelper.createCaregiver(self, self.student.student)
+        self.assertIn(caregiver.caregiver, self.student.student.caregiver_set.all())
+
+    def test_caregiver_str(self):
+        caregiver = testHelper.createCaregiver(self)
+        # Test __str__ method
+        self.assertEqual(
+            str(caregiver.caregiver),
+            f"{caregiver.first_name} {caregiver.last_name} ({caregiver.caregiver.id})",
+        )
+
+        # Caregiver with no user
+        caregiver2 = Caregiver.objects.create()
+        self.assertEqual(str(caregiver2), f"{caregiver2.id}")
 
 
 class studentsViewsTest(TestCase):
