@@ -27,3 +27,18 @@ class StudentAdmin(admin.ModelAdmin):
 @admin.register(Caregiver)
 class CaregiverAdmin(admin.ModelAdmin):
     """Admin settings for the caregiver model."""
+
+    list_display = (
+        "id",
+        "user",
+        "list_students",
+    )
+
+    search_fields = ("id", "user__first_name", "user__last_name")
+
+    ordering = ("id", "user__first_name", "user__last_name")
+
+    list_students = lambda _, obj: ", ".join(
+        [str(s) for s in obj.students.all().order_by("id")]
+    )
+    list_students.short_description = "Students"
