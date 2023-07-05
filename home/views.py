@@ -18,6 +18,8 @@ def portals(request) -> render:
         return render(request, "home/home_teacher.html")
     if request.user.is_student:
         return render(request, "home/home_student.html")
+    if request.user.is_caregiver:
+        return render(request, "home/home_caregiver.html")
     if request.user.is_superuser:
         return redirect("/admin/", permanent=False)
     return redirect("/", permanent=False)
