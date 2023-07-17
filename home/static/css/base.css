@@ -311,3 +311,11 @@ nav a:hover,
         float: none;
     }
 }
+
+.student-switcher {
+    margin: 0 auto;
+}
+
+.student-switcher form {
+    max-width: fit-content;
+}
