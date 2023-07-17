@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from commendationSite.authHelper import role_required
 
@@ -59,3 +59,25 @@ def studentInfo(request, ID: int = None):
             "milestones": milestones,
         },
     )
+
+
+@role_required(caregiver=True)
+def viewAs(request):
+    if request.method != "POST":
+        raise Http404("Page not found")
+
+    # Get the student
+    try:
+        selectedStudent = Student.objects.get(id=request.POST.get("student"))
+        # Check if the student is a child of the caregiver
+        if selectedStudent not in request.user.caregiver.students.all():
+            raise Http404("Page not found")
+    # If the student does not exist, return a 404
+    except Student.DoesNotExist:
+        raise Http404("Student does not exist")
+
+    # Set the session variable
+    request.session["viewAs"] = selectedStudent.id
+
+    # Redirect to the previous page
+    return redirect(request.META.get("HTTP_REFERER", "/"))
