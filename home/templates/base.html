@@ -68,6 +68,14 @@
                                 <a href="/commendations/progress/">RISE Award Progress</a>
                             </div>
                         </div>
+                    {% elif request.user.is_caregiver %}
+                        <div class="dropdown">
+                            <button class="dropbtn">Caregivers</button>
+                            <div class="dropdown-content">
+                                <a href="/portal/">Caregiver Portal</a>
+                                <a href="/commendations/my/">View Commendations</a>
+                            </div>
+                        </div>
                     {% endif %}
 
                     <a href="/logout/" class="right">Logout</a>
@@ -89,7 +97,7 @@
                     <form action="/students/viewas/" method="POST">
                         {% comment %} Student switcher using radio buttons instead of a dropdown {% endcomment %}
                         {% csrf_token %}
-                        <label for="student">Viewing page as student:</label>
+                        <label for="student">Viewing page as:</label>
                         <br>
                         {% for student in request.user.caregiver.students.all %}
                             <input type="radio" id="s-{{student.id}}" name="student" value="{{ student.id }}" onchange="this.form.submit();" {% if request.session.viewAs == student.id %}checked{% endif %}>

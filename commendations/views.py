@@ -190,14 +190,28 @@ def viewMilestones(request):
     )
 
 
-@role_required(student=True)
+@role_required(student=True, caregiver=True)
 def myCommendations(request):
     """The page where students can view their commendations"""
-    student = Student.objects.get(user=request.user)
+    if request.user.is_caregiver:
+        # Get the student they are trying to view as
+        studentID = request.session.get("viewAs")
+        if not studentID:
+            return render(
+                request,
+                "students/select_student.html",
+                {"studentSwitcherEnabled": True},
+            )
+        student = Student.objects.get(id=studentID)
+    else:
+        student = Student.objects.get(user=request.user)
+
     commendations = student.commendation_set.all().order_by("-date_time")
 
     return render(
-        request, "commendations/my_commendations.html", {"commendations": commendations}
+        request,
+        "commendations/my_commendations.html",
+        {"commendations": commendations, "studentSwitcherEnabled": True},
     )
 
 

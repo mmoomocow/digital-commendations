@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% comment %} HTML title{% endcomment %}
+{% block title %}Please select a student{% endblock title %}
+{% comment %} Meta description{% endcomment %}
+{% block description %}A student needs to be selected for this page to work sorry{% endblock description %}
+
+
+{% comment %} HTML head, for css styles etc{% endcomment %}
+{% block head %}
+
+{% endblock head %}
+
+
+{% comment %} H1 at top of page, page title{% endcomment %}
+{% block headerText %}Please select a student{% endblock headerText %}
+
+
+{% comment %} Main content{% endcomment %}
+{% block content %}
+<p>
+    You are trying to view a page that requires a student to be selected, but no student is selected.
+    <br>
+    Please select a student using the buttons above.
+</p>
+{% endblock content %}
