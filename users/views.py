@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
-from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect, render
 
 from commendationSite.authHelper import can_login
