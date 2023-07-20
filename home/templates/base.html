@@ -68,6 +68,14 @@
                                 <a href="/commendations/progress/">RISE Award Progress</a>
                             </div>
                         </div>
+                    {% elif request.user.is_caregiver %}
+                        <div class="dropdown">
+                            <button class="dropbtn">Caregivers</button>
+                            <div class="dropdown-content">
+                                <a href="/portal/">Caregiver Portal</a>
+                                <a href="/commendations/my/">View Commendations</a>
+                            </div>
+                        </div>
                     {% endif %}
 
                     <a href="/logout/" class="right">Logout</a>
