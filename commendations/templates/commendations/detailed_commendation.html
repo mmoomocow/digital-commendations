@@ -33,12 +33,16 @@
         </div>
 
         <div class="person">
-            {{request.user.first_name}} {{request.user.last_name}}
+            {{student.user.first_name}} {{student.user.last_name}}
         </div>
 
         <div class="reason">
             For {{ commendation.reason }}
         </div>
     </div>
+</div>
+<div id="buttons">
+    <a href="/">Home</a>
+    <a href="javascript:history.back()">Back</a>
 </div>
 {% endblock content %}
