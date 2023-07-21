@@ -228,15 +228,28 @@ def commendationDetail(request, commendation_id):
         commendationStudents = commendation.students.all()
 
         # Check if the 2 lists have any common elements
-        if not set(caregiverStudents) & set(commendationStudents):
+        student = list(set(caregiverStudents) & set(commendationStudents))[0]
+        if not student:
             raise PermissionDenied("You do not have permission to view this page")
+
     elif not commendation.students.filter(user=request.user).exists():
         raise PermissionDenied("You do not have permission to view this page")
+
+    # if student has not been set yet, set it
+    # if not student raises UnboundLocalError
+    try:
+        student
+    except NameError:
+        student = Student.objects.get(user=request.user)
 
     return render(
         request,
         "commendations/detailed_commendation.html",
-        {"commendation": commendation, "studentSwitcherEnabled": True},
+        {
+            "commendation": commendation,
+            "student": student,
+            "studentSwitcherEnabled": True,
+        },
     )
 
 
