@@ -248,7 +248,6 @@ def commendationDetail(request, commendation_id):
         {
             "commendation": commendation,
             "student": student,
-            "studentSwitcherEnabled": True,
         },
     )
 
