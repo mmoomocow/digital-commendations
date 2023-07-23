@@ -1,7 +1,9 @@
 from typing import Optional
 
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import render
 
+from students.models import Student
 from users.models import User
 
 
@@ -52,6 +54,59 @@ def role_required(
                 return view(request, *args, **kwargs)
 
             # If the user is not any of the roles, deny the view
+            raise PermissionDenied
+
+        return inner
+
+    return decorator
+
+
+def get_student():
+    """Gets the current student, if they are a student or a caregiver of a student"""
+
+    def decorator(view):
+        """The decorator that wraps the view"""
+
+        def inner(request, *args, **kwargs):
+            """The inner function that gets the student"""
+
+            # Return if not logged in
+            if not request.user.is_authenticated:
+                return
+
+            if request.user.is_student:
+                # If the user is a student, return the student
+                kwargs["student"] = request.user.student
+                return view(request, *args, **kwargs)
+
+            if not request.user.is_caregiver:
+                # If the user is not a caregiver, return
+                return
+
+            if "viewAs" not in request.session:
+                return render(
+                    request,
+                    "students/select_student.html",
+                    {"studentSwitcherEnabled": True},
+                )
+
+            try:
+                # Try to get the student from the session
+                student = Student.objects.get(id=request.session["viewAs"])
+            except User.DoesNotExist:
+                # If the student does not exist, return the student switcher
+                return render(
+                    request,
+                    "students/select_student.html",
+                    {"studentSwitcherEnabled": True},
+                )
+
+            # If the user is a caregiver of the student, allow the view
+            if student in request.user.caregiver.students.all():
+                kwargs["student"] = student
+                return view(request, *args, **kwargs)
+
+            # If the user is not a caregiver of the student, deny the view
             raise PermissionDenied
 
         return inner
