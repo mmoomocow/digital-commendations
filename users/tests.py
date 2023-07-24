@@ -82,7 +82,7 @@ class UserViewsTest(TestCase):
             {"username": self.teacher.username, "password": "password"},
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/")
+        self.assertEqual(response.url, "/portal/")
         self.assertEqual(response.wsgi_request.user, self.teacher)
 
     def test_login_post_invalid(self):
@@ -136,7 +136,7 @@ class UserViewsTest(TestCase):
         self.client.force_login(self.teacher)
         response = self.client.get("/users/login/")
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/")
+        self.assertEqual(response.url, "/portal/")
 
     def test_login_no_credentials(self):
         response = self.client.post("/users/login/", {}, follow=True)
