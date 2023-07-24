@@ -225,10 +225,10 @@ def commendationDetail(request, commendation_id, student: Student = None):
     )
 
 
-@role_required(student=True)
-def milestoneProgress(request):
+@role_required(student=True, caregiver=True)
+@get_student()
+def milestoneProgress(request, student: Student = None):
     """The page where students can view their progress towards milestones"""
-    student = Student.objects.get(user=request.user)
     milestones = Milestone.objects.filter(student=student).order_by("-milestone_type")
     commendations = student.commendation_set.all().order_by("-date_time")
     # For each milestone type, calculate the progress as a percentage
@@ -260,5 +260,7 @@ def milestoneProgress(request):
             "commendations": commendations,
             "commendationCount": commendationCount,
             "milestoneProgress": progress,
+            "student": student,
+            "studentSwitcherEnabled": True,
         },
     )
