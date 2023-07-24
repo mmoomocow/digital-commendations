@@ -167,7 +167,7 @@ AUTH_USER_MODEL = "users.User"
 SITE_ID = 1
 
 # Login URL
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/portal/"
 LOGIN_URL = "/login/"
 LOGOUT_REDIRECT_URL = "/"
 LOGOUT_URL = "/logout/"
