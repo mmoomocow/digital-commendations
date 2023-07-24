@@ -20,14 +20,14 @@
 {% comment %} Main content{% endcomment %}
 {% block content %}
 <h2>Your Commendations</h2>
-<p>You have {{ commendationCount }} commendations that are being counted toward RISE awards.</p>
+<p>{% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} {{ commendationCount }} commendations that are being counted toward RISE awards.</p>
 <h2>Your progress</h2>
 {% for i in milestoneProgress %}
 
     {% if i.percentage == 100 %}
         <div>
             <h3>{{i.type}}</h3>
-            <p>You have achieved this RISE award! Congratulations 🎉</p>
+            <p>{% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} achieved this RISE award! Congratulations 🎉</p>
             <div class="barContainer">
                 <div class="bar" style="width: 100%;"></div>
             </div>
@@ -35,7 +35,7 @@
     {% else %}
         <div>
             <h3>{{i.type}}</h3>
-            <p>You have got {{commendationCount}}/{{i.value}} commendations needed to achieve this RISE award. Only {{i.remaining}} to go!</p>
+            <p>{% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} got {{commendationCount}}/{{i.value}} commendations needed to achieve this RISE award. Only {{i.remaining}} to go!</p>
             <div class="barContainer">
                 <div class="bar" style="width: {{i.percentage}}%;"></div>
             </div>
