@@ -6,7 +6,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.utils.timezone import make_aware
 
-from commendationSite.authHelper import role_required
+from commendationSite.authHelper import get_student, role_required
 from students.models import Student
 from teachers.models import Teacher
 
@@ -191,21 +191,8 @@ def viewMilestones(request):
 
 
 @role_required(student=True, caregiver=True)
-def myCommendations(request):
-    """The page where students can view their commendations"""
-    if request.user.is_caregiver:
-        # Get the student they are trying to view as
-        studentID = request.session.get("viewAs")
-        if not studentID:
-            return render(
-                request,
-                "students/select_student.html",
-                {"studentSwitcherEnabled": True},
-            )
-        student = Student.objects.get(id=studentID)
-    else:
-        student = Student.objects.get(user=request.user)
-
+@get_student()
+def myCommendations(request, student: Student = None):
     commendations = student.commendation_set.all().order_by("-date_time")
 
     return render(
@@ -216,31 +203,17 @@ def myCommendations(request):
 
 
 @role_required(student=True, caregiver=True)
-def commendationDetail(request, commendation_id):
+@get_student()
+def commendationDetail(request, commendation_id, student: Student = None):
     """The page where students can view the details of a commendation"""
     try:
         commendation = Commendation.objects.get(id=commendation_id)
     except Commendation.DoesNotExist:
         raise Http404("Commendation does not exist")
 
-    if request.user.is_caregiver:
-        caregiverStudents = request.user.caregiver.students.all()
-        commendationStudents = commendation.students.all()
-
-        # Check if the 2 lists have any common elements
-        student = list(set(caregiverStudents) & set(commendationStudents))[0]
-        if not student:
-            raise PermissionDenied("You do not have permission to view this page")
-
-    elif not commendation.students.filter(user=request.user).exists():
-        raise PermissionDenied("You do not have permission to view this page")
-
-    # if student has not been set yet, set it
-    # if not student raises UnboundLocalError
-    try:
-        student
-    except NameError:
-        student = Student.objects.get(user=request.user)
+    # Check if the student is in the commendation
+    if student not in commendation.students.all():
+        raise PermissionDenied
 
     return render(
         request,
@@ -252,10 +225,10 @@ def commendationDetail(request, commendation_id):
     )
 
 
-@role_required(student=True)
-def milestoneProgress(request):
+@role_required(student=True, caregiver=True)
+@get_student()
+def milestoneProgress(request, student: Student = None):
     """The page where students can view their progress towards milestones"""
-    student = Student.objects.get(user=request.user)
     milestones = Milestone.objects.filter(student=student).order_by("-milestone_type")
     commendations = student.commendation_set.all().order_by("-date_time")
     # For each milestone type, calculate the progress as a percentage
@@ -287,5 +260,7 @@ def milestoneProgress(request):
             "commendations": commendations,
             "commendationCount": commendationCount,
             "milestoneProgress": progress,
+            "student": student,
+            "studentSwitcherEnabled": True,
         },
     )
