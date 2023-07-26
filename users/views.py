@@ -54,6 +54,12 @@ def login(request):
         messages.success(
             request, f"You have successfully logged in. Welcome back {user.first_name}!"
         )
+        if request.user.is_teacher:
+            messages.info(
+                request,
+                "You will be redirected to the commendation awarding page. To go to the portal, select the portal button from the teacher dropdown above.",
+            )
+            return redirect("/commendations/award/")
         return redirect(settings.LOGIN_REDIRECT_URL)
     messages.error(
         request,
@@ -97,7 +103,12 @@ def callback(request):
         messages.success(
             request, f"You have successfully logged in. Welcome back {user.first_name}!"
         )
-        return redirect(settings.LOGIN_REDIRECT_URL)
+        if request.user.is_teacher:
+            messages.info(
+                request,
+                "You have been redirected to the award commendation page. To go to the teacher portal, select the portal button from the teacher dropdown below.",
+            )
+            return redirect("/commendations/award/")
     messages.error(
         request,
         "You do not have permission to login. If you believe this is an error, please contact support.",

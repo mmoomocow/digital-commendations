@@ -76,13 +76,22 @@ class UserViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "users/login.html")
 
-    def test_login_post_valid(self):
+    def test_login_post_valid_student(self):
+        response = self.client.post(
+            "/users/login/",
+            {"username": self.student.username, "password": "password"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/portal/")
+        self.assertEqual(response.wsgi_request.user, self.student)
+
+    def test_login_post_valid_teacher(self):
         response = self.client.post(
             "/users/login/",
             {"username": self.teacher.username, "password": "password"},
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/portal/")
+        self.assertEqual(response.url, "/commendations/award/")
         self.assertEqual(response.wsgi_request.user, self.teacher)
 
     def test_login_post_invalid(self):
@@ -133,7 +142,7 @@ class UserViewsTest(TestCase):
                 self.client.get("/users/callback/")
 
     def test_login_already_authenticated(self):
-        self.client.force_login(self.teacher)
+        self.client.force_login(self.student)
         response = self.client.get("/users/login/")
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/portal/")

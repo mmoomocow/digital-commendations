@@ -12,9 +12,24 @@
 {% endblock head %}
 
 {% comment %} H1 at top of page, page title {% endcomment %}
-{% block headerText %}Teacher Portal{% endblock headerText %}
+{% block headerText %}Hello {{ request.user.first_name }}{% endblock headerText %}
 
 {% comment %} Main content {% endcomment %}
 {% block content %}
-<p>Hello World</p>
+<h2>Welcome to the teacher portal</h2>
+<p>
+    This is the teacher portal for the commendation system. From here you can award commendations
+    to students and view commendations that have been awarded to students.
+    <br><br>
+    Use the navigation bar at the top of the page to navigate the site.
+</p>
+<h2>Getting Started</h2>
+<p>
+    Get started by awarding a commendation to a student. You can <a href="/commendations/award/">click here</a>
+    or select "Award Commendation" from the teacher dropdown in the navigation bar at the top of the page.
+    {% if request.user.teacher.is_management %}
+    <br><br>
+    You are a member of the management team. This means you can <a href="/students/list/">View all students</a> and view students who are eligible for <a href="/commendations/spirit/">Spirit awards</a>.
+    {% endif %}
+</p>
 {% endblock content %}
