@@ -6,7 +6,7 @@
     width: 100%;
 }
 
-.cert {
+#cert {
     border: 20px solid var(--color-green);
     display: table-cell;
     vertical-align: middle;
@@ -52,7 +52,7 @@
     padding: 0.5rem 1rem;
     border: 3px solid var(--color-green);
     border-radius: 5px;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
     transition: all 0.3s ease-in-out;
 }
 
@@ -62,7 +62,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    .cert {
+    #cert {
         border: 15px solid var(--color-green);
         width: 100%;
         height: auto;
@@ -84,5 +84,11 @@
 
     .reason {
         font-size: 16px;
+    }
+
+    /* One button per line */
+    #buttons a {
+        display: block;
+        margin: 1rem 0;
     }
 }
