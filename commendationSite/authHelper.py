@@ -92,11 +92,7 @@ def get_student():
                 student = Student.objects.get(id=request.session["viewAs"])
             except User.DoesNotExist:
                 # If the student does not exist, return the student switcher
-                return render(
-                    request,
-                    "students/select_student.html",
-                    {"studentSwitcherEnabled": True},
-                )
+                request.session["viewAs"] = request.user.caregiver.students.first().id
 
             # If the user is a caregiver of the student, allow the view
             if student in request.user.caregiver.students.all():
