@@ -84,11 +84,8 @@ def get_student():
                 return
 
             if "viewAs" not in request.session:
-                return render(
-                    request,
-                    "students/select_student.html",
-                    {"studentSwitcherEnabled": True},
-                )
+                # Set the viewAs session variable to the first student
+                request.session["viewAs"] = request.user.caregiver.students.first().id
 
             try:
                 # Try to get the student from the session
