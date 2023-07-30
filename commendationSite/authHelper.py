@@ -1,7 +1,6 @@
 from typing import Optional
 
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
 
 from students.models import Student
 from users.models import User
