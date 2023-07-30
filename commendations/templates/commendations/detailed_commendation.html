@@ -12,6 +12,16 @@
 <link rel="stylesheet" href="{% static 'commendations/certificate.min.css' %}">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="{% static 'commendations/download.min.js' %}"></script>
+<style>
+    #cert {
+        {% comment %} Place the image in the bottom right, with a small padding {% endcomment %}
+        background-image: url({% static 'img/bayfield-shield-logo.png' %}) !important;
+        background-position: bottom left !important;
+        background-size: 20%  !important;
+        background-repeat: no-repeat !important;
+        background-origin: content-box;
+    }
+</style>
 {% endblock head %}
 
 
