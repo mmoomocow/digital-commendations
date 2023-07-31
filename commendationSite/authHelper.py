@@ -1,7 +1,6 @@
 from typing import Optional
 
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
 
 from students.models import Student
 from users.models import User
@@ -84,22 +83,15 @@ def get_student():
                 return
 
             if "viewAs" not in request.session:
-                return render(
-                    request,
-                    "students/select_student.html",
-                    {"studentSwitcherEnabled": True},
-                )
+                # Set the viewAs session variable to the first student
+                request.session["viewAs"] = request.user.caregiver.students.first().id
 
             try:
                 # Try to get the student from the session
                 student = Student.objects.get(id=request.session["viewAs"])
             except User.DoesNotExist:
                 # If the student does not exist, return the student switcher
-                return render(
-                    request,
-                    "students/select_student.html",
-                    {"studentSwitcherEnabled": True},
-                )
+                request.session["viewAs"] = request.user.caregiver.students.first().id
 
             # If the user is a caregiver of the student, allow the view
             if student in request.user.caregiver.students.all():

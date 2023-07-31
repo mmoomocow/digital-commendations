@@ -10,6 +10,18 @@
 {% comment %} HTML head, for css styles etc{% endcomment %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'commendations/certificate.min.css' %}">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="{% static 'commendations/download.min.js' %}"></script>
+<style>
+    #cert {
+        {% comment %} Place the image in the bottom right, with a small padding {% endcomment %}
+        background-image: url({% static 'img/bayfield-shield-logo.png' %}) !important;
+        background-position: bottom left !important;
+        background-size: 20%  !important;
+        background-repeat: no-repeat !important;
+        background-origin: content-box;
+    }
+</style>
 {% endblock head %}
 
 
@@ -19,7 +31,7 @@
 {% comment %} Main content{% endcomment %}
 {% block content %}
 <div class="container">
-    <div class="cert">
+    <div id="cert">
         <div class="organisation">
             Bayfield High School
         </div>
@@ -43,6 +55,7 @@
 </div>
 <div id="buttons">
     <a href="/">Home</a>
+    <a onclick="saveCertAsPNG('#cert', '{{commendation.get_commendation_type_display}} commendation for {{student.user.first_name}} from {{commendation.teacher}}')">Save as Image</a>
     <a href="/commendations/my/">Back</a>
 </div>
 {% endblock content %}
