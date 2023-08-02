@@ -93,6 +93,12 @@ class User(defaultUser, defaultPermissionsMixin):
     )
     # User's last login time
     last_login = models.DateTimeField(null=True, blank=True, verbose_name="Last Login")
+    recent_login = models.DateTimeField(
+        null=True, blank=True, verbose_name="Most Recent Login"
+    )
+    previous_login = models.DateTimeField(
+        null=True, blank=True, verbose_name="Previous Login"
+    )
 
     # ------ USER ACCESS LEVELS ------ #
     # Can log in to django's backend administration site, not reflective of
