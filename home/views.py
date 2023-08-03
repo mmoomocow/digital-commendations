@@ -20,10 +20,8 @@ def portals(request) -> render:
     if request.user.is_student:
         # Get all commendations since previous login
         commendations = request.user.student.commendation_set.filter(
-            date_time__gte=request.user.previous_login
+            date_time__gte=request.user.previous_login or request.user.last_login
         )
-        print(commendations)
-        print(len(commendations))
         # Message the user if they have new commendations
         if commendations:
             messages.info(

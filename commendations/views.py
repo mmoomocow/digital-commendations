@@ -195,10 +195,8 @@ def viewMilestones(request):
 def myCommendations(request, student: Student = None):
     commendations = student.commendation_set.all().order_by("-date_time")
     commendationsSinceLastLogin = commendations.filter(
-        date_time__gte=request.user.previous_login
+        date_time__gte=request.user.previous_login or request.user.last_login
     )
-
-    print(commendationsSinceLastLogin)
 
     return render(
         request,
