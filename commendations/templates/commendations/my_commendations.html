@@ -19,7 +19,12 @@
 <p>
     You can view more details about a commendation by clicking on the row.
     <br>
-    So far you have {{commendations|length}} commendations.
+    <br>
+    {% if commendationsSince|length > 1 %}
+        You have received {{commendationsSince|length}} commendations since you last logged in.
+        <br>
+    {% endif %}
+    You have received {{commendations|length}} commendations in total.
 </p>
 
 <table id="myCommendations">
