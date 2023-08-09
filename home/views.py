@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
@@ -17,6 +18,17 @@ def portals(request) -> render:
     if request.user.is_teacher:
         return render(request, "home/home_teacher.html")
     if request.user.is_student:
+        # Get all commendations since previous login
+        commendations = request.user.student.commendation_set.filter(
+            date_time__gte=request.user.previous_login or request.user.last_login
+        )
+        # Message the user if they have new commendations
+        if commendations:
+            messages.info(
+                request,
+                f"You have {len(commendations)} new commendation(s)! Follow the link below to view them.",
+                extra_tags="commendations",
+            )
         return render(request, "home/home_student.html")
     if request.user.is_caregiver:
         return render(request, "home/home_caregiver.html")

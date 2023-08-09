@@ -194,11 +194,18 @@ def viewMilestones(request):
 @get_student()
 def myCommendations(request, student: Student = None):
     commendations = student.commendation_set.all().order_by("-date_time")
+    commendationsSinceLastLogin = commendations.filter(
+        date_time__gte=request.user.previous_login or request.user.last_login
+    )
 
     return render(
         request,
         "commendations/my_commendations.html",
-        {"commendations": commendations, "studentSwitcherEnabled": True},
+        {
+            "commendations": commendations,
+            "studentSwitcherEnabled": True,
+            "commendationsSince": commendationsSinceLastLogin,
+        },
     )
 
 
