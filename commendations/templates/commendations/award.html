@@ -9,7 +9,27 @@
 {% comment %} Content that goes in the HTML head {% endcomment %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'commendations/giveCommendation.min.css' %}">
-<script src="{% static 'commendations/search.js' %}"></script>
+<script src="{% static 'commendations/search.min.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    {% comment %} For 2 col selector {% endcomment %}
+    $(document).ready(function () {
+        $('#Available').on('click', 'li', function () {
+            $(this).toggleClass('selected');
+            $(this).find('input').prop('checked', !$(this).find('input').prop('checked'));
+            if ($(this).hasClass('selected')) {
+                $('#selected-students').append('<li><input type="checkbox" for="students" id="' + $(this).find('input').attr('id') + '" checked>' + $(this).text() + '</li>');
+            } else {
+                $('#selected-students').find('#' + $(this).find('input').attr('id')).parent().remove();
+            }
+        });
+        $('#Selected').on('click', 'li', function () {
+            $(this).toggleClass('selected');
+            $(this).find('input').prop('checked', !$(this).find('input').prop('checked'));
+            $('#selected-students').find('#' + $(this).find('input').attr('id')).parent().remove();
+        });
+    });
+</script>
 {% endblock head %}
 
 {% comment %} H1 at top of page, page title {% endcomment %}
@@ -47,14 +67,24 @@
 
     <div class="formField">
         <label for="students">Student(s) <abbr class="requiredField" title="This field is required">*</abbr></label>
-        {% comment %} Hold ctrl to select multiple hint {% endcomment %}
-        <p class="hint">Hold Ctrl to select multiple students</p>
-        <input type="text" name="students" id="searchStudents" placeholder="Search students" onkeydown="filterStudents(this.value)">
-        <select name="students" id="students" multiple required>
-            {% for student in students %}
-                <option class="studentChoice" value="{{ student.id }}">{{ student }}</option>
-            {% endfor %}
-        </select>
+        <p class="hint">Select students from the left by clicking them. Students on the right will be awarded the commendation. You can click students who are selected to deselect them</p>
+        <div class="selector">
+            <label id="AvailableLabel">Available Students</label>
+            <label id="SelectedLabel">Selected Students</label>
+            <input type="text" name="students" id="searchStudents" placeholder="Search students" onkeyup="filterStudents(this.value)">
+            <div id="Available" class="selectorCol">
+                <ul id="selectable-students">
+                    {% for student in students %}
+                        <li><input type="checkbox" for="students" id="{{student.id}}">{{student}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="Selected" class="selectorCol">
+                <ul id="selected-students">
+                    <!-- Selected students will appear here -->
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="formField">
