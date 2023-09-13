@@ -34,14 +34,20 @@ def giveCommendation(request):
         elif quickReason != "" and reason != "":
             reason = f"{quickReason}: {reason}"
 
-        rawStudents = request.POST.getlist("students")
-        # rawStudents starts with an empty list, so we need to remove the empty string that is the first element and any non number items and append valid IDs to a new list
-        students = []
-        for student in rawStudents:
-            try:
-                students.append(int(student))
-            except ValueError:
-                pass
+        rawStudents = request.POST["selectedStudents"]
+        # Split the students into a list
+        students = rawStudents.split(",")
+        # Remove any empty strings, duplicates, convert to ints and remove non-existent students
+        students = list(set(filter(lambda student: student != "", students)))
+        students = list(map(lambda student: int(student), students))
+        students = list(
+            filter(lambda student: Student.objects.filter(id=student), students)
+        )
+
+        # If no students were selected, return an error
+        if len(students) == 0:
+            messages.error(request, "No students were selected")
+            return redirect("/commendations/award/")
 
         # Get the teacher that is awarding the commendation
         teacher = Teacher.objects.get(id=request.POST["teacher"])

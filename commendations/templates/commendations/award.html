@@ -18,15 +18,23 @@
             $(this).toggleClass('selected');
             $(this).find('input').prop('checked', !$(this).find('input').prop('checked'));
             if ($(this).hasClass('selected')) {
-                $('#selected-students').append('<li><input type="checkbox" for="students" id="' + $(this).find('input').attr('id') + '" checked>' + $(this).text() + '</li>');
+                $('#selected-students').append('<li><input type="checkbox" id="' + $(this).find('input').attr('id') + '" checked>' + $(this).text() + '</li>');
+                // Also add to hidden input
+                $('#selectedStudents').val($('#selectedStudents').val() + $(this).find('input').attr('id') + ',');
             } else {
                 $('#selected-students').find('#' + $(this).find('input').attr('id')).parent().remove();
+                // Also remove from hidden input
+                $('#selectedStudents').val($('#selectedStudents').val().replace($(this).find('input').attr('id') + ',', ''));
             }
         });
         $('#Selected').on('click', 'li', function () {
             $(this).toggleClass('selected');
             $(this).find('input').prop('checked', !$(this).find('input').prop('checked'));
             $('#selected-students').find('#' + $(this).find('input').attr('id')).parent().remove();
+            // Remove selected class from li in Available
+            $('#Available').find('#' + $(this).find('input').attr('id')).parent().removeClass('selected');
+            // Also remove from hidden input
+            $('#selectedStudents').val($('#selectedStudents').val().replace($(this).find('input').attr('id') + ',', ''));
         });
     });
 </script>
@@ -66,7 +74,7 @@
     </div>
 
     <div class="formField">
-        <label for="students">Student(s) <abbr class="requiredField" title="This field is required">*</abbr></label>
+        <label>Student(s) <abbr class="requiredField" title="This field is required">*</abbr></label>
         <p class="hint">Select students from the left by clicking them. Students on the right will be awarded the commendation. You can click students who are selected to deselect them</p>
         <div class="selector">
             <label id="AvailableLabel">Available Students</label>
@@ -75,7 +83,7 @@
             <div id="Available" class="selectorCol">
                 <ul id="selectable-students">
                     {% for student in students %}
-                        <li><input type="checkbox" for="students" id="{{student.id}}">{{student}}</li>
+                        <li><input type="checkbox" id="{{student.id}}">{{student}}</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -95,6 +103,11 @@
                 <option value="{{ teacher.id }}">{{ teacher }}</option>
             {% endfor %}
         </select>
+    </div>
+
+    {% comment %} Hidden selected students list {% endcomment %}
+    <div class="formField">
+        <input type="hidden" name="selectedStudents" id="selectedStudents">
     </div>
 
     <div class="formField">
