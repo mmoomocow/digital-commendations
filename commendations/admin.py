@@ -9,7 +9,7 @@ from .models import Commendation, Milestone
 class CommendationAdmin(admin.ModelAdmin):
     """Admin settings for the commendation model."""
 
-    list_display = ("id", "commendation_type", "date_time", "teacher", "students")
+    list_display = ("id", "commendation_type", "date_time", "teacher", "listStudents")
     list_filter = ("commendation_type", "date_time", "teacher")
     search_fields = (
         "id",
@@ -27,9 +27,21 @@ class CommendationAdmin(admin.ModelAdmin):
         ("User Links", {"fields": ("teacher", "students")}),
     )
 
-    def students(self, obj) -> str:
+    def listStudents(self, obj) -> str:
         """Return a string of the students in the commendation."""
-        return ", ".join([str(student) for student in obj.students.all()])
+        # If there are no students, return a blank string
+        if not obj.students.all():
+            return ""
+        # If there is only one student, return their name
+        elif len(obj.students.all()) == 1:
+            return obj.students.all()[0].user.first_name
+        # If there are multiple students, return a list of their names
+        else:
+            return ", ".join(
+                [student.user.first_name for student in obj.students.all()]
+            )
+
+    listStudents.short_description = "Students"
 
 
 @admin.register(Milestone)
