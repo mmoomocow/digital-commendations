@@ -83,6 +83,10 @@ form #submit {
 .selector {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "searchStudents searchStudents"
+        "AvailableLabel SelectedLabel"
+        "Available Selected";
     grid-gap: 0.3rem;
     margin-bottom: 2rem;
 }
@@ -94,7 +98,6 @@ form #submit {
     height: 15rem;
     overflow-y: scroll;
     padding: 2px;
-    /* Adjust padding as needed */
 }
 
 .selector>div>ul {
@@ -119,15 +122,41 @@ form #submit {
     display: none;
 }
 
+#AvailableLabel {
+    grid-area: AvailableLabel;
+}
 
-/* Mobile friendly version */
+#SelectedLabel {
+    grid-area: SelectedLabel;
+}
 
-@media only screen and (max-width: 600px) {
+#searchStudents {
+    grid-area: searchStudents;
+}
+
+#Available {
+    grid-area: Available;
+}
+
+#Selected {
+    grid-area: Selected;
+}
+
+@media screen and (max-width: 500px) {
     .selector {
+        display: grid;
         grid-template-columns: 1fr;
+        grid-template-areas:
+            "searchStudents"
+            "AvailableLabel"
+            "Available"
+            "SelectedLabel"
+            "Selected";
+        grid-gap: 0.3rem;
+        margin-bottom: 2rem;
     }
 
-    form {
-        max-width: 100%;
+    .selectorCol {
+        height: 10rem;
     }
 }
