@@ -208,11 +208,12 @@ class commendationsCommendationAdminTest(TestCase):
         commendation.students.add(self.student.student)
         commendation.save()
 
-        admin = CommendationAdmin(commendation, None)
+        admin = CommendationAdmin(Commendation, None)
+        studentList = admin.listStudents(commendation)
         self.assertEqual(
-            admin.students(commendation),
-            self.student.student.__str__(),
-            f"Commendation students was not set correctly, expected {self.student.student}, got {admin.students(commendation)}",
+            studentList,
+            self.student.student.user.first_name,
+            f"CommendationAdmin listStudents was not set correctly, expected {self.student.student.user.first_name}, got {studentList}",
         )
 
 
@@ -231,7 +232,7 @@ class commendationsCommendationViewTest(TestCase):
             "/commendations/award/",
             {
                 "commendationType": Commendation.EXCELLENCE,
-                "students": [self.student.student.id],
+                "selectedStudents": str(self.student.student.id),
                 "teacher": self.teacher.teacher.id,
                 "reason": "Test commendation",
                 "quickReason": "",
@@ -257,7 +258,7 @@ class commendationsCommendationViewTest(TestCase):
             "/commendations/award/",
             {
                 "commendationType": Commendation.EXCELLENCE,
-                "students": [self.student.student.id],
+                "selectedStudents": str(self.student.student.id),
                 "teacher": self.teacher.teacher.id,
                 "reason": "",
                 "quickReason": "",
@@ -283,7 +284,7 @@ class commendationsCommendationViewTest(TestCase):
             "/commendations/award/",
             {
                 "commendationType": Commendation.EXCELLENCE,
-                "students": [self.student.student.id],
+                "selectedStudents": str(self.student.student.id),
                 "teacher": self.teacher.teacher.id,
                 "reason": "And very helpful",
                 "quickReason": "Being truthful",
@@ -309,7 +310,7 @@ class commendationsCommendationViewTest(TestCase):
             "/commendations/award/",
             {
                 "commendationType": Commendation.EXCELLENCE,
-                "students": [self.student.student.id],
+                "selectedStudents": str(self.student.student.id),
                 "teacher": self.teacher.teacher.id,
                 "reason": "",
                 "quickReason": "Being truthful",
