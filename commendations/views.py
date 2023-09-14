@@ -211,6 +211,7 @@ def myCommendations(request, student: Student = None):
             "commendations": commendations,
             "studentSwitcherEnabled": True,
             "commendationsSince": commendationsSinceLastLogin,
+            "student": student,
         },
     )
 

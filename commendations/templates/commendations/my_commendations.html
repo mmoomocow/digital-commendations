@@ -17,14 +17,14 @@
 {% comment %} Main content {% endcomment %}
 {% block content %}
 <p>
-    You can view more details about a commendation by clicking on the row.
+    To view more information about individual commendations click on the row in the table.
     <br>
     <br>
     {% if commendationsSince|length > 1 %}
-        You have received {{commendationsSince|length}} commendations since you last logged in.
+        {% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} have received {{commendationsSince|length}} commendations since you last logged in.
         <br>
     {% endif %}
-    You have received {{commendations|length}} commendations in total.
+    {% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} have received {{commendations|length}} commendations in total.
 </p>
 
 <table id="myCommendations">
