@@ -18,6 +18,27 @@ tr:nth-child(even) {
     background-color: #b4b4b4;
 }
 
+/* Set width of columns. 10% 10% 80% */
+th:nth-child(1),
+td:nth-child(1) {
+    width: 10%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 15%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 70%;
+    /* Chop it shorter if too long */
+    white-space: nowrap;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 div#info-split {
     display: flex;
     flex-direction: row;
@@ -32,4 +53,11 @@ div#info-split>div {
 div#info-split>div:nth-child(even) {
     /* Add a left border */
     border-left: 2px solid var(--color-green);
+}
+
+/* Screen width <500px */
+
+@media screen and (max-width: 500px) {
+    /* Table formatting */
+    
 }
