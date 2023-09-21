@@ -56,6 +56,22 @@ class Commendation(models.Model):
         verbose_name="Commendation Type",
     )
 
+    # Inside/outside of classroom
+    INSIDE = "I"
+    OUTSIDE = "O"
+    INSIDE_OUTSIDE_CHOICES = (
+        (INSIDE, "Inside Classroom"),
+        (OUTSIDE, "Outside Classroom"),
+    )
+    inside_outside = models.CharField(
+        max_length=1,
+        choices=INSIDE_OUTSIDE_CHOICES,
+        blank=False,
+        null=False,
+        default=INSIDE,
+        verbose_name="Commendation Location",
+    )
+
     # The reason for giving the commendation
     reason = models.TextField(
         max_length=500, blank=False, null=False, verbose_name="Reason"
