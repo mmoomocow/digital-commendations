@@ -10,7 +10,7 @@ class CommendationAdmin(admin.ModelAdmin):
     """Admin settings for the commendation model."""
 
     list_display = ("id", "commendation_type", "date_time", "teacher", "listStudents")
-    list_filter = ("commendation_type", "date_time", "teacher")
+    list_filter = ("commendation_type", "date_time", "inside_outside", "teacher")
     search_fields = (
         "id",
         "commendation_type",
@@ -23,7 +23,10 @@ class CommendationAdmin(admin.ModelAdmin):
     filter_horizontal = ("students",)
     fieldsets = (
         (None, {"fields": ("id",)}),
-        ("Commendation", {"fields": ("commendation_type", "reason", "date_time")}),
+        (
+            "Commendation",
+            {"fields": ("commendation_type", "reason", "inside_outside", "date_time")},
+        ),
         ("User Links", {"fields": ("teacher", "students")}),
     )
 
