@@ -157,6 +157,7 @@ class commendationsCommendationModelTest(TestCase):
             commendation_type="E",
             reason="Test",
             teacher=self.teacher.teacher,
+            inside_outside=Commendation.OUTSIDE,
         )
         commendation.students.add(self.student.student)
 
@@ -177,6 +178,12 @@ class commendationsCommendationModelTest(TestCase):
             commendation.teacher,
             self.teacher.teacher,
             f"Commendation teacher was not set correctly, expected {self.teacher.teacher}, got {commendation.teacher}",
+        )
+
+        self.assertEqual(
+            commendation.inside_outside,
+            Commendation.OUTSIDE,
+            f"Commendation inside_outside was not set correctly, expected {Commendation.OUTSIDE}, got {commendation.inside_outside}",
         )
 
         self.assertEqual(
