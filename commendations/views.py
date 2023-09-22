@@ -101,9 +101,12 @@ def giveCommendation(request):
 
     # Process and render the award commendation page
     _commendationTypes = []
+    _commendationLocations = []
 
     for Type in Commendation.COMMENDATION_TYPE_CHOICES:
         _commendationTypes.append({"name": Type[1], "value": Type[0]})
+    for Location in Commendation.INSIDE_OUTSIDE_CHOICES:
+        _commendationLocations.append({"name": Location[1], "value": Location[0]})
     students = Student.objects.all()
     teachers = Teacher.objects.all()
 
@@ -113,6 +116,7 @@ def giveCommendation(request):
     # Generate context and render the page
     context = {
         "commendationTypes": _commendationTypes,
+        "commendationLocations": _commendationLocations,
         "students": students,
         "teachers": teachers,
     }
