@@ -50,11 +50,29 @@
     <div class="formField">
         <label for="commendationType">Commendation Type <abbr class="requiredField" title="This field is required">*</abbr></label>
         <br>
-        {% for type in commendationTypes %}
-            <input type="radio" name="commendationType" id="{{ type.value }}" value="{{ type.value }}" required>
-            <label for="{{ type.value }}">{{ type.name }}</label>
-            <br>
-        {% endfor %}
+        <fieldset name="commendationType">
+            {% for type in commendationTypes %}
+                <input type="radio" name="commendationType" id="type-{{ type.value }}" value="{{ type.value }}" required>
+                <label for="type-{{ type.value }}">{{ type.name }}</label>
+                <br>
+            {% endfor %}
+        </fieldset>
+    </div>
+
+    <div class="formField">
+        <label for="commendationLocation">Commendation Location</label>
+        <br>
+        <fieldset name="commendationLocation">
+            {% for Location in commendationLocations %}
+                {% if forloop.counter == 1 %}
+                    <input type="radio" name="commendationLocation" id="loc-{{ Location.value }}" value="{{ Location.value }}" checked>
+                {% else %}
+                <input type="radio" name="commendationLocation" id="loc-{{ Location.value }}" value="{{ Location.value }}">
+                {% endif %}
+                <label for="loc-{{ Location.value }}">{{ Location.name }}</label>
+                <br>
+            {% endfor %}
+        </fieldset>
     </div>
 
 	<div class="formField">
