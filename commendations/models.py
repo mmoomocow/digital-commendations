@@ -59,9 +59,11 @@ class Commendation(models.Model):
     # Inside/outside of classroom
     INSIDE = "I"
     OUTSIDE = "O"
+    EXTRACURRICULAR = "E"
     INSIDE_OUTSIDE_CHOICES = (
-        (INSIDE, "Inside Classroom"),
-        (OUTSIDE, "Outside Classroom"),
+        (INSIDE, "In class"),
+        (OUTSIDE, "Out of class"),
+        (EXTRACURRICULAR, "Extracurricular"),
     )
     inside_outside = models.CharField(
         max_length=1,
