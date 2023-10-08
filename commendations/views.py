@@ -125,7 +125,7 @@ def giveCommendation(request):
 
 
 @role_required(teacher=True, management=True)
-def viewMilestones(request):
+def awardMilestones(request):
     """The page where teachers can award milestones"""
     if request.method == "POST":
         # there will be a list of milestone IDs
