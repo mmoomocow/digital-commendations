@@ -21,8 +21,12 @@
     <br>
     <br>
     {% if commendationsSince|length > 1 %}
-        {% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} have received {{commendationsSince|length}} commendations since you last logged in.
+        {% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} have received new {{commendationsSince|length}} commendations since you last logged in.
         <br>
+    {% elif commendationsSince|length == 1 %}
+        {% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} have received new {{commendationsSince|length}} commendation since you last logged in.
+        <br>
+
     {% endif %}
     {% if request.user.is_caregiver %}{{ student.user.first_name }} has {% else %}You have{% endif %} have received {{commendations|length}} commendations in total.
 </p>
@@ -34,11 +38,20 @@
         <th>Reason</th>
     </tr>
     {% for commendation in commendations %}
-        <tr onclick="window.location.href='/commendations/detail/{{commendation.id}}'">
-            <td class="Ctype">{{commendation.get_commendation_type_display}}</td>
-            <td class="Cdata">{{ commendation.date_time|date:"F j, Y" }}</td>
-            <td class="Creason">{{commendation.reason}}</td>
-        </tr>
+        {% comment %} CommendationsSince is a set of new commendations, if the commendation is in commendationsSince then it should have the newCommendation class {% endcomment %}
+        {% if commendation in commendationsSince %}
+            <tr onclick="window.location.href='/commendations/detail/{{commendation.id}}'" class="newCommendation">
+                <td class="Ctype">{{commendation.get_commendation_type_display}}</td>
+                <td class="Cdata">{{ commendation.date_time|date:"F j, Y" }}</td>
+                <td class="Creason">{{commendation.reason}}</td>
+            </tr>
+        {% else %}
+            <tr onclick="window.location.href='/commendations/detail/{{commendation.id}}'">
+                <td class="Ctype">{{commendation.get_commendation_type_display}}</td>
+                <td class="Cdata">{{ commendation.date_time|date:"F j, Y" }}</td>
+                <td class="Creason">{{commendation.reason}}</td>
+            </tr>
+        {% endif %}
     {% endfor %}
 </table>
 {% endblock content %}
