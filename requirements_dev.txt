@@ -1,5 +1,5 @@
 black==23.9.1
-Faker==19.6.1
+Faker==19.8.0
 pytest==7.4.0
 coverage==7.3.1
 pytest-django==4.5.2
