@@ -107,11 +107,12 @@ def giveCommendation(request):
         _commendationTypes.append({"name": Type[1], "value": Type[0]})
     for Location in Commendation.INSIDE_OUTSIDE_CHOICES:
         _commendationLocations.append({"name": Location[1], "value": Location[0]})
-    students = Student.objects.all()
-    teachers = Teacher.objects.all()
 
     # If there is a teacher signed in, then the only teacher that should show is themselves
     teachers = Teacher.objects.filter(user=request.user)
+
+    # Filter students to year 9 and 10 only
+    students = Student.objects.filter(year_level__in=[9, 10])
 
     # Generate context and render the page
     context = {
