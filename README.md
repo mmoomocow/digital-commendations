@@ -5,6 +5,10 @@
 
 A digital commendation system being developed for use at Bayfield High School
 
+## ⚠️ PROJECT ARCHIVED ⚠️
+
+This project has been archived for now as I have completed my assessments. At some point I might return to this and keep working on it.
+
 ## Install Instructions
 
 This project requires Python 3.10 or higher!
